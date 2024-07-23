@@ -28,7 +28,7 @@ class UrlBuilder {
 
         StringBuilder urlStringBuilder = new StringBuilder(JDBC_H2);
         appandFileSystem(urlStringBuilder, config, map);
-        appandDebug(urlStringBuilder, config, map);
+        appandDebug(urlStringBuilder, config);
         appandIdentifier(urlStringBuilder, config, map);
         return urlStringBuilder.toString();
     }
@@ -49,7 +49,7 @@ class UrlBuilder {
         }
     }
 
-    private static void appandDebug(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
+    private static void appandDebug(StringBuilder urlStringBuilder, H2BaseConfig config) {
         if (config.debug()) {
             urlStringBuilder.append("debug:");
         }

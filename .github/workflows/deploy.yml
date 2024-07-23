@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish:
-    if: ${{ (github.repository == 'eclipse-daanse/org.eclipse.daanse.jdbc.datasource.metatype.h2') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
+    if: ${{ (github.repository == 'eclipse-daanse/org.eclipse.daanse.jdbc.datasource') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
     runs-on: ubuntu-latest
     steps:
       - id: install-secret-key

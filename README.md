@@ -1,2 +1,2 @@
-# org.eclipse.daanse.jdbc.datasource.metatype.h2
-Repository for the datasoure metatype support for h2
+# org.eclipse.daanse.jdbc.datasource
+Repository for the datasoucre support

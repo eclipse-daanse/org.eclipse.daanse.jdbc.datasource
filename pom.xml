@@ -21,13 +21,13 @@
     <artifactId>org.eclipse.daanse.pom.parent</artifactId>
     <version>0.0.2</version>
   </parent>
-  <artifactId>org.eclipse.daanse.jdbc.datasource.metatype.h2</artifactId>
+  <artifactId>org.eclipse.daanse.jdbc.datasource</artifactId>
   <version>${revision}</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <properties>
     <revision>0.0.1-SNAPSHOT</revision>
-    <scm.repo.detail>org.eclipse.daanse.jdbc.datasource.metatype.h2</scm.repo.detail>
+    <scm.repo.detail>org.eclipse.daanse.jdbc.datasource</scm.repo.detail>
   </properties>
 
   <dependencies>
@@ -35,24 +35,18 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.2.224</version>
-      <scope>compile</scope>
-    </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.cm</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.metatype.annotations</artifactId>
     </dependency>
   </dependencies>
 
+  <modules>
+    <module>metatype.h2</module>
+  </modules>
 </project>
