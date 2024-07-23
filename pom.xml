@@ -48,5 +48,6 @@
 
   <modules>
     <module>metatype.h2</module>
+    <module>metatype.postgresql</module>
   </modules>
 </project>
