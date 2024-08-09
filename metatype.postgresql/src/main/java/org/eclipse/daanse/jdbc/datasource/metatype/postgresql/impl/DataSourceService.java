@@ -13,12 +13,11 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -30,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 @Designate(ocd = PostgresConfig.class, factory = true)
 @Component(service = DataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
-public class DataSourceService extends AbstractDatasource implements DataSource {
+public class DataSourceService extends AbstractDataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DataSourceService.class);
 
     private PGSimpleDataSource ds;
@@ -50,27 +49,7 @@ public class DataSourceService extends AbstractDatasource implements DataSource 
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
-        return ds.getConnection();
-    }
-
-    @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-        return ds.getConnection(username, password);
-    }
-
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return ds.unwrap(iface);
-    }
-
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return ds.isWrapperFor(iface);
-    }
-
-    @Override
-    PGSimpleDataSource ds() {
+    protected DataSource ds() {
         return ds;
     }
 

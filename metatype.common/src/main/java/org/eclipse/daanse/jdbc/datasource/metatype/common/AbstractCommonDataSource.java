@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl;
+package org.eclipse.daanse.jdbc.datasource.metatype.common;
 
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -20,13 +20,13 @@ import java.util.logging.Logger;
 
 import javax.sql.CommonDataSource;
 
-public abstract class AbstractDatasource {
+public abstract class AbstractCommonDataSource<T extends CommonDataSource> {
 
-    public AbstractDatasource() {
+    protected AbstractCommonDataSource() {
         super();
     }
 
-    abstract CommonDataSource ds();
+    protected abstract T ds();
 
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return ds().getParentLogger();

@@ -13,12 +13,9 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.h2.impl;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
@@ -26,6 +23,8 @@ import javax.sql.PooledConnection;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 
+import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractCommonDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants;
 import org.h2.jdbcx.JdbcDataSource;
 import org.osgi.service.component.annotations.Activate;
@@ -38,7 +37,9 @@ import org.slf4j.LoggerFactory;
 @Designate(ocd = H2BaseConfig.class, factory = true)
 @Component(service = { DataSource.class, XADataSource.class,
         ConnectionPoolDataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
-public class H2DataSource implements ConnectionPoolDataSource, DataSource, XADataSource {
+@DataSourceMetaData(subprotocol = "h2")
+public class H2DataSource extends AbstractCommonDataSource<JdbcDataSource>
+        implements ConnectionPoolDataSource, DataSource, XADataSource {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(H2DataSource.class);
 
@@ -90,16 +91,6 @@ public class H2DataSource implements ConnectionPoolDataSource, DataSource, XADat
     }
 
     @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return ds.isWrapperFor(iface);
-    }
-
-    @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return ds.getParentLogger();
-    }
-
-    @Override
     public PooledConnection getPooledConnection() throws SQLException {
         return ds.getPooledConnection();
     }
@@ -110,26 +101,6 @@ public class H2DataSource implements ConnectionPoolDataSource, DataSource, XADat
     }
 
     @Override
-    public PrintWriter getLogWriter() throws SQLException {
-        return ds.getLogWriter();
-    }
-
-    @Override
-    public void setLogWriter(PrintWriter out) throws SQLException {
-        ds.setLogWriter(out);
-    }
-
-    @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
-        ds.setLoginTimeout(seconds);
-    }
-
-    @Override
-    public int getLoginTimeout() throws SQLException {
-        return ds.getLoginTimeout();
-    }
-
-    @Override
     public XAConnection getXAConnection() throws SQLException {
         return ds.getXAConnection();
     }
@@ -137,6 +108,16 @@ public class H2DataSource implements ConnectionPoolDataSource, DataSource, XADat
     @Override
     public XAConnection getXAConnection(String user, String password) throws SQLException {
         return ds.getXAConnection(user, password);
+    }
+
+    @Override
+    protected JdbcDataSource ds() {
+        return ds;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return ds.isWrapperFor(iface);
     }
 
 }

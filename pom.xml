@@ -47,7 +47,9 @@
   </dependencies>
 
   <modules>
+    <module>metatype.common</module>
     <module>metatype.h2</module>
     <module>metatype.postgresql</module>
+    <module>metatype.ucanaccess</module>
   </modules>
 </project>
