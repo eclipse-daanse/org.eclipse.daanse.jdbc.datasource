@@ -17,12 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
+import javax.sql.PooledConnection;
 import javax.sql.XADataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.annotation.Property;
+import org.osgi.test.common.annotation.Property.TemplateArgument;
+import org.osgi.test.common.annotation.Property.ValueSource;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
@@ -48,7 +52,8 @@ class H2DataSourceTest {
     }
 
     @Test
-    @WithFactoryConfiguration(factoryPid = Constants.PID_DATASOURCE, name = "1", location = "?")
+    @WithFactoryConfiguration(factoryPid = Constants.PID_DATASOURCE, name = "1", location = "?", properties = @Property(key = Constants.DATASOURCE_PROPERTY_IDENTIFIER, value = "./h2/%h/%s", templateArguments = {
+            @TemplateArgument(source = ValueSource.TestUniqueId), @TemplateArgument(source = ValueSource.TestMethod) }))
     void serviceWithConfigurationTest(@InjectService(timeout = 500) ServiceAware<DataSource> serviceAwareDataSource, //
             @InjectService(timeout = 500) ServiceAware<XADataSource> serviceAwareXaDataSource, //
             @InjectService(timeout = 500) ServiceAware<ConnectionPoolDataSource> serviceAwareCpDataSource)
@@ -61,6 +66,7 @@ class H2DataSourceTest {
         DataSource dataSource = serviceAwareDataSource.waitForService(0);
         XADataSource xaDataSource = serviceAwareXaDataSource.waitForService(0);
         ConnectionPoolDataSource cpDataSource = serviceAwareCpDataSource.waitForService(0);
+        cpDataSource.getPooledConnection();
 
         // Singleton
         assertThat(dataSource).isEqualTo(xaDataSource).isEqualTo(cpDataSource);

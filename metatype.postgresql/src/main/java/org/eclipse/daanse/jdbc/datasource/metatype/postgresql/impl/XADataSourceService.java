@@ -13,13 +13,11 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl;
 
-import java.sql.SQLException;
 import java.util.Map;
 
-import javax.sql.CommonDataSource;
-import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 
+import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractXADataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -31,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 @Designate(ocd = PostgresConfig.class, factory = true)
 @Component(service = XADataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE_XA)
-public class XADataSourceService extends AbstractDatasource implements XADataSource {
+public class XADataSourceService extends AbstractXADataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(XADataSourceService.class);
 
     private PGXADataSource ds;
@@ -49,17 +47,7 @@ public class XADataSourceService extends AbstractDatasource implements XADataSou
     }
 
     @Override
-    public XAConnection getXAConnection() throws SQLException {
-        return ds.getXAConnection();
-    }
-
-    @Override
-    public XAConnection getXAConnection(String user, String password) throws SQLException {
-        return ds.getXAConnection(user, password);
-    }
-
-    @Override
-    CommonDataSource ds() {
+    protected XADataSource ds() {
         return ds;
     }
 

@@ -96,7 +96,7 @@ import org.osgi.service.metatype.annotations.Option;
      * {@link Constants#DATASOURCE_PROPERTY_IDENTIFIER}.
      *
      */
-    @AttributeDefinition(name = L10N_IDENTIFIER_NAME, description = L10N_IDENTIFIER_DESCRIPTION)
+    @AttributeDefinition(name = L10N_IDENTIFIER_NAME, description = L10N_IDENTIFIER_DESCRIPTION, required = true)
     String identifier();
 
     /**
