@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 @Designate(ocd = PostgresConfig.class, factory = true)
 @Component(service = DataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
+@DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class DataSourceService extends AbstractDataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DataSourceService.class);
 

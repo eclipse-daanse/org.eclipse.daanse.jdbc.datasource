@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 @Designate(ocd = H2BaseConfig.class, factory = true)
 @Component(service = { DataSource.class, XADataSource.class,
         ConnectionPoolDataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
-@DataSourceMetaData(subprotocol = "h2")
+@DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class H2DataSource extends AbstractCommonDataSource<JdbcDataSource>
         implements ConnectionPoolDataSource, DataSource, XADataSource {
 
