@@ -17,6 +17,7 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
+import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.osgi.framework.Bundle;
 
 /**
@@ -26,6 +27,12 @@ public class Constants {
 
     private Constants() {
     }
+
+    /**
+     * Constant for the {@link DataSourceMetaData#subprotocol()}
+     *
+     */
+    public static final String SUBPROTOCOL = "h2";
 
     /**
      * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a
