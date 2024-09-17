@@ -51,5 +51,6 @@
     <module>metatype.h2</module>
     <module>metatype.postgresql</module>
     <module>metatype.ucanaccess</module>
+    <module>metatype.opensearch</module>
   </modules>
 </project>
