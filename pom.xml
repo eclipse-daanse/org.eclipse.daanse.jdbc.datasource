@@ -53,5 +53,6 @@
     <module>metatype.ucanaccess</module>
     <module>metatype.opensearch</module>
     <module>metatype.mysql</module>
+    <module>mssqlserver</module>
   </modules>
 </project>
