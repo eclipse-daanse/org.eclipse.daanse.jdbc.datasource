@@ -27,19 +27,19 @@ class UrlBuilder {
     static String buildUrl(H2BaseConfig config, Map<String, Object> map) {
 
         StringBuilder urlStringBuilder = new StringBuilder(JDBC_H2);
-        appandFileSystem(urlStringBuilder, config, map);
-        appandDebug(urlStringBuilder, config);
-        appandIdentifier(urlStringBuilder, config, map);
+        appendFileSystem(urlStringBuilder, config, map);
+        appendDebug(urlStringBuilder, config);
+        appendIdentifier(urlStringBuilder, config, map);
         return urlStringBuilder.toString();
     }
 
-    private static void appandIdentifier(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
+    private static void appendIdentifier(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
         if (map.containsKey(Constants.DATASOURCE_PROPERTY_IDENTIFIER)) {
             urlStringBuilder.append(config.identifier());
         }
     }
 
-    private static void appandFileSystem(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
+    private static void appendFileSystem(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
 
         if (map.containsKey(Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM)) {
             String plugableFileSystem = config.plugableFilesystem();
@@ -49,7 +49,7 @@ class UrlBuilder {
         }
     }
 
-    private static void appandDebug(StringBuilder urlStringBuilder, H2BaseConfig config) {
+    private static void appendDebug(StringBuilder urlStringBuilder, H2BaseConfig config) {
         if (config.debug()) {
             urlStringBuilder.append("debug:");
         }
