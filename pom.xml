@@ -28,6 +28,12 @@
   <properties>
     <revision>0.0.1-SNAPSHOT</revision>
     <scm.repo.detail>org.eclipse.daanse.jdbc.datasource</scm.repo.detail>
+
+    <java.version>17</java.version>
+    <java.release>17</java.release>
+
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
 
   <dependencies>
