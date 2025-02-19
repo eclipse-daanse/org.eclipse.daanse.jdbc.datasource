@@ -27,10 +27,21 @@ class UrlBuilder {
     static String buildUrl(H2BaseConfig config, Map<String, Object> map) {
 
         StringBuilder urlStringBuilder = new StringBuilder(JDBC_H2);
-        appendFileSystem(urlStringBuilder, config, map);
         appendDebug(urlStringBuilder, config);
+        appendFileSystem(urlStringBuilder, config, map);
+        // to here is pre identifier. so separated with ":".
         appendIdentifier(urlStringBuilder, config, map);
+        // from here is post identifier. so separated with ";".
+        appendDatabaseToUpper(urlStringBuilder, config, map);
         return urlStringBuilder.toString();
+    }
+
+    private static void appendDatabaseToUpper(StringBuilder urlStringBuilder, H2BaseConfig config,
+            Map<String, Object> map) {
+        if (map.containsKey(Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER)) {
+            String val = config.databaseToUpper() ? "TRUE" : "FALSE";
+            urlStringBuilder.append(";DATABASE_TO_UPPER=" + val);
+        }
     }
 
     private static void appendIdentifier(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
