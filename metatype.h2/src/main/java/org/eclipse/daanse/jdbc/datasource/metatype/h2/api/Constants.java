@@ -35,11 +35,18 @@ public class Constants {
     public static final String SUBPROTOCOL = "h2";
 
     /**
-     * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a
-     * {@link DataSource} and {@link XADataSource} and
-     * {@link ConnectionPoolDataSource} - Service.
+     * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a {@link DataSource} and
+     * {@link XADataSource} and {@link ConnectionPoolDataSource} - Service.
      */
     public static final String PID_DATASOURCE = "org.eclipse.daanse.jdbc.datasource.metatype.h2.DataSource";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_DATASOURCE}.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.h2.impl.H2BaseConfig#debug()}
+     */
+    public static final String DATASOURCE_PROPERTY_DATABASE_TO_UPPER = "databaseToUpper";
 
     /**
      * Constant for Properties of the Service that could be configured using the

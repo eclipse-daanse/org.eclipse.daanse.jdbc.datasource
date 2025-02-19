@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.h2.impl;
 
+import static org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER;
 import static org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants.DATASOURCE_PROPERTY_DEBUG;
 import static org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants.DATASOURCE_PROPERTY_DESCRIPTION;
 import static org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants.DATASOURCE_PROPERTY_IDENTIFIER;
@@ -63,6 +64,12 @@ import org.osgi.service.metatype.annotations.Option;
     public static final String L10N_USERNAME_DESCRIPTION = L10N_PREFIX + DATASOURCE_PROPERTY_USERNAME
             + L10N_POSTFIX_DESCRIPTION;
 
+    public static final String L10N_DATABASE_TO_UPPER_NAME = L10N_PREFIX + DATASOURCE_PROPERTY_USERNAME
+            + L10N_POSTFIX_NAME;
+
+    public static final String L10N_DATABASE_TO_UPPER_DESCRIPTION = L10N_PREFIX + DATASOURCE_PROPERTY_DATABASE_TO_UPPER
+            + L10N_POSTFIX_DESCRIPTION;
+
     /**
      * {@link Constants#DATASOURCE_PROPERTY_DEBUG}.
      *
@@ -102,9 +109,8 @@ import org.osgi.service.metatype.annotations.Option;
     /**
      * {@link Constants#DATASOURCE_PROPERTY_PASSWORD}. OSGi Service Component Spec.:
      *
-     * Component properties whose names start with full stop are available to the
-     * component instance but are not available as service properties of the
-     * registered service.
+     * Component properties whose names start with full stop are available to the component instance but
+     * are not available as service properties of the registered service.
      *
      * A single low line ('_' \u005F) is converted into a full stop ('.' \u002E)
      *
@@ -119,5 +125,12 @@ import org.osgi.service.metatype.annotations.Option;
      */
     @AttributeDefinition(name = L10N_USERNAME_NAME, description = L10N_USERNAME_DESCRIPTION)
     String username() default "";
+
+    /**
+     * {@link Constants#DATASOURCE_PROPERTY_DATABASE_TO_UPPER}.
+     *
+     */
+    @AttributeDefinition(name = H2BaseConfig.L10N_DATABASE_TO_UPPER_NAME, description = L10N_DATABASE_TO_UPPER_DESCRIPTION)
+    boolean databaseToUpper() default true;
 
 }
