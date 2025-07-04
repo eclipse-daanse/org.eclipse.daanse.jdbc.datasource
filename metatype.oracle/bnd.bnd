@@ -15,17 +15,15 @@
 # may cause license issues. better to have driver in lib/ext?
 #-includeresource: ojdbc11-23.5.0.24.07.jar;lib:=true
 #
-#Import-Package:\
-#    !com.oracle.*,\
-#    !oracle.*,\
-#    !org.graalvm*,\
-#    !jakarta.json*,\
-#    !javax.json*,\
-#    !javax.resource*,\
-#    !org.objectweb*,\
-#    !weblogic*,\
-#    !com.sun.security.jgss*,\
-#    !sun.security.krb5.internal*,\
-#    *
-#
-#Dynamic-Import: *
+Import-Package:\
+    com.oracle.*,\
+    oracle.*,\
+    !org.graalvm*,\
+    !jakarta.json*,\
+    !javax.json*,\
+    !javax.resource*,\
+    !org.objectweb*,\
+    !weblogic*,\
+    !com.sun.security.jgss*,\
+    !sun.security.krb5.internal*,\
+    *
