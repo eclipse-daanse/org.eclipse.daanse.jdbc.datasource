@@ -30,7 +30,7 @@ public class Util {
     public static void doConfig(OracleDataSource ds, OracleConfig config, Map<String, Object> configMap) {
         ds.setDriverType("thin");
         setValueIfNotNull(ds::setUser, config::user, configMap, Constants.DATASOURCE_PROPERTY_USER);
-        setValueIfNotNull(ds::setServerName, config::_password, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD);
+        setValueIfNotNull(ds::setPassword, config::_password, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD);
 
         setValueIfNotNull(ds::setServiceName, config::serviceName, configMap,
                 Constants.DATASOURCE_PROPERTY_SERVICENAME);
