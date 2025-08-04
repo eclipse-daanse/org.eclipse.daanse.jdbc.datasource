@@ -82,9 +82,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
     /**
      * {@link Constants#DATASOURCE_PROPERTY_PASSWORD}. OSGi Service Component Spec.:
      *
-     * Component properties whose names start with full stop are available to the
-     * component instance but are not available as service properties of the
-     * registered service.
+     * Component properties whose names start with full stop are available to the component instance but
+     * are not available as service properties of the registered service.
      *
      * A single low line ('_' \u005F) is converted into a full stop ('.' \u002E)
      *

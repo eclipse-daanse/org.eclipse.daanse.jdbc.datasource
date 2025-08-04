@@ -13,11 +13,13 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -38,10 +40,17 @@ public class DataSourceService extends AbstractDataSource {
     private MysqlDataSource ds;
 
     @Activate
-    public DataSourceService(MySqlConfig config, Map<String, Object> configMap) {
+    public DataSourceService(Map<String, Object> configMap) throws SQLException {
         super();
         this.ds = new MysqlDataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure MySQL DataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

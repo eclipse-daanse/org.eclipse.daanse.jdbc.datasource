@@ -21,6 +21,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractCommonDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.opensearch.api.Constants;
 import org.opensearch.jdbc.OpenSearchDataSource;
@@ -40,7 +41,8 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 
 @Designate(ocd = OpenSearchBaseConfig.class, factory = true)
-@Component(service = { DataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE, immediate = true)
+@Component(service = {
+        DataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE, immediate = true)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource> implements DataSource {
 
@@ -49,40 +51,53 @@ public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource>
     private final OpenSearchDataSource ds = new OpenSearchDataSource();
 
     @Activate
-    public OSDataSource(OpenSearchBaseConfig config, Map<String, Object> map) throws SQLException {
+    public OSDataSource(Map<String, Object> map) throws SQLException {
 
-        Properties properties = new Properties();
+        try {
+            Properties properties = new Properties();
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_HOST)) {
-            properties.put(HostConnectionProperty.KEY, config.host());
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_HOST)) {
+                properties.put(HostConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_HOST));
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_PORT)) {
-            properties.put(PortConnectionProperty.KEY, config.port()+"");
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_PORT)) {
+                Integer port = (Integer) map.get(Constants.DATASOURCE_PROPERTY_PORT);
+                if (port != null) {
+                    properties.put(PortConnectionProperty.KEY, port + "");
+                }
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_PATH)) {
-            properties.put(PathConnectionProperty.KEY, config.path());
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_PATH)) {
+                properties.put(PathConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_PATH));
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_USESSL)) {
-            properties.put(UseSSLConnectionProperty.KEY, config.usessl()+"");
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_USESSL)) {
+                Boolean usessl = (Boolean) map.get(Constants.DATASOURCE_PROPERTY_USESSL);
+                if (usessl != null) {
+                    properties.put(UseSSLConnectionProperty.KEY, usessl + "");
+                }
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
-            properties.put(PasswordConnectionProperty.KEY, config._password());
-        }
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_USERNAME)) {
-            properties.put(UserConnectionProperty.KEY, config.username());
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
+                properties.put(PasswordConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_PASSWORD));
+            }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_USERNAME)) {
+                properties.put(UserConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_USERNAME));
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_TRUSTSELFSIGNED)) {
-            properties.put(TrustSelfSignedConnectionProperty.KEY, config.trustSelfSigned()+"");
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_TRUSTSELFSIGNED)) {
+                Boolean trustSelfSigned = (Boolean) map.get(Constants.DATASOURCE_PROPERTY_TRUSTSELFSIGNED);
+                if (trustSelfSigned != null) {
+                    properties.put(TrustSelfSignedConnectionProperty.KEY, trustSelfSigned + "");
+                }
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_AUTH)) {
-            properties.put(AuthConnectionProperty.KEY, config.auth()+"");
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_AUTH)) {
+                String auth = (String) map.get(Constants.DATASOURCE_PROPERTY_AUTH);
+                if (auth != null) {
+                    properties.put(AuthConnectionProperty.KEY, auth);
+                }
+            }
 
 //        properties.put(AuthConnectionProperty.KEY, "");
 //        properties.put(AwsCredentialsProviderProperty.KEY, "");
@@ -102,7 +117,12 @@ public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource>
 //        properties.put(TunnelHostConnectionProperty.KEY, "");
 //
 
-        ds.setProperties(properties);
+            ds.setProperties(properties);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(map);
+            LOGGER.error("Failed to configure OpenSearch DataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

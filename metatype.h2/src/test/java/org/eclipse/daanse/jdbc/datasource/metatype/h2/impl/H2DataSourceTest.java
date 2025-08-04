@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
-import javax.sql.PooledConnection;
 import javax.sql.XADataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants;

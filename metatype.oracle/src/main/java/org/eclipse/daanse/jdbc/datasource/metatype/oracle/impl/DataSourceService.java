@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.oracle.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -28,9 +29,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 
-
 @Designate(ocd = OracleConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE,immediate = true)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE, immediate = true)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class DataSourceService extends AbstractDataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DataSourceService.class);
@@ -38,10 +38,17 @@ public class DataSourceService extends AbstractDataSource {
     private oracle.jdbc.datasource.impl.OracleDataSource ds;
 
     @Activate
-    public DataSourceService(OracleConfig config, Map<String, Object> configMap) throws SQLException {
+    public DataSourceService(Map<String, Object> configMap) throws SQLException {
         super();
         this.ds = new oracle.jdbc.datasource.impl.OracleDataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure Oracle DataSource with config: {}", safeConfigMap, e);
+            throw new SQLException(e);
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

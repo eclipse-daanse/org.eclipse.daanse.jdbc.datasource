@@ -27,24 +27,28 @@ public class Util {
         // constructor
     }
 
-    public static void doConfig(OracleDataSource ds, OracleConfig config, Map<String, Object> configMap) {
+    public static void doConfig(OracleDataSource ds, Map<String, Object> configMap) {
         ds.setDriverType("thin");
-        setValueIfNotNull(ds::setUser, config::user, configMap, Constants.DATASOURCE_PROPERTY_USER);
-        setValueIfNotNull(ds::setPassword, config::_password, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD);
+        setValueFromMap(ds::setUser, configMap, Constants.DATASOURCE_PROPERTY_USER);
+        setValueFromMap(ds::setPassword, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD);
 
-        setValueIfNotNull(ds::setServiceName, config::serviceName, configMap,
+        setValueFromMap(ds::setServiceName, configMap,
                 Constants.DATASOURCE_PROPERTY_SERVICENAME);
-        setValueIfNotNull(ds::setPortNumber, config::portNumber, configMap, Constants.DATASOURCE_PROPERTY_PORTNUMBER);
-        setValueIfNotNull(ds::setServerName, config::serverName, configMap, Constants.DATASOURCE_PROPERTY_SERVERNAME);
-        setValueIfNotNull(ds::setDatabaseName, config::databaseName, configMap,
+        setValueFromMap(ds::setPortNumber, configMap, Constants.DATASOURCE_PROPERTY_PORTNUMBER);
+        setValueFromMap(ds::setServerName, configMap, Constants.DATASOURCE_PROPERTY_SERVERNAME);
+        setValueFromMap(ds::setDatabaseName, configMap,
                 Constants.DATASOURCE_PROPERTY_DATABASENAME);
 
     }
 
-    private static <T> void setValueIfNotNull(Consumer<T> setterMethod, Supplier<T> value,
+    @SuppressWarnings("unchecked")
+    private static <T> void setValueFromMap(Consumer<T> setterMethod,
             Map<String, Object> configMap, String propName) {
         if (configMap.containsKey(propName)) {
-            setterMethod.accept(value.get());
+            T value = (T) configMap.get(propName);
+            if (value != null) {
+                setterMethod.accept(value);
+            }
         }
     }
 }

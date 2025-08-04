@@ -24,6 +24,7 @@ import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractCommonDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants;
 import org.h2.jdbcx.JdbcDataSource;
@@ -46,24 +47,30 @@ public class H2DataSource extends AbstractCommonDataSource<JdbcDataSource>
     private final JdbcDataSource ds = new JdbcDataSource();
 
     @Activate
-    public H2DataSource(H2BaseConfig config, Map<String, Object> map) {
+    public H2DataSource(Map<String, Object> map) {
 
-        String url = UrlBuilder.buildUrl(config, map);
+        try {
+            String url = UrlBuilder.buildUrl(map);
 
-        LOGGER.debug("composed url: {}", url);
+            LOGGER.debug("composed url: {}", url);
 
-        ds.setURL(url);
+            ds.setURL(url);
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_USERNAME)) {
-            ds.setUser(config.username());
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_USERNAME)) {
+                ds.setUser((String) map.get(Constants.DATASOURCE_PROPERTY_USERNAME));
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
-            ds.setPassword(config._password());
-        }
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
+                ds.setPassword((String) map.get(Constants.DATASOURCE_PROPERTY_PASSWORD));
+            }
 
-        if (map.containsKey(Constants.DATASOURCE_PROPERTY_DESCRIPTION)) {
-            ds.setDescription(config.description());
+            if (map.containsKey(Constants.DATASOURCE_PROPERTY_DESCRIPTION)) {
+                ds.setDescription((String) map.get(Constants.DATASOURCE_PROPERTY_DESCRIPTION));
+            }
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(map);
+            LOGGER.error("Failed to configure H2 DataSource with config: {}", safeConfigMap, e);
+            throw e;
         }
 
     }

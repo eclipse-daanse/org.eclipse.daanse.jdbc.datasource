@@ -58,6 +58,92 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
     public static final String L10N_USER_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER
             + L10N_POSTFIX_DESCRIPTION;
 
+    // Additional L10N constants for commonly used properties
+    public static final String L10N_DATABASENAME_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATABASENAME
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_DATABASENAME_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATABASENAME
+            + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_ENCRYPT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_ENCRYPT
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_ENCRYPT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_ENCRYPT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_TRUST_SERVER_CERTIFICATE_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_TRUST_SERVER_CERTIFICATE + L10N_POSTFIX_NAME;
+    public static final String L10N_TRUST_SERVER_CERTIFICATE_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_TRUST_SERVER_CERTIFICATE + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_INTEGRATED_SECURITY_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_INTEGRATED_SECURITY + L10N_POSTFIX_NAME;
+    public static final String L10N_INTEGRATED_SECURITY_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_INTEGRATED_SECURITY + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_AUTHENTICATION_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_AUTHENTICATION
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_AUTHENTICATION_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_AUTHENTICATION + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_LOGIN_TIMEOUT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOGIN_TIMEOUT
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_LOGIN_TIMEOUT_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_LOGIN_TIMEOUT + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_QUERY_TIMEOUT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_QUERY_TIMEOUT
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_QUERY_TIMEOUT_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_QUERY_TIMEOUT + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_SOCKET_TIMEOUT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SOCKET_TIMEOUT
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_SOCKET_TIMEOUT_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_SOCKET_TIMEOUT + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_RESPONSE_BUFFERING_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_RESPONSE_BUFFERING + L10N_POSTFIX_NAME;
+    public static final String L10N_RESPONSE_BUFFERING_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_RESPONSE_BUFFERING + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_SELECT_METHOD_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SELECT_METHOD
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_SELECT_METHOD_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_SELECT_METHOD + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_APPLICATION_INTENT_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_APPLICATION_INTENT + L10N_POSTFIX_NAME;
+    public static final String L10N_APPLICATION_INTENT_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_APPLICATION_INTENT + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_MULTI_SUBNET_FAILOVER_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_MULTI_SUBNET_FAILOVER + L10N_POSTFIX_NAME;
+    public static final String L10N_MULTI_SUBNET_FAILOVER_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_MULTI_SUBNET_FAILOVER + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_FAILOVER_PARTNER_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_FAILOVER_PARTNER
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_FAILOVER_PARTNER_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_FAILOVER_PARTNER + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_PACKET_SIZE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PACKET_SIZE
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_PACKET_SIZE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PACKET_SIZE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_LOCK_TIMEOUT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCK_TIMEOUT
+            + L10N_POSTFIX_NAME;
+    public static final String L10N_LOCK_TIMEOUT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCK_TIMEOUT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_COLUMN_ENCRYPTION_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_COLUMN_ENCRYPTION + L10N_POSTFIX_NAME;
+    public static final String L10N_COLUMN_ENCRYPTION_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_COLUMN_ENCRYPTION + L10N_POSTFIX_DESCRIPTION;
+
+    public static final String L10N_SEND_STRING_PARAMETERS_AS_UNICODE_NAME = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_SEND_STRING_PARAMETERS_AS_UNICODE + L10N_POSTFIX_NAME;
+    public static final String L10N_SEND_STRING_PARAMETERS_AS_UNICODE_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_SEND_STRING_PARAMETERS_AS_UNICODE + L10N_POSTFIX_DESCRIPTION;
+
     // https://docs.oracle.com/cd/E13222_01/wls/docs81/jdbc_drivers/oracle.html
     /**
      * {@link Constants#DATASOURCE_PROPERTY_PASSWORD}. OSGi Service Component Spec.:
@@ -90,5 +176,57 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
     @AttributeDefinition(name = L10N_SERVERNAME_NAME, description = L10N_SERVERNAME_DESCRIPTION)
     String serverName();
+
+    // Additional MS SQL Server properties
+    @AttributeDefinition(name = L10N_DATABASENAME_NAME, description = L10N_DATABASENAME_DESCRIPTION)
+    String databaseName() default "";
+
+    @AttributeDefinition(name = L10N_ENCRYPT_NAME, description = L10N_ENCRYPT_DESCRIPTION)
+    String encrypt() default "true";
+
+    @AttributeDefinition(name = L10N_TRUST_SERVER_CERTIFICATE_NAME, description = L10N_TRUST_SERVER_CERTIFICATE_DESCRIPTION)
+    boolean trustServerCertificate() default false;
+
+    @AttributeDefinition(name = L10N_INTEGRATED_SECURITY_NAME, description = L10N_INTEGRATED_SECURITY_DESCRIPTION)
+    boolean integratedSecurity() default false;
+
+    @AttributeDefinition(name = L10N_AUTHENTICATION_NAME, description = L10N_AUTHENTICATION_DESCRIPTION)
+    String authentication() default "NotSpecified";
+
+    @AttributeDefinition(name = L10N_LOGIN_TIMEOUT_NAME, description = L10N_LOGIN_TIMEOUT_DESCRIPTION)
+    int loginTimeout() default 30;
+
+    @AttributeDefinition(name = L10N_QUERY_TIMEOUT_NAME, description = L10N_QUERY_TIMEOUT_DESCRIPTION)
+    int queryTimeout() default -1;
+
+    @AttributeDefinition(name = L10N_SOCKET_TIMEOUT_NAME, description = L10N_SOCKET_TIMEOUT_DESCRIPTION)
+    int socketTimeout() default 0;
+
+    @AttributeDefinition(name = L10N_RESPONSE_BUFFERING_NAME, description = L10N_RESPONSE_BUFFERING_DESCRIPTION)
+    String responseBuffering() default "adaptive";
+
+    @AttributeDefinition(name = L10N_SELECT_METHOD_NAME, description = L10N_SELECT_METHOD_DESCRIPTION)
+    String selectMethod() default "direct";
+
+    @AttributeDefinition(name = L10N_APPLICATION_INTENT_NAME, description = L10N_APPLICATION_INTENT_DESCRIPTION)
+    String applicationIntent() default "readwrite";
+
+    @AttributeDefinition(name = L10N_MULTI_SUBNET_FAILOVER_NAME, description = L10N_MULTI_SUBNET_FAILOVER_DESCRIPTION)
+    boolean multiSubnetFailover() default false;
+
+    @AttributeDefinition(name = L10N_FAILOVER_PARTNER_NAME, description = L10N_FAILOVER_PARTNER_DESCRIPTION)
+    String failoverPartner() default "";
+
+    @AttributeDefinition(name = L10N_PACKET_SIZE_NAME, description = L10N_PACKET_SIZE_DESCRIPTION)
+    int packetSize() default 4096;
+
+    @AttributeDefinition(name = L10N_LOCK_TIMEOUT_NAME, description = L10N_LOCK_TIMEOUT_DESCRIPTION)
+    int lockTimeout() default -1;
+
+    @AttributeDefinition(name = L10N_COLUMN_ENCRYPTION_NAME, description = L10N_COLUMN_ENCRYPTION_DESCRIPTION)
+    String columnEncryptionSetting() default "Disabled";
+
+    @AttributeDefinition(name = L10N_SEND_STRING_PARAMETERS_AS_UNICODE_NAME, description = L10N_SEND_STRING_PARAMETERS_AS_UNICODE_DESCRIPTION)
+    boolean sendStringParametersAsUnicode() default true;
 
 }

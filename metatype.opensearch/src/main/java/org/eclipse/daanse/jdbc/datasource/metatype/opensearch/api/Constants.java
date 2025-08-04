@@ -35,9 +35,8 @@ public class Constants {
     public static final String SUBPROTOCOL = "opensearch";
 
     /**
-     * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a
-     * {@link DataSource} and {@link XADataSource} and
-     * {@link ConnectionPoolDataSource} - Service.
+     * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a {@link DataSource} and
+     * {@link XADataSource} and {@link ConnectionPoolDataSource} - Service.
      */
     public static final String PID_DATASOURCE = "org.eclipse.daanse.jdbc.datasource.metatype.opensearch.OSDataSource";
 
