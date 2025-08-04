@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.sql.XADataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractXADataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.oracle.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -39,9 +40,16 @@ public class XADataSourceService extends AbstractXADataSource {
     private OracleXADataSource ds;
 
     @Activate
-    public XADataSourceService(OracleConfig config, Map<String, Object> configMap) throws SQLException {
+    public XADataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new OracleXADataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure Oracle XADataSource with config: {}", safeConfigMap, e);
+            throw new SQLException(e);
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

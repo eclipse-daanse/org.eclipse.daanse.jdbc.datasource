@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.sql.ConnectionPoolDataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractConnectionPoolDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -30,7 +31,6 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 import org.sqlite.javax.SQLiteConnectionPoolDataSource;
-
 
 @Designate(ocd = SqliteConfig.class, factory = true)
 @Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON, name = PID_DATASOURCE_CP)
@@ -42,9 +42,16 @@ public class ConnectionPoolDataSourceService extends AbstractConnectionPoolDataS
     private SQLiteConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(SqliteConfig config, Map<String, Object> configMap) throws SQLException {
+    public ConnectionPoolDataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new SQLiteConnectionPoolDataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure SQLite ConnectionPoolDataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
 
     }
 

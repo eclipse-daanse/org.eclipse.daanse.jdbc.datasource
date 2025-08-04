@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.sql.ConnectionPoolDataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractConnectionPoolDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -41,10 +42,17 @@ public class ConnectionPoolDataSourceService extends AbstractConnectionPoolDataS
     private SQLServerConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(MssqlserverConfig config, Map<String, Object> configMap) {
+    public ConnectionPoolDataSourceService(Map<String, Object> configMap) {
         this.ds = new SQLServerConnectionPoolDataSource();
 
-        Util.doConfig(ds, config, configMap);
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure MS SQL Server ConnectionPoolDataSource with config: {}", safeConfigMap,
+                    e);
+            throw e;
+        }
 
     }
 

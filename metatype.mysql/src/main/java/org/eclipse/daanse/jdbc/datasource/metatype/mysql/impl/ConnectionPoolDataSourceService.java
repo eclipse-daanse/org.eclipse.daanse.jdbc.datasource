@@ -13,11 +13,13 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.ConnectionPoolDataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractConnectionPoolDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -39,10 +41,16 @@ public class ConnectionPoolDataSourceService extends AbstractConnectionPoolDataS
     private MysqlConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(MySqlConfig config, Map<String, Object> configMap) {
+    public ConnectionPoolDataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new MysqlConnectionPoolDataSource();
 
-        Util.doConfig(ds, config, configMap);
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure MySQL ConnectionPoolDataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
 
     }
 

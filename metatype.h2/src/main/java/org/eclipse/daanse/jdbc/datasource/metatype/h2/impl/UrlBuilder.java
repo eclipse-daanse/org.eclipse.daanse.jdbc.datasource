@@ -24,45 +24,51 @@ class UrlBuilder {
 
     private static final String JDBC_H2 = "jdbc:h2:";
 
-    static String buildUrl(H2BaseConfig config, Map<String, Object> map) {
+    static String buildUrl(Map<String, Object> map) {
 
         StringBuilder urlStringBuilder = new StringBuilder(JDBC_H2);
-        appendDebug(urlStringBuilder, config);
-        appendFileSystem(urlStringBuilder, config, map);
+        appendDebug(urlStringBuilder, map);
+        appendFileSystem(urlStringBuilder, map);
         // to here is pre identifier. so separated with ":".
-        appendIdentifier(urlStringBuilder, config, map);
+        appendIdentifier(urlStringBuilder, map);
         // from here is post identifier. so separated with ";".
-        appendDatabaseToUpper(urlStringBuilder, config, map);
+        appendDatabaseToUpper(urlStringBuilder, map);
         return urlStringBuilder.toString();
     }
 
-    private static void appendDatabaseToUpper(StringBuilder urlStringBuilder, H2BaseConfig config,
-            Map<String, Object> map) {
+    private static void appendDatabaseToUpper(StringBuilder urlStringBuilder, Map<String, Object> map) {
         if (map.containsKey(Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER)) {
-            String val = config.databaseToUpper() ? "TRUE" : "FALSE";
+            Boolean databaseToUpper = (Boolean) map.get(Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER);
+            String val = (databaseToUpper != null && databaseToUpper) ? "TRUE" : "FALSE";
             urlStringBuilder.append(";DATABASE_TO_UPPER=" + val);
         }
     }
 
-    private static void appendIdentifier(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
+    private static void appendIdentifier(StringBuilder urlStringBuilder, Map<String, Object> map) {
         if (map.containsKey(Constants.DATASOURCE_PROPERTY_IDENTIFIER)) {
-            urlStringBuilder.append(config.identifier());
+            String identifier = (String) map.get(Constants.DATASOURCE_PROPERTY_IDENTIFIER);
+            if (identifier != null) {
+                urlStringBuilder.append(identifier);
+            }
         }
     }
 
-    private static void appendFileSystem(StringBuilder urlStringBuilder, H2BaseConfig config, Map<String, Object> map) {
+    private static void appendFileSystem(StringBuilder urlStringBuilder, Map<String, Object> map) {
 
         if (map.containsKey(Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM)) {
-            String plugableFileSystem = config.plugableFilesystem();
+            String plugableFileSystem = (String) map.get(Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM);
             if (plugableFileSystem != null) {
                 urlStringBuilder.append(plugableFileSystem).append(":");
             }
         }
     }
 
-    private static void appendDebug(StringBuilder urlStringBuilder, H2BaseConfig config) {
-        if (config.debug()) {
-            urlStringBuilder.append("debug:");
+    private static void appendDebug(StringBuilder urlStringBuilder, Map<String, Object> map) {
+        if (map.containsKey(Constants.DATASOURCE_PROPERTY_DEBUG)) {
+            Boolean debug = (Boolean) map.get(Constants.DATASOURCE_PROPERTY_DEBUG);
+            if (debug != null && debug) {
+                urlStringBuilder.append("debug:");
+            }
         }
     }
 }

@@ -12,18 +12,22 @@
 #  Stefan Bischof (bipolis.org) - initial
 #*******************************************************************************
 
-# may cause license issues. better to have driver in lib/ext?
-#-includeresource: ojdbc11-23.5.0.24.07.jar;lib:=true
+# NEVRE: modify the Oracle ojdbc.jar
+# READ: https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/22525
+# RESPECT: https://download.oracle.com/otn-pub/otn_software/jdbc/FDHUT_LICENSE.txt
+-includeresource: ojdbc11-${ojdbc11.version}.jar;lib:=true
 #
 Import-Package:\
-    com.oracle.*,\
-    oracle.*,\
+    !com.oracle*,\
+    !oracle*,\
     !org.graalvm*,\
-    !jakarta.json*,\
     !javax.json*,\
     !javax.resource*,\
     !org.objectweb*,\
     !weblogic*,\
     !com.sun.security.jgss*,\
     !sun.security.krb5.internal*,\
+    !org.ietf.jgss*,\
+    javax.transaction*;resolution:=optional,\
+    jakarta.json*;resolution:=optional,\
     *

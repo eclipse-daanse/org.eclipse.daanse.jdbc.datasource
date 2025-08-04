@@ -69,7 +69,9 @@ class OSDataSourceTest {
             @Property(key = Constants.DATASOURCE_PROPERTY_HOST, value = "localhost"),
             @Property(key = Constants.DATASOURCE_PROPERTY_PORT, value = "9200"),
             @Property(key = Constants.DATASOURCE_PROPERTY_USERNAME, value = "admin"),
-            @Property(key = Constants.DATASOURCE_PROPERTY_PASSWORD, value = "%s", templateArguments = @TemplateArgument(source = ValueSource.SystemProperty, value = "OPENSEARCH_INITIAL_ADMIN_PASSWORD")),//set in bndrun
+            @Property(key = Constants.DATASOURCE_PROPERTY_PASSWORD, value = "%s", templateArguments = @TemplateArgument(source = ValueSource.SystemProperty, value = "OPENSEARCH_INITIAL_ADMIN_PASSWORD")), // set
+                                                                                                                                                                                                            // in
+                                                                                                                                                                                                            // bndrun
             @Property(key = Constants.DATASOURCE_PROPERTY_AUTH, value = "BASIC"),
             @Property(key = Constants.DATASOURCE_PROPERTY_TRUSTSELFSIGNED, value = "true"),
             @Property(key = Constants.DATASOURCE_PROPERTY_USESSL, value = "true") })

@@ -16,9 +16,10 @@ package org.eclipse.daanse.jdbc.datasource.metatype.sqlite.impl;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
+import org.eclipse.daanse.jdbc.datasource.metatype.sqlite.api.Constants;
 import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig.Pragma;
 import org.sqlite.SQLiteDataSource;
 
 public class Util {
@@ -26,53 +27,89 @@ public class Util {
         // constructor
     }
 
-    public static void doConfig(SQLiteDataSource ds, SqliteConfig config, Map<String, Object> configMap)
+    public static void doConfig(SQLiteDataSource ds, Map<String, Object> configMap)
             throws SQLException {
         SQLiteConfig c = new SQLiteConfig();
 
-        ds.setUrl(config.url());
+        // Set URL from configMap
+        if (configMap.containsKey(Constants.DATASOURCE_PROPERTY_URL)) {
+            ds.setUrl((String) configMap.get(Constants.DATASOURCE_PROPERTY_URL));
+        }
 
-//        c.setPragma(Pragma.PASSWORD, config._password());
+        // Handle user and password on DataSource
+        if (configMap.containsKey(Constants.DATASOURCE_PROPERTY_USER)) {
+//            c.setPragma(Pragma.PASSWORD, null);
+        }
+        if (configMap.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
+            String password = (String) configMap.get(Constants.DATASOURCE_PROPERTY_PASSWORD);
+            if (password != null) {
+                c.setPragma(Pragma.PASSWORD, password);
+            }
+        }
 
-        setValueIfNotNull(c::setApplicationId, config::applicationId, configMap, "");
-        setValueIfNotNull(c::setBusyTimeout, config::busyTimeout, configMap, "");
-        setValueIfNotNull(c::setDateClass, () -> config.dateClass().getValue(), configMap, "");
-
-        setValueIfNotNull(c::setDateStringFormat, config::dateStringFormat, configMap, "");
-        setValueIfNotNull(c::deferForeignKeys, config::deferForeignKeys, configMap, "");
-        setValueIfNotNull(c::setDefaultCacheSize, config::defaultCacheSize, configMap, "");
-        setValueIfNotNull(c::deferForeignKeys, config::deferForeignKeys, configMap, "");
-        setValueIfNotNull(c::enableCaseSensitiveLike, config::caseSensitiveLike, configMap, "");
-        setValueIfNotNull(c::enableFullSync, config::fullSync, configMap, "");
-        setValueIfNotNull(c::enforceForeignKeys, config::enforceForeignKeys, configMap, "");
-        setValueIfNotNull(c::setHexKeyMode, config::hexKeyMode, configMap, "");
-        setValueIfNotNull(c::incrementalVacuum, config::incrementalVacuum, configMap, "");
-        setValueIfNotNull(c::setCacheSize, config::cacheSize, configMap, "");
-        setValueIfNotNull(c::setJournalMode, config::journalMode, configMap, "");
-        setValueIfNotNull(c::setJournalMode, config::journalMode, configMap, "");
-        setValueIfNotNull(c::useLegacyFileFormat, config::legacyFileFormat, configMap, "");
-        setValueIfNotNull(c::setLockingMode, config::lockingMode, configMap, "");
-        setValueIfNotNull(c::enableLoadExtension, config::loadExtensionEnabled, configMap, "");
-        setValueIfNotNull(c::setMaxPageCount, config::maxPageCount, configMap, "");
-        setValueIfNotNull(c::setPageSize, config::pageSize, configMap, "");
-        setValueIfNotNull(c::setReadOnly, config::readOnly, configMap, "");
-        setValueIfNotNull(c::enableRecursiveTriggers, config::recursiveTriggers, configMap, "");
-        setValueIfNotNull(c::enableReverseUnorderedSelects, config::reverseUnorderedSelects, configMap, "");
-        setValueIfNotNull(c::setSharedCache, config::sharedCache, configMap, "");
-        setValueIfNotNull(c::enableShortColumnNames, config::shortColumnNames, configMap, "");
-        setValueIfNotNull(c::setSynchronous, config::synchronous, configMap, "");
-        setValueIfNotNull(c::setTempStore, config::tempStore, configMap, "");
-        setValueIfNotNull(c::setTempStoreDirectory, config::tempStoreDirectory, configMap, "");
-        setValueIfNotNull(c::setTransactionMode, config::transactionMode, configMap, "");
-        setValueIfNotNull(c::setUserVersion, config::userVersion, configMap, "");
+        setValueFromMap(c::setApplicationId, configMap, Constants.DATASOURCE_PROPERTY_APPLICATION_ID);
+        setValueFromMap(c::setBusyTimeout, configMap, Constants.DATASOURCE_PROPERTY_BUSY_TIMEOUT);
+        setStringValueFromMap(c::setDateClass, configMap, Constants.DATASOURCE_PROPERTY_DATE_CLASS);
+        setStringValueFromMap(c::setDatePrecision, configMap, Constants.DATASOURCE_PROPERTY_DATE_PRECISION);
+        setValueFromMap(c::setDateStringFormat, configMap, Constants.DATASOURCE_PROPERTY_DATE_STRING_FORMAT);
+        setValueFromMap(c::deferForeignKeys, configMap, Constants.DATASOURCE_PROPERTY_DEFER_FOREIGN_KEYS);
+        setValueFromMap(c::setDefaultCacheSize, configMap, Constants.DATASOURCE_PROPERTY_DEFAULT_CACHE_SIZE);
+        setValueFromMap(c::enableCaseSensitiveLike, configMap, Constants.DATASOURCE_PROPERTY_CASE_SENSITIVE_LIKE);
+        setValueFromMap(c::enableFullSync, configMap, Constants.DATASOURCE_PROPERTY_FULL_SYNC);
+        setValueFromMap(c::enforceForeignKeys, configMap, Constants.DATASOURCE_PROPERTY_ENFORCE_FOREIGN_KEYS);
+        setValueFromMap(c::setHexKeyMode, configMap, Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE);
+        setValueFromMap(c::incrementalVacuum, configMap, Constants.DATASOURCE_PROPERTY_INCREMENTAL_VACUUM);
+        setValueFromMap(c::setCacheSize, configMap, Constants.DATASOURCE_PROPERTY_CACHE_SIZE);
+        setPragmaFromMap(c, Pragma.JOURNAL_MODE, configMap, Constants.DATASOURCE_PROPERTY_JOURNAL_MODE);
+        setValueFromMap(c::setJournalSizeLimit, configMap, Constants.DATASOURCE_PROPERTY_JOURNAL_SIZE_LIMIT);
+        setValueFromMap(c::useLegacyFileFormat, configMap, Constants.DATASOURCE_PROPERTY_LEGACY_FILE_FORMAT);
+        setPragmaFromMap(c, Pragma.LOCKING_MODE, configMap, Constants.DATASOURCE_PROPERTY_LOCKING_MODE);
+        setValueFromMap(c::enableLoadExtension, configMap, Constants.DATASOURCE_PROPERTY_LOAD_EXTENSION_ENABLED);
+        setValueFromMap(c::setMaxPageCount, configMap, Constants.DATASOURCE_PROPERTY_MAX_PAGE_COUNT);
+        setValueFromMap(c::setPageSize, configMap, Constants.DATASOURCE_PROPERTY_PAGE_SIZE);
+        setValueFromMap(c::setReadOnly, configMap, Constants.DATASOURCE_PROPERTY_READ_ONLY);
+//        setValueFromMap(c::setReadUncommited, configMap, Constants.DATASOURCE_PROPERTY_READ_UNCOMMITTED);
+        setValueFromMap(c::enableRecursiveTriggers, configMap, Constants.DATASOURCE_PROPERTY_RECURSIVE_TRIGGERS);
+        setValueFromMap(c::enableReverseUnorderedSelects, configMap, Constants.DATASOURCE_PROPERTY_REVERSE_UNORDERED_SELECTS);
+        setValueFromMap(c::setSharedCache, configMap, Constants.DATASOURCE_PROPERTY_SHARED_CACHE);
+        setValueFromMap(c::enableShortColumnNames, configMap, Constants.DATASOURCE_PROPERTY_SHORT_COLUMN_NAMES);
+        setPragmaFromMap(c, Pragma.SYNCHRONOUS, configMap, Constants.DATASOURCE_PROPERTY_SYNCHRONOUS);
+        setPragmaFromMap(c, Pragma.TEMP_STORE, configMap, Constants.DATASOURCE_PROPERTY_TEMP_STORE);
+        setValueFromMap(c::setTempStoreDirectory, configMap, Constants.DATASOURCE_PROPERTY_TEMP_STORE_DIRECTORY);
+        setPragmaFromMap(c, Pragma.TRANSACTION_MODE, configMap, Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE);
+        setValueFromMap(c::setUserVersion, configMap, Constants.DATASOURCE_PROPERTY_USER_VERSION);
 
         ds.setConfig(c);
     }
 
-    private static <T> void setValueIfNotNull(Consumer<T> setterMethod, Supplier<T> value,
+    @SuppressWarnings("unchecked")
+    private static <T> void setValueFromMap(Consumer<T> setterMethod,
             Map<String, Object> configMap, String propName) {
         if (configMap.containsKey(propName)) {
-            setterMethod.accept(value.get());
+            T value = (T) configMap.get(propName);
+            if (value != null) {
+                setterMethod.accept(value);
+            }
+        }
+    }
+
+    private static void setStringValueFromMap(Consumer<String> setterMethod,
+            Map<String, Object> configMap, String propName) {
+        if (configMap.containsKey(propName)) {
+            Object value = configMap.get(propName);
+            if (value != null) {
+                setterMethod.accept(value.toString());
+            }
+        }
+    }
+
+    private static void setPragmaFromMap(SQLiteConfig config, Pragma pragma,
+            Map<String, Object> configMap, String propName) {
+        if (configMap.containsKey(propName)) {
+            Object value = configMap.get(propName);
+            if (value != null) {
+                config.setPragma(pragma, value.toString());
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.sqlite.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -38,10 +39,19 @@ public class DataSourceService extends AbstractDataSource {
     private SQLiteDataSource ds;
 
     @Activate
-    public DataSourceService(SqliteConfig config, Map<String, Object> configMap) throws SQLException {
+    public DataSourceService(Map<String, Object> configMap) throws SQLException {
+
         super();
+
         this.ds = new SQLiteDataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure SQLite DataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

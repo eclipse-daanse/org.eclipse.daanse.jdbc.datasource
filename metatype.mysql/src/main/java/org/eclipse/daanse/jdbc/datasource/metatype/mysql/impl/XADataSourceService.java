@@ -13,11 +13,13 @@
 */
 package org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.XADataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractXADataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -38,9 +40,16 @@ public class XADataSourceService extends AbstractXADataSource {
     private MysqlXADataSource ds;
 
     @Activate
-    public XADataSourceService(MySqlConfig config, Map<String, Object> configMap) {
+    public XADataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new MysqlXADataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (SQLException e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure MySQL XADataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

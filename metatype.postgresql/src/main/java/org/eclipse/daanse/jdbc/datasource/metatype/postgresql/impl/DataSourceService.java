@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -37,10 +38,17 @@ public class DataSourceService extends AbstractDataSource {
     private PGSimpleDataSource ds;
 
     @Activate
-    public DataSourceService(PostgresConfig config, Map<String, Object> configMap) {
+    public DataSourceService(Map<String, Object> configMap) {
         super();
         this.ds = new PGSimpleDataSource();
-        Util.doConfig(ds, config, configMap);
+
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure PostgreSQL DataSource with config: {}", safeConfigMap, e);
+            throw e;
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

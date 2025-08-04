@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.sql.ConnectionPoolDataSource;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractConnectionPoolDataSource;
+import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -31,7 +32,6 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
-
 
 @Designate(ocd = OracleConfig.class, factory = true)
 @Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON, name = PID_DATASOURCE_CP)
@@ -43,10 +43,16 @@ public class ConnectionPoolDataSourceService extends AbstractConnectionPoolDataS
     private OracleConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(OracleConfig config, Map<String, Object> configMap) throws SQLException {
+    public ConnectionPoolDataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new OracleConnectionPoolDataSource();
 
-        Util.doConfig(ds, config, configMap);
+        try {
+            Util.doConfig(ds, configMap);
+        } catch (Exception e) {
+            Map<String, Object> safeConfigMap = DataSourceCommonUtils.createSafeConfigMapForLogging(configMap);
+            LOGGER.error("Failed to configure Oracle ConnectionPoolDataSource with config: {}", safeConfigMap, e);
+            throw new SQLException(e);
+        }
 
     }
 
