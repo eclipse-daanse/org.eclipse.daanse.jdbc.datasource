@@ -24,6 +24,7 @@ import javax.sql.ConnectionPoolDataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractConnectionPoolDataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
+import org.eclipse.daanse.jdbc.datasource.metatype.oracle.api.ocd.CpDsConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -33,8 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 
-@Designate(ocd = OracleConfig.class, factory = true)
-@Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON, name = PID_DATASOURCE_CP)
+@Designate(ocd = CpDsConfig.class, factory = true)
+@Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON, configurationPid = PID_DATASOURCE_CP)
 @DataSourceMetaData(subprotocol = SUBPROTOCOL)
 public class ConnectionPoolDataSourceService extends AbstractConnectionPoolDataSource
         implements ConnectionPoolDataSource {

@@ -27,6 +27,7 @@ import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractCommonDataSour
 import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.metatype.h2.api.ocd.DsConfig;
 import org.h2.jdbcx.JdbcDataSource;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -35,9 +36,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 
-@Designate(ocd = H2BaseConfig.class, factory = true)
+@Designate(ocd = DsConfig.class, factory = true)
 @Component(service = { DataSource.class, XADataSource.class,
-        ConnectionPoolDataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
+        ConnectionPoolDataSource.class }, scope = ServiceScope.SINGLETON, configurationPid = Constants.PID_DATASOURCE)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class H2DataSource extends AbstractCommonDataSource<JdbcDataSource>
         implements ConnectionPoolDataSource, DataSource, XADataSource {

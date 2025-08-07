@@ -55,7 +55,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl.PostgresConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.ocd.BaseConfig#_password()}
      * {@link PGProperty#PASSWORD}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
@@ -63,7 +63,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl.PostgresConfig#user()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.ocd.BaseConfig#user()}
      * {@link PGProperty#USER}
      */
     public static final String DATASOURCE_PROPERTY_USER = "user";
@@ -71,7 +71,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl.PostgresConfig#host()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.ocd.BaseConfig#host()}
      * {@link PGProperty#PG_HOST}
      */
     public static final String DATASOURCE_PROPERTY_PG_HOST = "pg.host";
@@ -79,7 +79,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl.PostgresConfig#dbname()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.ocd.BaseConfig#dbname()}
      * {@link PGProperty#PG_DBNAME}
      */
     public static final String DATASOURCE_PROPERTY_PG_DBNAME = "pg.dbname";
@@ -87,7 +87,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.impl.PostgresConfig#ports()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.postgresql.api.ocd.BaseConfig#ports()}
      * {@link PGProperty#PG_PORT}
      */
     public static final String DATASOURCE_PROPERTY_PG_PORT = "pg.port";

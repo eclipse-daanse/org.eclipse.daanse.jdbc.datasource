@@ -54,35 +54,35 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl.MySqlConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.BaseConfig#_password()}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
 
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl.MySqlConfig#user()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.BaseConfig#user()}
      */
     public static final String DATASOURCE_PROPERTY_USER = "user";
 
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl.MySqlConfig#host()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.BaseConfig#host()}
      */
     public static final String DATASOURCE_PROPERTY_HOST = "host";
 
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl.MySqlConfig#databaseName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.BaseConfig#databaseName()}
      */
     public static final String DATASOURCE_PROPERTY_DATABASENAME = "databaseName";
 
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.impl.MySqlConfig#port()}
+     * {@link org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.BaseConfig#port()}
      */
     public static final String DATASOURCE_PROPERTY_PORT = "port";
 

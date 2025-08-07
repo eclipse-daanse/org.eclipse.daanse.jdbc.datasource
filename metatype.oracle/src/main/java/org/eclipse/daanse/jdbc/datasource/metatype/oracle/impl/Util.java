@@ -15,7 +15,6 @@ package org.eclipse.daanse.jdbc.datasource.metatype.oracle.impl;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import org.eclipse.daanse.jdbc.datasource.metatype.oracle.api.Constants;
 
