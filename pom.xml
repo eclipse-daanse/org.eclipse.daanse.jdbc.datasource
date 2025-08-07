@@ -53,14 +53,14 @@
   </dependencies>
 
   <modules>
-    <module>metatype.common</module>
-    <module>metatype.h2</module>
-    <module>metatype.postgresql</module>
-    <module>metatype.ucanaccess</module>
-    <module>metatype.opensearch</module>
-    <module>metatype.mysql</module>
-    <module>metatype.mssqlserver</module>
-    <module>metatype.sqlite</module>
-    <module>metatype.oracle</module>
+    <module>common</module>
+    <module>h2</module>
+    <module>postgresql</module>
+    <module>ucanaccess</module>
+    <module>opensearch</module>
+    <module>mysql</module>
+    <module>mssqlserver</module>
+    <module>sqlite</module>
+    <module>oracle</module>
   </modules>
 </project>

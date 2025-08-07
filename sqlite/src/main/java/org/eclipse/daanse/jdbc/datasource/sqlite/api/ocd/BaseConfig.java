@@ -1,0 +1,482 @@
+/*
+* Copyright (c) 2022 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
+package org.eclipse.daanse.jdbc.datasource.sqlite.api.ocd;
+
+import org.eclipse.daanse.jdbc.datasource.sqlite.api.Constants;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.AttributeType;
+import org.osgi.service.metatype.annotations.Option;
+import org.sqlite.SQLiteConfig.DateClass;
+import org.sqlite.SQLiteConfig.DatePrecision;
+import org.sqlite.SQLiteConfig.HexKeyMode;
+import org.sqlite.SQLiteConfig.JournalMode;
+import org.sqlite.SQLiteConfig.LockingMode;
+import org.sqlite.SQLiteConfig.SynchronousMode;
+import org.sqlite.SQLiteConfig.TempStore;
+import org.sqlite.SQLiteConfig.TransactionMode;
+
+public interface BaseConfig {
+
+    String OCD_LOCALIZATION = "OSGI-INF/l10n/org.eclipse.daanse.jdbc.datasource.sqlite.ocd";
+    String L10N_PREFIX = "%";
+    String L10N_POSTFIX_DESCRIPTION = ".description";
+    String L10N_POSTFIX_NAME = ".name";
+    String L10N_POSTFIX_OPTION = ".option";
+    String L10N_POSTFIX_LABEL = ".label";
+
+    String L10N_URL_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_URL + L10N_POSTFIX_NAME;
+    String L10N_URL_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_URL + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_USER_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER + L10N_POSTFIX_NAME;
+    String L10N_USER_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_PASSWORD_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PASSWORD + L10N_POSTFIX_NAME;
+    String L10N_PASSWORD_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PASSWORD + L10N_POSTFIX_DESCRIPTION;
+
+    // SQLite specific L10N constants
+    String L10N_SHARED_CACHE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SHARED_CACHE + L10N_POSTFIX_NAME;
+    String L10N_SHARED_CACHE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SHARED_CACHE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_LOAD_EXTENSION_ENABLED_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOAD_EXTENSION_ENABLED
+            + L10N_POSTFIX_NAME;
+    String L10N_LOAD_EXTENSION_ENABLED_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOAD_EXTENSION_ENABLED
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_READ_ONLY_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_READ_ONLY + L10N_POSTFIX_NAME;
+    String L10N_READ_ONLY_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_READ_ONLY
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_CACHE_SIZE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_CACHE_SIZE + L10N_POSTFIX_NAME;
+    String L10N_CACHE_SIZE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_CACHE_SIZE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_CASE_SENSITIVE_LIKE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_CASE_SENSITIVE_LIKE
+            + L10N_POSTFIX_NAME;
+    String L10N_CASE_SENSITIVE_LIKE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_CASE_SENSITIVE_LIKE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_DEFAULT_CACHE_SIZE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFAULT_CACHE_SIZE
+            + L10N_POSTFIX_NAME;
+    String L10N_DEFAULT_CACHE_SIZE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFAULT_CACHE_SIZE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_DEFER_FOREIGN_KEYS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFER_FOREIGN_KEYS
+            + L10N_POSTFIX_NAME;
+    String L10N_DEFER_FOREIGN_KEYS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFER_FOREIGN_KEYS
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_ENFORCE_FOREIGN_KEYS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_ENFORCE_FOREIGN_KEYS
+            + L10N_POSTFIX_NAME;
+    String L10N_ENFORCE_FOREIGN_KEYS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_ENFORCE_FOREIGN_KEYS
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_FULL_SYNC_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_FULL_SYNC + L10N_POSTFIX_NAME;
+    String L10N_FULL_SYNC_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_FULL_SYNC
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_INCREMENTAL_VACUUM_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_INCREMENTAL_VACUUM
+            + L10N_POSTFIX_NAME;
+    String L10N_INCREMENTAL_VACUUM_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_INCREMENTAL_VACUUM
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_JOURNAL_MODE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_NAME;
+    String L10N_JOURNAL_MODE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_JOURNAL_SIZE_LIMIT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_SIZE_LIMIT
+            + L10N_POSTFIX_NAME;
+    String L10N_JOURNAL_SIZE_LIMIT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_SIZE_LIMIT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_LEGACY_FILE_FORMAT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LEGACY_FILE_FORMAT
+            + L10N_POSTFIX_NAME;
+    String L10N_LEGACY_FILE_FORMAT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LEGACY_FILE_FORMAT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_LOCKING_MODE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCKING_MODE + L10N_POSTFIX_NAME;
+    String L10N_LOCKING_MODE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCKING_MODE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_PAGE_SIZE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PAGE_SIZE + L10N_POSTFIX_NAME;
+    String L10N_PAGE_SIZE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PAGE_SIZE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_MAX_PAGE_COUNT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_MAX_PAGE_COUNT + L10N_POSTFIX_NAME;
+    String L10N_MAX_PAGE_COUNT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_MAX_PAGE_COUNT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_READ_UNCOMMITTED_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_READ_UNCOMMITTED
+            + L10N_POSTFIX_NAME;
+    String L10N_READ_UNCOMMITTED_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_READ_UNCOMMITTED
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_RECURSIVE_TRIGGERS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_RECURSIVE_TRIGGERS
+            + L10N_POSTFIX_NAME;
+    String L10N_RECURSIVE_TRIGGERS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_RECURSIVE_TRIGGERS
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_REVERSE_UNORDERED_SELECTS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_REVERSE_UNORDERED_SELECTS
+            + L10N_POSTFIX_NAME;
+    String L10N_REVERSE_UNORDERED_SELECTS_DESCRIPTION = L10N_PREFIX
+            + Constants.DATASOURCE_PROPERTY_REVERSE_UNORDERED_SELECTS + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_SHORT_COLUMN_NAMES_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SHORT_COLUMN_NAMES
+            + L10N_POSTFIX_NAME;
+    String L10N_SHORT_COLUMN_NAMES_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SHORT_COLUMN_NAMES
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_SYNCHRONOUS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS + L10N_POSTFIX_NAME;
+    String L10N_SYNCHRONOUS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_HEX_KEY_MODE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE + L10N_POSTFIX_NAME;
+    String L10N_HEX_KEY_MODE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_TEMP_STORE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE + L10N_POSTFIX_NAME;
+    String L10N_TEMP_STORE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_TEMP_STORE_DIRECTORY_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE_DIRECTORY
+            + L10N_POSTFIX_NAME;
+    String L10N_TEMP_STORE_DIRECTORY_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE_DIRECTORY
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_USER_VERSION_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER_VERSION + L10N_POSTFIX_NAME;
+    String L10N_USER_VERSION_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER_VERSION
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_APPLICATION_ID_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_APPLICATION_ID + L10N_POSTFIX_NAME;
+    String L10N_APPLICATION_ID_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_APPLICATION_ID
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_TRANSACTION_MODE_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE
+            + L10N_POSTFIX_NAME;
+    String L10N_TRANSACTION_MODE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_DATE_PRECISION_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_PRECISION + L10N_POSTFIX_NAME;
+    String L10N_DATE_PRECISION_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_PRECISION
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_DATE_CLASS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_CLASS + L10N_POSTFIX_NAME;
+    String L10N_DATE_CLASS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_CLASS
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_DATE_STRING_FORMAT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_STRING_FORMAT
+            + L10N_POSTFIX_NAME;
+    String L10N_DATE_STRING_FORMAT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_STRING_FORMAT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    String L10N_BUSY_TIMEOUT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_BUSY_TIMEOUT + L10N_POSTFIX_NAME;
+    String L10N_BUSY_TIMEOUT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_BUSY_TIMEOUT
+            + L10N_POSTFIX_DESCRIPTION;
+
+    // Option label constants following .option.optionname.label pattern
+    String L10N_JOURNAL_MODE_OPTION_DELETE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".delete" + L10N_POSTFIX_LABEL;
+    String L10N_JOURNAL_MODE_OPTION_TRUNCATE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".truncate" + L10N_POSTFIX_LABEL;
+    String L10N_JOURNAL_MODE_OPTION_PERSIST_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".persist" + L10N_POSTFIX_LABEL;
+    String L10N_JOURNAL_MODE_OPTION_MEMORY_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".memory" + L10N_POSTFIX_LABEL;
+    String L10N_JOURNAL_MODE_OPTION_WAL_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".wal" + L10N_POSTFIX_LABEL;
+    String L10N_JOURNAL_MODE_OPTION_OFF_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_JOURNAL_MODE + L10N_POSTFIX_OPTION + ".off" + L10N_POSTFIX_LABEL;
+
+    String L10N_LOCKING_MODE_OPTION_NORMAL_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCKING_MODE + L10N_POSTFIX_OPTION + ".normal" + L10N_POSTFIX_LABEL;
+    String L10N_LOCKING_MODE_OPTION_EXCLUSIVE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_LOCKING_MODE + L10N_POSTFIX_OPTION + ".exclusive" + L10N_POSTFIX_LABEL;
+
+    String L10N_SYNCHRONOUS_OPTION_OFF_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS + L10N_POSTFIX_OPTION + ".off" + L10N_POSTFIX_LABEL;
+    String L10N_SYNCHRONOUS_OPTION_NORMAL_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS + L10N_POSTFIX_OPTION + ".normal" + L10N_POSTFIX_LABEL;
+    String L10N_SYNCHRONOUS_OPTION_FULL_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS + L10N_POSTFIX_OPTION + ".full" + L10N_POSTFIX_LABEL;
+    String L10N_SYNCHRONOUS_OPTION_EXTRA_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SYNCHRONOUS + L10N_POSTFIX_OPTION + ".extra" + L10N_POSTFIX_LABEL;
+
+    String L10N_HEX_KEY_MODE_OPTION_NONE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE + L10N_POSTFIX_OPTION + ".none" + L10N_POSTFIX_LABEL;
+    String L10N_HEX_KEY_MODE_OPTION_SSE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE + L10N_POSTFIX_OPTION + ".sse" + L10N_POSTFIX_LABEL;
+    String L10N_HEX_KEY_MODE_OPTION_SQLCIPHER_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HEX_KEY_MODE + L10N_POSTFIX_OPTION + ".sqlcipher" + L10N_POSTFIX_LABEL;
+
+    String L10N_TEMP_STORE_OPTION_DEFAULT_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE + L10N_POSTFIX_OPTION + ".default" + L10N_POSTFIX_LABEL;
+    String L10N_TEMP_STORE_OPTION_FILE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE + L10N_POSTFIX_OPTION + ".file" + L10N_POSTFIX_LABEL;
+    String L10N_TEMP_STORE_OPTION_MEMORY_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TEMP_STORE + L10N_POSTFIX_OPTION + ".memory" + L10N_POSTFIX_LABEL;
+
+    String L10N_TRANSACTION_MODE_OPTION_DEFERRED_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE + L10N_POSTFIX_OPTION + ".deferred" + L10N_POSTFIX_LABEL;
+    String L10N_TRANSACTION_MODE_OPTION_IMMEDIATE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE + L10N_POSTFIX_OPTION + ".immediate" + L10N_POSTFIX_LABEL;
+    String L10N_TRANSACTION_MODE_OPTION_EXCLUSIVE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_TRANSACTION_MODE + L10N_POSTFIX_OPTION + ".exclusive" + L10N_POSTFIX_LABEL;
+
+    String L10N_DATE_PRECISION_OPTION_SECONDS_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_PRECISION + L10N_POSTFIX_OPTION + ".seconds" + L10N_POSTFIX_LABEL;
+    String L10N_DATE_PRECISION_OPTION_MILLISECONDS_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_PRECISION + L10N_POSTFIX_OPTION + ".milliseconds" + L10N_POSTFIX_LABEL;
+
+    String L10N_DATE_CLASS_OPTION_INTEGER_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_CLASS + L10N_POSTFIX_OPTION + ".integer" + L10N_POSTFIX_LABEL;
+    String L10N_DATE_CLASS_OPTION_TEXT_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_CLASS + L10N_POSTFIX_OPTION + ".text" + L10N_POSTFIX_LABEL;
+    String L10N_DATE_CLASS_OPTION_REAL_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATE_CLASS + L10N_POSTFIX_OPTION + ".real" + L10N_POSTFIX_LABEL;
+
+    // Default value constants
+    String DEFAULT_URL = "";
+    String DEFAULT_USER = "";
+    String DEFAULT_PASSWORD = "";
+    boolean DEFAULT_SHARED_CACHE = false;
+    boolean DEFAULT_LOAD_EXTENSION_ENABLED = false;
+    boolean DEFAULT_READ_ONLY = false;
+    int DEFAULT_CACHE_SIZE = 0;
+    boolean DEFAULT_CASE_SENSITIVE_LIKE = false;
+    int DEFAULT_DEFAULT_CACHE_SIZE = 0;
+    boolean DEFAULT_DEFER_FOREIGN_KEYS = false;
+    boolean DEFAULT_ENFORCE_FOREIGN_KEYS = false;
+    boolean DEFAULT_FULL_SYNC = false;
+    int DEFAULT_INCREMENTAL_VACUUM = 0;
+    JournalMode DEFAULT_JOURNAL_MODE = JournalMode.DELETE;
+    int DEFAULT_JOURNAL_SIZE_LIMIT = 0;
+    boolean DEFAULT_LEGACY_FILE_FORMAT = false;
+    LockingMode DEFAULT_LOCKING_MODE = LockingMode.NORMAL;
+    int DEFAULT_PAGE_SIZE = 0;
+    int DEFAULT_MAX_PAGE_COUNT = 0;
+    boolean DEFAULT_READ_UNCOMMITTED = false;
+    boolean DEFAULT_RECURSIVE_TRIGGERS = false;
+    boolean DEFAULT_REVERSE_UNORDERED_SELECTS = false;
+    boolean DEFAULT_SHORT_COLUMN_NAMES = false;
+    SynchronousMode DEFAULT_SYNCHRONOUS = SynchronousMode.FULL;
+    HexKeyMode DEFAULT_HEX_KEY_MODE = HexKeyMode.NONE;
+    TempStore DEFAULT_TEMP_STORE = TempStore.DEFAULT;
+    String DEFAULT_TEMP_STORE_DIRECTORY = "";
+    int DEFAULT_USER_VERSION = 0;
+    int DEFAULT_APPLICATION_ID = 0;
+    TransactionMode DEFAULT_TRANSACTION_MODE = TransactionMode.DEFERRED;
+    DatePrecision DEFAULT_DATE_PRECISION = DatePrecision.MILLISECONDS;
+    DateClass DEFAULT_DATE_CLASS = DateClass.INTEGER;
+    String DEFAULT_DATE_STRING_FORMAT = "";
+    int DEFAULT_BUSY_TIMEOUT = 0;
+
+    @AttributeDefinition(name = L10N_URL_NAME, description = L10N_URL_DESCRIPTION, required = true, defaultValue = DEFAULT_URL)
+    default String url() {
+        return DEFAULT_URL;
+    }
+
+    @AttributeDefinition(name = L10N_USER_NAME, description = L10N_USER_DESCRIPTION, defaultValue = DEFAULT_USER)
+    default String user() {
+        return DEFAULT_USER;
+    }
+
+    @AttributeDefinition(name = L10N_PASSWORD_NAME, description = L10N_PASSWORD_DESCRIPTION, type = AttributeType.PASSWORD, defaultValue = DEFAULT_PASSWORD)
+    default String _password() {
+        return DEFAULT_PASSWORD;
+    }
+
+    @AttributeDefinition(name = L10N_SHARED_CACHE_NAME, description = L10N_SHARED_CACHE_DESCRIPTION, defaultValue = DEFAULT_SHARED_CACHE
+            + "")
+    default boolean sharedCache() {
+        return DEFAULT_SHARED_CACHE;
+    }
+
+    @AttributeDefinition(name = L10N_LOAD_EXTENSION_ENABLED_NAME, description = L10N_LOAD_EXTENSION_ENABLED_DESCRIPTION, defaultValue = DEFAULT_LOAD_EXTENSION_ENABLED
+            + "")
+    default boolean loadExtensionEnabled() {
+        return DEFAULT_LOAD_EXTENSION_ENABLED;
+    }
+
+    @AttributeDefinition(name = L10N_READ_ONLY_NAME, description = L10N_READ_ONLY_DESCRIPTION, defaultValue = DEFAULT_READ_ONLY
+            + "")
+    default boolean readOnly() {
+        return DEFAULT_READ_ONLY;
+    }
+
+    @AttributeDefinition(name = L10N_CACHE_SIZE_NAME, description = L10N_CACHE_SIZE_DESCRIPTION, defaultValue = DEFAULT_CACHE_SIZE
+            + "")
+    default int cacheSize() {
+        return DEFAULT_CACHE_SIZE;
+    }
+
+    @AttributeDefinition(name = L10N_CASE_SENSITIVE_LIKE_NAME, description = L10N_CASE_SENSITIVE_LIKE_DESCRIPTION, defaultValue = DEFAULT_CASE_SENSITIVE_LIKE
+            + "")
+    default boolean caseSensitiveLike() {
+        return DEFAULT_CASE_SENSITIVE_LIKE;
+    }
+
+    @AttributeDefinition(name = L10N_DEFAULT_CACHE_SIZE_NAME, description = L10N_DEFAULT_CACHE_SIZE_DESCRIPTION, defaultValue = DEFAULT_DEFAULT_CACHE_SIZE
+            + "")
+    default int defaultCacheSize() {
+        return DEFAULT_DEFAULT_CACHE_SIZE;
+    }
+
+    @AttributeDefinition(name = L10N_DEFER_FOREIGN_KEYS_NAME, description = L10N_DEFER_FOREIGN_KEYS_DESCRIPTION, defaultValue = DEFAULT_DEFER_FOREIGN_KEYS
+            + "")
+    default boolean deferForeignKeys() {
+        return DEFAULT_DEFER_FOREIGN_KEYS;
+    }
+
+    @AttributeDefinition(name = L10N_ENFORCE_FOREIGN_KEYS_NAME, description = L10N_ENFORCE_FOREIGN_KEYS_DESCRIPTION, defaultValue = DEFAULT_ENFORCE_FOREIGN_KEYS
+            + "")
+    default boolean enforceForeignKeys() {
+        return DEFAULT_ENFORCE_FOREIGN_KEYS;
+    }
+
+    @AttributeDefinition(name = L10N_FULL_SYNC_NAME, description = L10N_FULL_SYNC_DESCRIPTION, defaultValue = DEFAULT_FULL_SYNC
+            + "")
+    default boolean fullSync() {
+        return DEFAULT_FULL_SYNC;
+    }
+
+    @AttributeDefinition(name = L10N_INCREMENTAL_VACUUM_NAME, description = L10N_INCREMENTAL_VACUUM_DESCRIPTION, defaultValue = DEFAULT_INCREMENTAL_VACUUM
+            + "")
+    default int incrementalVacuum() {
+        return DEFAULT_INCREMENTAL_VACUUM;
+    }
+
+    @AttributeDefinition(name = L10N_JOURNAL_MODE_NAME, description = L10N_JOURNAL_MODE_DESCRIPTION, defaultValue = "DELETE", options = {
+            @Option(label = L10N_JOURNAL_MODE_OPTION_DELETE_LABEL, value = "DELETE"),
+            @Option(label = L10N_JOURNAL_MODE_OPTION_TRUNCATE_LABEL, value = "TRUNCATE"),
+            @Option(label = L10N_JOURNAL_MODE_OPTION_PERSIST_LABEL, value = "PERSIST"),
+            @Option(label = L10N_JOURNAL_MODE_OPTION_MEMORY_LABEL, value = "MEMORY"),
+            @Option(label = L10N_JOURNAL_MODE_OPTION_WAL_LABEL, value = "WAL"),
+            @Option(label = L10N_JOURNAL_MODE_OPTION_OFF_LABEL, value = "OFF")
+    })
+    default JournalMode journalMode() {
+        return DEFAULT_JOURNAL_MODE;
+    }
+
+    @AttributeDefinition(name = L10N_JOURNAL_SIZE_LIMIT_NAME, description = L10N_JOURNAL_SIZE_LIMIT_DESCRIPTION, defaultValue = DEFAULT_JOURNAL_SIZE_LIMIT
+            + "")
+    default int jounalSizeLimit() {
+        return DEFAULT_JOURNAL_SIZE_LIMIT;
+    }
+
+    @AttributeDefinition(name = L10N_LEGACY_FILE_FORMAT_NAME, description = L10N_LEGACY_FILE_FORMAT_DESCRIPTION, defaultValue = DEFAULT_LEGACY_FILE_FORMAT
+            + "")
+    default boolean legacyFileFormat() {
+        return DEFAULT_LEGACY_FILE_FORMAT;
+    }
+
+    @AttributeDefinition(name = L10N_LOCKING_MODE_NAME, description = L10N_LOCKING_MODE_DESCRIPTION, defaultValue = "NORMAL", options = {
+            @Option(label = L10N_LOCKING_MODE_OPTION_NORMAL_LABEL, value = "NORMAL"),
+            @Option(label = L10N_LOCKING_MODE_OPTION_EXCLUSIVE_LABEL, value = "EXCLUSIVE")
+    })
+    default LockingMode lockingMode() {
+        return DEFAULT_LOCKING_MODE;
+    }
+
+    @AttributeDefinition(name = L10N_PAGE_SIZE_NAME, description = L10N_PAGE_SIZE_DESCRIPTION, defaultValue = DEFAULT_PAGE_SIZE
+            + "")
+    default int pageSize() {
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    @AttributeDefinition(name = L10N_MAX_PAGE_COUNT_NAME, description = L10N_MAX_PAGE_COUNT_DESCRIPTION, defaultValue = DEFAULT_MAX_PAGE_COUNT
+            + "")
+    default int maxPageCount() {
+        return DEFAULT_MAX_PAGE_COUNT;
+    }
+
+    @AttributeDefinition(name = L10N_READ_UNCOMMITTED_NAME, description = L10N_READ_UNCOMMITTED_DESCRIPTION, defaultValue = DEFAULT_READ_UNCOMMITTED
+            + "")
+    default boolean readUncommited() {
+        return DEFAULT_READ_UNCOMMITTED;
+    }
+
+    @AttributeDefinition(name = L10N_RECURSIVE_TRIGGERS_NAME, description = L10N_RECURSIVE_TRIGGERS_DESCRIPTION, defaultValue = DEFAULT_RECURSIVE_TRIGGERS
+            + "")
+    default boolean recursiveTriggers() {
+        return DEFAULT_RECURSIVE_TRIGGERS;
+    }
+
+    @AttributeDefinition(name = L10N_REVERSE_UNORDERED_SELECTS_NAME, description = L10N_REVERSE_UNORDERED_SELECTS_DESCRIPTION, defaultValue = DEFAULT_REVERSE_UNORDERED_SELECTS
+            + "")
+    default boolean reverseUnorderedSelects() {
+        return DEFAULT_REVERSE_UNORDERED_SELECTS;
+    }
+
+    @AttributeDefinition(name = L10N_SHORT_COLUMN_NAMES_NAME, description = L10N_SHORT_COLUMN_NAMES_DESCRIPTION, defaultValue = DEFAULT_SHORT_COLUMN_NAMES
+            + "")
+    default boolean shortColumnNames() {
+        return DEFAULT_SHORT_COLUMN_NAMES;
+    }
+
+    @AttributeDefinition(name = L10N_SYNCHRONOUS_NAME, description = L10N_SYNCHRONOUS_DESCRIPTION, defaultValue = "FULL", options = {
+            @Option(label = L10N_SYNCHRONOUS_OPTION_OFF_LABEL, value = "OFF"),
+            @Option(label = L10N_SYNCHRONOUS_OPTION_NORMAL_LABEL, value = "NORMAL"),
+            @Option(label = L10N_SYNCHRONOUS_OPTION_FULL_LABEL, value = "FULL"),
+            @Option(label = L10N_SYNCHRONOUS_OPTION_EXTRA_LABEL, value = "EXTRA")
+    })
+    default SynchronousMode synchronous() {
+        return DEFAULT_SYNCHRONOUS;
+    }
+
+    @AttributeDefinition(name = L10N_HEX_KEY_MODE_NAME, description = L10N_HEX_KEY_MODE_DESCRIPTION, defaultValue = "NONE", options = {
+            @Option(label = L10N_HEX_KEY_MODE_OPTION_NONE_LABEL, value = "NONE"),
+            @Option(label = L10N_HEX_KEY_MODE_OPTION_SSE_LABEL, value = "SSE"),
+            @Option(label = L10N_HEX_KEY_MODE_OPTION_SQLCIPHER_LABEL, value = "SQLCIPHER")
+    })
+    default HexKeyMode hexKeyMode() {
+        return DEFAULT_HEX_KEY_MODE;
+    }
+
+    @AttributeDefinition(name = L10N_TEMP_STORE_NAME, description = L10N_TEMP_STORE_DESCRIPTION, defaultValue = "DEFAULT", options = {
+            @Option(label = L10N_TEMP_STORE_OPTION_DEFAULT_LABEL, value = "DEFAULT"),
+            @Option(label = L10N_TEMP_STORE_OPTION_FILE_LABEL, value = "FILE"),
+            @Option(label = L10N_TEMP_STORE_OPTION_MEMORY_LABEL, value = "MEMORY")
+    })
+    default TempStore tempStore() {
+        return DEFAULT_TEMP_STORE;
+    }
+
+    @AttributeDefinition(name = L10N_TEMP_STORE_DIRECTORY_NAME, description = L10N_TEMP_STORE_DIRECTORY_DESCRIPTION, defaultValue = DEFAULT_TEMP_STORE_DIRECTORY)
+    default String tempStoreDirectory() {
+        return DEFAULT_TEMP_STORE_DIRECTORY;
+    }
+
+    @AttributeDefinition(name = L10N_USER_VERSION_NAME, description = L10N_USER_VERSION_DESCRIPTION, defaultValue = DEFAULT_USER_VERSION
+            + "")
+    default int userVersion() {
+        return DEFAULT_USER_VERSION;
+    }
+
+    @AttributeDefinition(name = L10N_APPLICATION_ID_NAME, description = L10N_APPLICATION_ID_DESCRIPTION, defaultValue = DEFAULT_APPLICATION_ID
+            + "")
+    default int applicationId() {
+        return DEFAULT_APPLICATION_ID;
+    }
+
+    @AttributeDefinition(name = L10N_TRANSACTION_MODE_NAME, description = L10N_TRANSACTION_MODE_DESCRIPTION, defaultValue = "DEFERRED", options = {
+            @Option(label = L10N_TRANSACTION_MODE_OPTION_DEFERRED_LABEL, value = "DEFERRED"),
+            @Option(label = L10N_TRANSACTION_MODE_OPTION_IMMEDIATE_LABEL, value = "IMMEDIATE"),
+            @Option(label = L10N_TRANSACTION_MODE_OPTION_EXCLUSIVE_LABEL, value = "EXCLUSIVE")
+    })
+    default TransactionMode transactionMode() {
+        return DEFAULT_TRANSACTION_MODE;
+    }
+
+    @AttributeDefinition(name = L10N_DATE_PRECISION_NAME, description = L10N_DATE_PRECISION_DESCRIPTION, defaultValue = "MILLISECONDS", options = {
+            @Option(label = L10N_DATE_PRECISION_OPTION_SECONDS_LABEL, value = "SECONDS"),
+            @Option(label = L10N_DATE_PRECISION_OPTION_MILLISECONDS_LABEL, value = "MILLISECONDS")
+    })
+    default DatePrecision datePrecision() {
+        return DEFAULT_DATE_PRECISION;
+    }
+
+    @AttributeDefinition(name = L10N_DATE_CLASS_NAME, description = L10N_DATE_CLASS_DESCRIPTION, defaultValue = "INTEGER", options = {
+            @Option(label = L10N_DATE_CLASS_OPTION_INTEGER_LABEL, value = "INTEGER"),
+            @Option(label = L10N_DATE_CLASS_OPTION_TEXT_LABEL, value = "TEXT"),
+            @Option(label = L10N_DATE_CLASS_OPTION_REAL_LABEL, value = "REAL")
+    })
+    default DateClass dateClass() {
+        return DEFAULT_DATE_CLASS;
+    }
+
+    @AttributeDefinition(name = L10N_DATE_STRING_FORMAT_NAME, description = L10N_DATE_STRING_FORMAT_DESCRIPTION, defaultValue = DEFAULT_DATE_STRING_FORMAT)
+    default String dateStringFormat() {
+        return DEFAULT_DATE_STRING_FORMAT;
+    }
+
+    @AttributeDefinition(name = L10N_BUSY_TIMEOUT_NAME, description = L10N_BUSY_TIMEOUT_DESCRIPTION, defaultValue = DEFAULT_BUSY_TIMEOUT
+            + "")
+    default int busyTimeout() {
+        return DEFAULT_BUSY_TIMEOUT;
+    }
+}

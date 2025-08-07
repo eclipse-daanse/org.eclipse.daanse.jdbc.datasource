@@ -1,0 +1,29 @@
+#*******************************************************************************
+# Copyright (c)  2024 Contributors to the Eclipse Foundation
+#
+# This program and the accompanying materials are made
+# available under the terms of the Eclipse Public License 2.0
+# which is available at https://www.eclipse.org/legal/epl-2.0/
+#
+# SPDX-License-Identifier: EPL-2.0
+#
+#   Contributors:
+#     Stefan Bischof - initial
+#*******************************************************************************
+
+Import-Package: \
+    !com.amazonaws.metrics.internal.cloudwatch.*,\
+    !com.amazonaws.services.s3.internal.*,\
+    !com.amazonaws.services.securitytoken.internal.*,\
+    !com.sun.org.apache.xpath.internal.*,\
+    !javax.xml.bind*,\
+    !kotlin,\
+    !software.amazon.ion*,\
+    *
+
+-conditionalpackage: \
+    org.eclipse.daanse.jdbc.datasource.opensearch*,\
+    org.opensearch.jdbc*,\
+    com.amazonaws*,\
+    com.amazonaws.metrics.internal.cloudwatch*,\
+    org.apache.http*

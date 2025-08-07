@@ -46,6 +46,6 @@ header:
     - 'license.templates'
     - '**/logback-test.xml'
     - '**/*.svg'
-    - 'metatype.oracle/src/main/resources/META-INF/FDHUT_LICENSE.txt'
+    - 'oracle/src/main/resources/META-INF/FDHUT_LICENSE.txt'
 
   comment: always
