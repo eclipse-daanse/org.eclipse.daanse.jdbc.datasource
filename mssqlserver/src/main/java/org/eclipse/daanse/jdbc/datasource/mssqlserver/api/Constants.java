@@ -56,7 +56,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#_password()}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
 
@@ -64,7 +64,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#user()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#user()}
      */
     public static final String DATASOURCE_PROPERTY_USER = "user";
 
@@ -72,7 +72,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#serverName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#serverName()}
      */
     public static final String DATASOURCE_PROPERTY_SERVERNAME = "serverName";
 
@@ -80,7 +80,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#instanceName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#instanceName()}
      */
     public static final String DATASOURCE_PROPERTY_INSTANCENAME = "instanceName";
 
@@ -88,7 +88,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#applicationName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#applicationName()}
      */
     public static final String DATASOURCE_PROPERTY_APPLICATIONNAME = "applicationName";
 
@@ -96,7 +96,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.impl.MssqlserverConfig#portNumber()}
+     * {@link org.eclipse.daanse.jdbc.datasource.mssqlserver.api.ocd.BaseConfig#portNumber()}
      */
     public static final String DATASOURCE_PROPERTY_PORTNUMBER = "portNumber";
 

@@ -44,7 +44,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#host()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#host()}
      */
     public static final String DATASOURCE_PROPERTY_HOST = "host";
 
@@ -52,7 +52,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#_password()}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
 
@@ -60,7 +60,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#username()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#username()}
      */
     public static final String DATASOURCE_PROPERTY_USERNAME = "username";
 
@@ -68,7 +68,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#port()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#port()}
      */
     public static final String DATASOURCE_PROPERTY_PORT = "port";
 
@@ -76,7 +76,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#path()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#path()}
      */
     public static final String DATASOURCE_PROPERTY_PATH = "path";
 
@@ -84,7 +84,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#usessl()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#usessl()}
      */
     public static final String DATASOURCE_PROPERTY_USESSL = "usessl";
 
@@ -92,7 +92,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#trustSelfSigned()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#trustSelfSigned()}
      */
     public static final String DATASOURCE_PROPERTY_TRUSTSELFSIGNED = "trustSelfSigned";
 
@@ -100,7 +100,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.impl.OpenSearchBaseConfig#auth()}
+     * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#auth()}
      */
     public static final String DATASOURCE_PROPERTY_AUTH = "auth";
 }
