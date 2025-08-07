@@ -24,6 +24,7 @@ import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractCommonDataSour
 import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.opensearch.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.metatype.opensearch.api.ocd.DsConfig;
 import org.opensearch.jdbc.OpenSearchDataSource;
 import org.opensearch.jdbc.config.AuthConnectionProperty;
 import org.opensearch.jdbc.config.HostConnectionProperty;
@@ -40,9 +41,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 
-@Designate(ocd = OpenSearchBaseConfig.class, factory = true)
+@Designate(ocd = DsConfig.class, factory = true)
 @Component(service = {
-        DataSource.class }, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE, immediate = true)
+        DataSource.class }, scope = ServiceScope.SINGLETON, configurationPid = Constants.PID_DATASOURCE, immediate = true)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource> implements DataSource {
 
@@ -79,7 +80,8 @@ public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource>
             }
 
             if (map.containsKey(Constants.DATASOURCE_PROPERTY_PASSWORD)) {
-                properties.put(PasswordConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_PASSWORD));
+                properties.put(PasswordConnectionProperty.KEY,
+                        (String) map.get(Constants.DATASOURCE_PROPERTY_PASSWORD));
             }
             if (map.containsKey(Constants.DATASOURCE_PROPERTY_USERNAME)) {
                 properties.put(UserConnectionProperty.KEY, (String) map.get(Constants.DATASOURCE_PROPERTY_USERNAME));

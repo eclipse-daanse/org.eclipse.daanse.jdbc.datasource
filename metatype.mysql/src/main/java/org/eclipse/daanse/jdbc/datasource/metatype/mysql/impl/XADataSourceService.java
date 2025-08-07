@@ -22,6 +22,7 @@ import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractXADataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.metatype.mysql.api.ocd.XaDsConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -31,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.cj.jdbc.MysqlXADataSource;
 
-@Designate(ocd = MySqlConfig.class, factory = true)
-@Component(service = XADataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE_XA)
+@Designate(ocd = XaDsConfig.class, factory = true)
+@Component(service = XADataSource.class, scope = ServiceScope.SINGLETON, configurationPid = Constants.PID_DATASOURCE_XA)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class XADataSourceService extends AbstractXADataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(XADataSourceService.class);

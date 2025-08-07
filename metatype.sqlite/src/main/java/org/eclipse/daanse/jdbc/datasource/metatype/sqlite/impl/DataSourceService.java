@@ -22,6 +22,7 @@ import org.eclipse.daanse.jdbc.datasource.metatype.common.AbstractDataSource;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.DataSourceCommonUtils;
 import org.eclipse.daanse.jdbc.datasource.metatype.common.annotation.prototype.DataSourceMetaData;
 import org.eclipse.daanse.jdbc.datasource.metatype.sqlite.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.metatype.sqlite.api.ocd.DsConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -30,8 +31,8 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.LoggerFactory;
 import org.sqlite.SQLiteDataSource;
 
-@Designate(ocd = SqliteConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.SINGLETON, name = Constants.PID_DATASOURCE)
+@Designate(ocd = DsConfig.class, factory = true)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON, configurationPid = Constants.PID_DATASOURCE)
 @DataSourceMetaData(subprotocol = Constants.SUBPROTOCOL)
 public class DataSourceService extends AbstractDataSource {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DataSourceService.class);
