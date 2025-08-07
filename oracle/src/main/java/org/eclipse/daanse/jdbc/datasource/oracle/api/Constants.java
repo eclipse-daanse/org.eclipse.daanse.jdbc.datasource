@@ -56,7 +56,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#_password()}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
 
@@ -64,7 +64,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#user()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#user()}
      */
     public static final String DATASOURCE_PROPERTY_USER = "user";
 
@@ -72,7 +72,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#serverName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#serverName()}
      */
     public static final String DATASOURCE_PROPERTY_SERVERNAME = "serverName";
 
@@ -80,7 +80,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#databaseName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#databaseName()}
      */
     public static final String DATASOURCE_PROPERTY_DATABASENAME = "databaseName";
 
@@ -88,7 +88,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#serviceName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#serviceName()}
      */
     public static final String DATASOURCE_PROPERTY_SERVICENAME = "serviceName";
 
@@ -96,7 +96,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.oracle.impl.OracleConfig#portNumber()}
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#portNumber()}
      */
     public static final String DATASOURCE_PROPERTY_PORTNUMBER = "portNumber";
 

@@ -50,7 +50,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.impl.SqliteConfig#_password()}
+     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.api.ocd.BaseConfig#_password()}
      */
     public static final String DATASOURCE_PROPERTY_PASSWORD = ".password";
 
@@ -58,7 +58,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.impl.SqliteConfig#user()}
+     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.api.ocd.BaseConfig#user()}
      */
     public static final String DATASOURCE_PROPERTY_USER = "user";
 
@@ -66,7 +66,7 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.impl.SqliteConfig#url()}
+     * {@link org.eclipse.daanse.jdbc.datasource.sqlite.api.ocd.BaseConfig#url()}
      */
     public static final String DATASOURCE_PROPERTY_URL = "url";
 
