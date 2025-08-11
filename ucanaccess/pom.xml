@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.ucanaccess</artifactId>
+  <name>Daanse JDBC DataSource UCanAccess</name>
+  <description>JDBC DataSource implementation for Microsoft Access databases using UCanAccess. This module provides connectivity to Access (.mdb and .accdb) database files through a pure Java JDBC driver for legacy database integration.</description>
 
   <dependencies>
     <dependency>

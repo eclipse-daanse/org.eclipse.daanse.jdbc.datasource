@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.oracle</artifactId>
+  <name>Eclipse Daanse JDBC DataSource Oracle</name>
+  <description>Oracle database DataSource implementation providing OSGi-compliant connection pooling and configuration management for Oracle databases. Includes support for standard DataSource, connection pool DataSource, and XA DataSource configurations with Oracle-specific optimizations.</description>
 
   <licenses>
     <license>

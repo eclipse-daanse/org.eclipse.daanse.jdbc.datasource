@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.postgresql</artifactId>
+  <name>Daanse JDBC DataSource PostgreSQL</name>
+  <description>JDBC DataSource implementation for PostgreSQL Database. This module provides PostgreSQL-specific DataSource configuration and integration with the official PostgreSQL JDBC driver for robust relational database operations.</description>
 
   <dependencies>
     <dependency>
