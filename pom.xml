@@ -60,6 +60,7 @@
     <module>postgresql</module>
     <module>ucanaccess</module>
     <module>opensearch</module>
+    <module>mariadb</module>
     <module>mysql</module>
     <module>mssqlserver</module>
     <module>sqlite</module>
