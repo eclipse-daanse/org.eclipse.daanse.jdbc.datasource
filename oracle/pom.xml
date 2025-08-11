@@ -21,7 +21,11 @@
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.oracle</artifactId>
   <name>Eclipse Daanse JDBC DataSource Oracle</name>
-  <description>Oracle database DataSource implementation providing OSGi-compliant connection pooling and configuration management for Oracle databases. Includes support for standard DataSource, connection pool DataSource, and XA DataSource configurations with Oracle-specific optimizations.</description>
+  <description>Oracle database DataSource implementation providing
+    OSGi-compliant connection pooling and configuration management for Oracle
+    databases. Includes support for standard DataSource, connection pool
+    DataSource, and XA DataSource configurations with Oracle-specific
+    optimizations.</description>
 
   <licenses>
     <license>
@@ -40,8 +44,6 @@
 
   <properties>
     <ojdbc11.version>23.8.0.25.04</ojdbc11.version>
-    <maven.deploy.skip>true</maven.deploy.skip>
-    <maven.install.skip>true</maven.install.skip>
   </properties>
 
   <dependencies>
