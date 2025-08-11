@@ -24,6 +24,8 @@
   <artifactId>org.eclipse.daanse.jdbc.datasource</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
+  <name>Eclipse Daanse JDBC DataSource Management</name>
+  <description>OSGi-compliant JDBC DataSource management framework providing connection pooling, configuration management, and database connectivity services. Supports multiple database systems including H2, PostgreSQL, MySQL, Oracle, SQLite, and specialized databases with comprehensive connection lifecycle management.</description>
 
   <properties>
     <revision>0.0.1-SNAPSHOT</revision>

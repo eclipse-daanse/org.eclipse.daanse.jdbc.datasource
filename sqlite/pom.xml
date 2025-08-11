@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.sqlite</artifactId>
+  <name>Daanse JDBC DataSource SQLite</name>
+  <description>JDBC DataSource implementation for SQLite Database. This module provides SQLite-specific DataSource configuration and integration with the Xerial SQLite JDBC driver for lightweight, embedded database operations.</description>
 
   <dependencies>
     <dependency>

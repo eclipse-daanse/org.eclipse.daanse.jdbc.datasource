@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.h2</artifactId>
+  <name>Daanse JDBC DataSource H2 Database</name>
+  <description>JDBC DataSource implementation for H2 Database Engine. This module provides H2-specific DataSource configuration and integration for embedded and server modes within the Daanse OLAP platform.</description>
 
   <dependencies>
     <dependency>

@@ -20,4 +20,6 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.common</artifactId>
+  <name>Daanse JDBC DataSource Common</name>
+  <description>Common utilities and base classes for JDBC DataSource implementations. This module provides shared functionality and interfaces used by database-specific DataSource implementations in the Daanse platform.</description>
 </project>

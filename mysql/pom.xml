@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.mysql</artifactId>
+  <name>Daanse JDBC DataSource MySQL</name>
+  <description>JDBC DataSource implementation for MySQL Database. This module provides MySQL-specific DataSource configuration and integration with the official MySQL Connector/J driver for relational database operations.</description>
 
 
   <dependencies>

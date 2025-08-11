@@ -20,6 +20,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.mssqlserver</artifactId>
+  <name>Daanse JDBC DataSource Microsoft SQL Server</name>
+  <description>JDBC DataSource implementation for Microsoft SQL Server. This module provides SQL Server-specific DataSource configuration and integration with the Microsoft JDBC driver for enterprise database connections.</description>
 
   <dependencies>
     <dependency>
