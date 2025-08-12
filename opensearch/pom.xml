@@ -21,7 +21,10 @@
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource.opensearch</artifactId>
   <name>Daanse JDBC DataSource OpenSearch</name>
-  <description>JDBC DataSource implementation for OpenSearch. This module provides OpenSearch SQL JDBC connectivity enabling queries against OpenSearch clusters for analytical data access and search-based OLAP operations.</description>
+  <description>JDBC DataSource implementation for OpenSearch. This module
+    provides OpenSearch SQL JDBC connectivity enabling queries against
+    OpenSearch clusters for analytical data access and search-based OLAP
+    operations.</description>
 
   <dependencies>
 
@@ -31,6 +34,14 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.tooling.testcontainers.core</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.opensearch.driver</groupId>
       <artifactId>opensearch-sql-jdbc</artifactId>
