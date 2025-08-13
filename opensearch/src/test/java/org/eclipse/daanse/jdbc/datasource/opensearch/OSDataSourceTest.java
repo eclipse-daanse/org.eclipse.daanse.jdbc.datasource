@@ -174,14 +174,14 @@ class OSDataSourceTest {
 
         // JSON to create the index (optional, you can add mappings here if needed)
         String createIndexData = """
-                  {
-                  "mappings": {
+                {
+                "mappings": {
                     "properties": {
-                      "member": {
+                        "member": {
                         "type": "keyword"
                       },
                       "measure": {
-                        "type": "float"
+                          "type": "float"
                       }
                     }
                   }
