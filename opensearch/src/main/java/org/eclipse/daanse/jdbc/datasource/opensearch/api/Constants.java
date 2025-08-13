@@ -103,4 +103,5 @@ public class Constants {
      * {@link org.eclipse.daanse.jdbc.datasource.opensearch.api.ocd.BaseConfig#auth()}
      */
     public static final String DATASOURCE_PROPERTY_AUTH = "auth";
+
 }
