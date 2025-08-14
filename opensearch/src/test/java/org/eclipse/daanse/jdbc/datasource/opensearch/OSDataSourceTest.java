@@ -96,8 +96,6 @@ class OSDataSourceTest {
             @InjectService(cardinality = 0) ServiceAware<DataSource> saDataSource) //
             throws Exception {
 
-        DockerClientFactory.lazyClient().pingCmd();
-
         try (GenericContainer container = new GenericContainer<>("opensearchproject/opensearch:latest")) {
 
             container.withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", PW)//
