@@ -158,5 +158,4 @@ public class OSDataSource extends AbstractCommonDataSource<OpenSearchDataSource>
     protected OpenSearchDataSource ds() {
         return ds;
     }
-
 }
