@@ -172,20 +172,19 @@ class OSDataSourceTest {
 
         // JSON to create the index (optional, you can add mappings here if needed)
         String createIndexData = """
-                {
-                "mappings": {
-                    "properties": {
-                        "member": {
-                        "type": "keyword"
-                      },
-                      "measure": {
-                          "type": "float"
-                      }
+        {
+            "mappings":{
+                "properties":{
+                    "member":{
+                        "type":"keyword"
+                    },
+                    "measure":{
+                        "type":"float"
                     }
-                  }
                 }
-                                """;
-
+            }
+        }
+        """;
         // Request to create the index
         HttpRequest createIndexRequest = HttpRequest.newBuilder().uri(new URI(createIndexUrl))
                 .header("Content-Type", "application/json").PUT(HttpRequest.BodyPublishers.ofString(createIndexData))
