@@ -28,11 +28,11 @@ public class Util {
     public static void doConfig(BaseDataSource ds, Map<String, Object> configMap) {
 
         // Basic connection properties
-        setStringProperty(ds, PGProperty.PG_HOST, configMap, Constants.DATASOURCE_PROPERTY_PG_HOST, "localhost");
-        setStringProperty(ds, PGProperty.PG_DBNAME, configMap, Constants.DATASOURCE_PROPERTY_PG_DBNAME, "");
+        setStringProperty(ds, PGProperty.PG_HOST, configMap, Constants.DATASOURCE_PROPERTY_HOST, "localhost");
+        setStringProperty(ds, PGProperty.PG_DBNAME, configMap, Constants.DATASOURCE_PROPERTY_DBNAME, "");
         setStringProperty(ds, PGProperty.USER, configMap, Constants.DATASOURCE_PROPERTY_USER, "");
         setStringProperty(ds, PGProperty.PASSWORD, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD, "");
-        setPortNumbers(ds, configMap, Constants.DATASOURCE_PROPERTY_PG_PORT, new int[]{5432});
+        setPortNumbers(ds, configMap, Constants.DATASOURCE_PROPERTY_PORT, new int[]{5432});
 
         // Additional properties
         setStringPropertyIfNotEmpty(ds, PGProperty.APPLICATION_NAME, configMap,

@@ -74,7 +74,7 @@ public class Constants {
      * {@link org.eclipse.daanse.jdbc.datasource.postgresql.api.ocd.BaseConfig#host()}
      * {@link PGProperty#PG_HOST}
      */
-    public static final String DATASOURCE_PROPERTY_PG_HOST = "pg.host";
+    public static final String DATASOURCE_PROPERTY_HOST = "host";
 
     /**
      * Constant for Properties of the Service that could be configured.
@@ -82,7 +82,7 @@ public class Constants {
      * {@link org.eclipse.daanse.jdbc.datasource.postgresql.api.ocd.BaseConfig#dbname()}
      * {@link PGProperty#PG_DBNAME}
      */
-    public static final String DATASOURCE_PROPERTY_PG_DBNAME = "pg.dbname";
+    public static final String DATASOURCE_PROPERTY_DBNAME = "dbname";
 
     /**
      * Constant for Properties of the Service that could be configured.
@@ -90,7 +90,7 @@ public class Constants {
      * {@link org.eclipse.daanse.jdbc.datasource.postgresql.api.ocd.BaseConfig#ports()}
      * {@link PGProperty#PG_PORT}
      */
-    public static final String DATASOURCE_PROPERTY_PG_PORT = "pg.port";
+    public static final String DATASOURCE_PROPERTY_PORT = "port";
 
     // Additional PostgreSQL driver properties based on PGProperty enum
 
