@@ -28,18 +28,18 @@ public interface BaseConfig {
     public static final String L10N_POSTFIX_OPTION = ".option";
     public static final String L10N_POSTFIX_LABEL = ".label";
 
-    public static final String L10N_HOST_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_HOST + L10N_POSTFIX_NAME;
-    public static final String L10N_HOST_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_HOST
+    public static final String L10N_HOST_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HOST + L10N_POSTFIX_NAME;
+    public static final String L10N_HOST_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HOST
             + L10N_POSTFIX_DESCRIPTION;
 
-    public static final String L10N_PORTS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_PORT
+    public static final String L10N_PORTS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
             + L10N_POSTFIX_NAME;
-    public static final String L10N_PORTS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_PORT
+    public static final String L10N_PORTS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
             + L10N_POSTFIX_DESCRIPTION;
 
-    public static final String L10N_DBNAME_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_DBNAME
+    public static final String L10N_DBNAME_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DBNAME
             + L10N_POSTFIX_NAME;
-    public static final String L10N_DBANE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PG_DBNAME
+    public static final String L10N_DBANE_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DBNAME
             + L10N_POSTFIX_DESCRIPTION;
 
     public static final String L10N_PASSWORD_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PASSWORD
