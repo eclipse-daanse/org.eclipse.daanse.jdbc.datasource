@@ -25,9 +25,7 @@ Import-Package:\
     !javax.resource*,\
     !org.objectweb*,\
     !weblogic*,\
-    !com.sun.security.jgss*,\
-    !sun.security.krb5.internal*,\
-    !org.ietf.jgss*,\
+    sun.security.krb5.internal*;resolution:=optional,\
     javax.transaction*;resolution:=optional,\
     jakarta.json*;resolution:=optional,\
     *
