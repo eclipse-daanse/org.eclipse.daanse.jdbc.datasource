@@ -31,18 +31,29 @@ public class Util {
         setValueFromMap(ds::setUser, configMap, Constants.DATASOURCE_PROPERTY_USER);
         setValueFromMap(ds::setPassword, configMap, Constants.DATASOURCE_PROPERTY_PASSWORD);
 
-        setValueFromMap(ds::setServiceName, configMap,
-                Constants.DATASOURCE_PROPERTY_SERVICENAME);
-        setValueFromMap(ds::setPortNumber, configMap, Constants.DATASOURCE_PROPERTY_PORTNUMBER);
+        setValueFromMap(ds::setServiceName, configMap, Constants.DATASOURCE_PROPERTY_SERVICENAME);
+
+        if (configMap.containsKey(Constants.DATASOURCE_PROPERTY_PORTNUMBER)) {
+            Object portObj = configMap.get(Constants.DATASOURCE_PROPERTY_PORTNUMBER);
+            if (portObj instanceof Integer) {
+                ds.setPortNumber((Integer) portObj);
+            } else if (portObj instanceof String) {
+                try {
+                    int port = Integer.parseInt((String) portObj);
+                    ds.setPortNumber(port);
+                } catch (NumberFormatException e) {
+                    // ignore, do not set port
+                }
+            }
+        }
+
         setValueFromMap(ds::setServerName, configMap, Constants.DATASOURCE_PROPERTY_SERVERNAME);
-        setValueFromMap(ds::setDatabaseName, configMap,
-                Constants.DATASOURCE_PROPERTY_DATABASENAME);
+        setValueFromMap(ds::setDatabaseName, configMap, Constants.DATASOURCE_PROPERTY_DATABASENAME);
 
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> void setValueFromMap(Consumer<T> setterMethod,
-            Map<String, Object> configMap, String propName) {
+    private static <T> void setValueFromMap(Consumer<T> setterMethod, Map<String, Object> configMap, String propName) {
         if (configMap.containsKey(propName)) {
             T value = (T) configMap.get(propName);
             if (value != null) {
