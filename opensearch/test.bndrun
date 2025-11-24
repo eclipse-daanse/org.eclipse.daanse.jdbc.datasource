@@ -56,11 +56,11 @@
 
 -runbundles: \
 	assertj-core;version='[3.26.0,3.26.1)',\
-	com.fasterxml.jackson.core.jackson-annotations;version='[2.13.4,2.13.5)',\
-	com.fasterxml.jackson.core.jackson-core;version='[2.13.4,2.13.5)',\
-	com.fasterxml.jackson.core.jackson-databind;version='[2.13.4,2.13.5)',\
+	com.fasterxml.jackson.core.jackson-annotations;version='[2.20.0,2.20.1)',\
+	com.fasterxml.jackson.core.jackson-core;version='[2.20.1,2.20.2)',\
+	com.fasterxml.jackson.core.jackson-databind;version='[2.20.1,2.20.2)',\
 	com.fasterxml.jackson.dataformat.jackson-dataformat-cbor;version='[2.12.3,2.12.4)',\
-	com.sun.jna;version='[5.11.0,5.11.1)',\
+	com.sun.jna;version='[5.18.1,5.18.2)',\
 	joda-time;version='[2.8.1,2.8.2)',\
 	junit-jupiter-api;version='[5.10.2,5.10.3)',\
 	junit-jupiter-engine;version='[5.10.2,5.10.3)',\
@@ -70,17 +70,17 @@
 	junit-platform-launcher;version='[1.10.2,1.10.3)',\
 	net.bytebuddy.byte-buddy;version='[1.14.16,1.14.17)',\
 	org.apache.commons.commons-codec;version='[1.15.0,1.15.1)',\
-	org.apache.commons.commons-compress;version='[1.24.0,1.24.1)',\
+	org.apache.commons.commons-compress;version='[1.28.0,1.28.1)',\
+	org.apache.commons.commons-io;version='[2.20.0,2.20.1)',\
+	org.apache.commons.lang3;version='[3.18.0,3.18.1)',\
 	org.apache.commons.logging;version='[1.1.3,1.1.4)',\
 	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
 	org.apache.felix.scr;version='[2.2.10,2.2.11)',\
 	org.eclipse.daanse.jdbc.datasource.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.jdbc.datasource.opensearch;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.jdbc.datasource.opensearch-tests;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.tooling.dockerjava;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.tooling.testcontainers.core;version='[0.0.1,0.0.2)',\
 	org.opentest4j;version='[1.3.0,1.3.1)',\
-	org.osgi.service.cm;version='[1.6.1,1.6.2)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
 	org.osgi.test.common;version='[1.3.0,1.3.1)',\
 	org.osgi.test.junit5;version='[1.3.0,1.3.1)',\
