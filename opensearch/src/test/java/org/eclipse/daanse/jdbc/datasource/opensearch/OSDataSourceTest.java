@@ -110,7 +110,7 @@ class OSDataSourceTest {
 
             container.start();
 
-//            Thread.sleep(5000);
+            Thread.sleep(1000);
 
             int port443 = container.getMappedPort(443);
             System.out.println("443=" + port443);
@@ -130,7 +130,7 @@ class OSDataSourceTest {
             ht.put(Constants.DATASOURCE_PROPERTY_USESSL, true);
             configuration.update(ht);
 
-//            Thread.sleep(1000000);
+            Thread.sleep(1000);
             Connection connection = saDataSource.waitForService(1000).getConnection();
             java.sql.Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM " + TABLE);
@@ -168,7 +168,7 @@ class OSDataSourceTest {
         HttpClient client = HttpClient.newBuilder().sslContext(sslContext).authenticator(authenticator).build();
 
         // URL of the OpenSearch Server
-        String createIndexUrl = "https://" + LOCALHOST + ":" + port + "/" + TABLE;
+        String createIndexUrl = "http://" + LOCALHOST + ":" + port + "/" + TABLE;
 
         // JSON to create the index (optional, you can add mappings here if needed)
         String createIndexData = """
