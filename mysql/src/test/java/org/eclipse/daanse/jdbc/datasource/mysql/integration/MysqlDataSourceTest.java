@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.jdbc.datasource.oracle.impl;
+package org.eclipse.daanse.jdbc.datasource.mysql.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +19,7 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import org.eclipse.daanse.jdbc.datasource.oracle.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.mysql.api.Constants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.test.common.annotation.InjectService;
@@ -32,7 +32,7 @@ import org.osgi.test.junit5.service.ServiceExtension;
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
 @ExtendWith(ConfigurationExtension.class)
-class OracleDataSourceTest {
+class MysqlDataSourceTest {
 
     @Test
     void noConfigurationNoServiceTest(
@@ -51,9 +51,9 @@ class OracleDataSourceTest {
     @WithFactoryConfiguration(factoryPid = Constants.PID_DATASOURCE, name = "1", location = "?")
     @WithFactoryConfiguration(factoryPid = Constants.PID_DATASOURCE_CP, name = "2", location = "?")
     @WithFactoryConfiguration(factoryPid = Constants.PID_DATASOURCE_XA, name = "3", location = "?")
-    void serviceWithConfigurationTest(@InjectService(timeout = 50000) ServiceAware<DataSource> serviceAwareDataSource, //
-            @InjectService(timeout = 50000) ServiceAware<XADataSource> serviceAwareXaDataSource, //
-            @InjectService(timeout = 50000) ServiceAware<ConnectionPoolDataSource> serviceAwareCpDataSource)
+    void serviceWithConfigurationTest(@InjectService(timeout = 500) ServiceAware<DataSource> serviceAwareDataSource, //
+            @InjectService(timeout = 500) ServiceAware<XADataSource> serviceAwareXaDataSource, //
+            @InjectService(timeout = 500) ServiceAware<ConnectionPoolDataSource> serviceAwareCpDataSource)
             throws Exception {
 
         assertThat(serviceAwareDataSource.getServices()).hasSize(1);
