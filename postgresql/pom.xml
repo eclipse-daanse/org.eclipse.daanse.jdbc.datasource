@@ -23,6 +23,11 @@
   <name>Daanse JDBC DataSource PostgreSQL</name>
   <description>JDBC DataSource implementation for PostgreSQL Database. This module provides PostgreSQL-specific DataSource configuration and integration with the official PostgreSQL JDBC driver for robust relational database operations.</description>
 
+
+  <properties>
+    <java.version>21</java.version>
+    <java.release>21</java.release>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
