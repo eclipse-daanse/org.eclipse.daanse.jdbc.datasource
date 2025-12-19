@@ -32,9 +32,9 @@ public interface BaseConfig {
     public static final String L10N_HOST_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_HOST
             + L10N_POSTFIX_DESCRIPTION;
 
-    public static final String L10N_PORTS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
+    public static final String L10N_PORT_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
             + L10N_POSTFIX_NAME;
-    public static final String L10N_PORTS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
+    public static final String L10N_PORT_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PORT
             + L10N_POSTFIX_DESCRIPTION;
 
     public static final String L10N_DBNAME_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DBNAME
@@ -156,7 +156,7 @@ public interface BaseConfig {
     public static final String DEFAULT_PASSWORD = "";
     public static final String DEFAULT_USER = "";
     public static final String DEFAULT_DBNAME = "";
-    public static final int[] DEFAULT_PORTS = { 5432 };
+    public static final int[] DEFAULT_PORT = { 5432 };
     public static final String DEFAULT_HOST = "localhost";
     public static final String DEFAULT_APPLICATION_NAME = "";
     public static final int DEFAULT_CONNECT_TIMEOUT = 0;
@@ -206,9 +206,9 @@ public interface BaseConfig {
         return DEFAULT_DBNAME;
     }
 
-    @AttributeDefinition(name = L10N_PORTS_NAME, description = L10N_PORTS_DESCRIPTION, required = true, defaultValue = "5432")
-    default int[] ports() {
-        return DEFAULT_PORTS;
+    @AttributeDefinition(name = L10N_PORT_NAME, description = L10N_PORT_DESCRIPTION, required = true, defaultValue = "5432")
+    default int[] port() {
+        return DEFAULT_PORT;
     }
 
     @AttributeDefinition(name = L10N_HOST_NAME, description = L10N_HOST_DESCRIPTION, required = true, defaultValue = DEFAULT_HOST)

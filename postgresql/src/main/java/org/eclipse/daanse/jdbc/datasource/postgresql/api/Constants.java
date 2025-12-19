@@ -87,7 +87,7 @@ public class Constants {
     /**
      * Constant for Properties of the Service that could be configured.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.postgresql.api.ocd.BaseConfig#ports()}
+     * {@link org.eclipse.daanse.jdbc.datasource.postgresql.api.ocd.BaseConfig#port()}
      * {@link PGProperty#PG_PORT}
      */
     public static final String DATASOURCE_PROPERTY_PORT = "port";
