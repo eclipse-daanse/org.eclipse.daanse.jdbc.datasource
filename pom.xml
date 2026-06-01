@@ -15,11 +15,10 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.pom.parent</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
   </parent>
   <artifactId>org.eclipse.daanse.jdbc.datasource</artifactId>
   <version>${revision}</version>
@@ -79,6 +78,8 @@
     <module>mssqlserver</module>
     <module>sqlite</module>
     <module>oracle</module>
+    <module>testkit</module>
   </modules>
+
 
 </project>
