@@ -14,8 +14,9 @@ package org.eclipse.daanse.jdbc.datasource.testkit.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.sql.DataSource;
+import java.sql.Statement;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
@@ -27,17 +28,19 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
  * PostgreSQL provider backed by a Testcontainers container. A single container
- * is shared for the JVM lifetime; lazily started on first {@link #activate()}.
+ * is shared for the JVM lifetime; {@link #activate(String)} returns a
+ * schema-isolated {@link ActiveDatabase} per key (CREATE SCHEMA + DataSource
+ * with {@code currentSchema=<key>}).
  */
 public class PostgresDatabaseProvider implements DatabaseProvider {
 
     private static final String IMAGE = "postgres:16-alpine";
+    private static final String DEFAULT_KEY = "__default__";
 
     private static volatile PostgreSQLContainer<?> container;
     private static final Object LOCK = new Object();
 
-    private DataSource dataSource;
-    private Dialect dialect;
+    private final ConcurrentMap<String, ActiveDatabase> dbsByKey = new ConcurrentHashMap<>();
 
     @Override
     public String id() {
@@ -45,22 +48,55 @@ public class PostgresDatabaseProvider implements DatabaseProvider {
     }
 
     @Override
-    public synchronized ActiveDatabase activate() {
-        if (dataSource != null) {
-            return new ActiveDatabase(dataSource, dialect);
-        }
+    public ActiveDatabase activate() {
+        return activate(DEFAULT_KEY);
+    }
+
+    @Override
+    public ActiveDatabase activate(String isolationKey) {
+        return dbsByKey.computeIfAbsent(isolationKey, this::newDatabaseForKey);
+    }
+
+    private ActiveDatabase newDatabaseForKey(String key) {
         PostgreSQLContainer<?> c = sharedContainer();
+        String schema = sanitize(key);
+        try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
+            st.execute("CREATE SCHEMA IF NOT EXISTS \"" + schema + "\"");
+        } catch (SQLException e) {
+            throw new IllegalStateException("Failed to create PG schema " + schema, e);
+        }
         PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setUrl(c.getJdbcUrl());
+        // Append currentSchema so all statements default to the per-key schema.
+        String url = c.getJdbcUrl();
+        url += (url.contains("?") ? "&" : "?") + "currentSchema=" + schema;
+        ds.setUrl(url);
         ds.setUser(c.getUsername());
         ds.setPassword(c.getPassword());
+        Dialect dialect;
         try (Connection conn = ds.getConnection()) {
-            this.dialect = new PostgreSqlDialect(DialectInitData.fromConnection(conn));
+            dialect = new PostgreSqlDialect(DialectInitData.fromConnection(conn));
         } catch (SQLException e) {
-            throw new IllegalStateException("Failed to build PostgreSQL dialect", e);
+            throw new IllegalStateException("Failed to build PostgreSQL dialect for key " + key, e);
         }
-        this.dataSource = ds;
-        return new ActiveDatabase(dataSource, dialect);
+        return new ActiveDatabase(ds, dialect);
+    }
+
+    private static Connection openAdmin(PostgreSQLContainer<?> c) throws SQLException {
+        PGSimpleDataSource admin = new PGSimpleDataSource();
+        admin.setUrl(c.getJdbcUrl());
+        admin.setUser(c.getUsername());
+        admin.setPassword(c.getPassword());
+        return admin.getConnection();
+    }
+
+    /** PG identifier: alphanumeric + _; lowercased; max 63 chars. */
+    private static String sanitize(String k) {
+        StringBuilder sb = new StringBuilder();
+        for (char ch : k.toLowerCase().toCharArray()) {
+            sb.append(Character.isLetterOrDigit(ch) || ch == '_' ? ch : '_');
+        }
+        String s = sb.toString();
+        return s.length() > 63 ? s.substring(0, 63) : s;
     }
 
     @SuppressWarnings("resource")

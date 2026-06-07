@@ -14,8 +14,9 @@ package org.eclipse.daanse.jdbc.datasource.testkit.mariadb;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.sql.DataSource;
+import java.sql.Statement;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
@@ -26,17 +27,19 @@ import org.mariadb.jdbc.MariaDbDataSource;
 import org.testcontainers.containers.MariaDBContainer;
 
 /**
- * MariaDB provider backed by a Testcontainers container. Shared JVM-wide.
+ * MariaDB provider backed by a shared Testcontainers container.
+ * {@link #activate(String)} returns per-key DATABASE-isolated
+ * {@link ActiveDatabase}.
  */
 public class MariaDbDatabaseProvider implements DatabaseProvider {
 
     private static final String IMAGE = "mariadb:11";
+    private static final String DEFAULT_KEY = "__default__";
 
     private static volatile MariaDBContainer<?> container;
     private static final Object LOCK = new Object();
 
-    private DataSource dataSource;
-    private Dialect dialect;
+    private final ConcurrentMap<String, ActiveDatabase> dbsByKey = new ConcurrentHashMap<>();
 
     @Override
     public String id() {
@@ -44,24 +47,65 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
     }
 
     @Override
-    public synchronized ActiveDatabase activate() {
-        if (dataSource != null) {
-            return new ActiveDatabase(dataSource, dialect);
-        }
+    public ActiveDatabase activate() {
+        return activate(DEFAULT_KEY);
+    }
+
+    @Override
+    public ActiveDatabase activate(String isolationKey) {
+        return dbsByKey.computeIfAbsent(isolationKey, this::newDatabaseForKey);
+    }
+
+    private ActiveDatabase newDatabaseForKey(String key) {
         MariaDBContainer<?> c = sharedContainer();
+        String dbName = sanitize(key);
+        try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
+            st.execute("CREATE DATABASE IF NOT EXISTS `" + dbName + "`");
+        } catch (SQLException e) {
+            throw new IllegalStateException("Failed to create MariaDB database " + dbName, e);
+        }
         try {
             MariaDbDataSource ds = new MariaDbDataSource();
-            ds.setUrl(c.getJdbcUrl());
+            ds.setUrl(jdbcUrlWithDb(c, dbName));
             ds.setUser(c.getUsername());
             ds.setPassword(c.getPassword());
+            Dialect dialect;
             try (Connection conn = ds.getConnection()) {
-                this.dialect = new MariaDBDialect(DialectInitData.fromConnection(conn));
+                dialect = new MariaDBDialect(DialectInitData.fromConnection(conn));
             }
-            this.dataSource = ds;
+            return new ActiveDatabase(ds, dialect);
         } catch (SQLException e) {
-            throw new IllegalStateException("Failed to build MariaDB dialect", e);
+            throw new IllegalStateException("Failed to build MariaDB dialect for key " + key, e);
         }
-        return new ActiveDatabase(dataSource, dialect);
+    }
+
+    private static Connection openAdmin(MariaDBContainer<?> c) throws SQLException {
+        try {
+            MariaDbDataSource admin = new MariaDbDataSource();
+            admin.setUrl(c.getJdbcUrl());
+            admin.setUser(c.getUsername());
+            admin.setPassword(c.getPassword());
+            return admin.getConnection();
+        } catch (SQLException e) { throw e; }
+    }
+
+    private static String jdbcUrlWithDb(MariaDBContainer<?> c, String dbName) {
+        String url = c.getJdbcUrl();
+        int q = url.indexOf('?');
+        String base = q == -1 ? url : url.substring(0, q);
+        String tail = q == -1 ? "" : url.substring(q);
+        int slash = base.lastIndexOf('/');
+        if (slash > "jdbc:mariadb://".length()) base = base.substring(0, slash + 1) + dbName;
+        return base + tail;
+    }
+
+    private static String sanitize(String k) {
+        StringBuilder sb = new StringBuilder();
+        for (char ch : k.toCharArray()) {
+            sb.append(Character.isLetterOrDigit(ch) || ch == '_' ? ch : '_');
+        }
+        String s = sb.toString();
+        return s.length() > 64 ? s.substring(0, 64) : s;
     }
 
     @SuppressWarnings("resource")

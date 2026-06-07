@@ -27,7 +27,25 @@ public interface DatabaseProvider extends AutoCloseable {
 
     String id();
 
+    /**
+     * Returns the provider's single default database. Repeated calls return
+     * the same {@link ActiveDatabase}; no isolation between consumers.
+     */
     ActiveDatabase activate();
+
+    /**
+     * Returns an isolated database keyed by {@code isolationKey}: distinct
+     * keys yield distinct databases. The same key returns the same
+     * {@link ActiveDatabase} on every call.
+     *
+     * <p>Default implementation ignores the key and delegates to
+     * {@link #activate()} — providers that can isolate (H2 memFS UUID;
+     * Postgres/MySQL/MSSQL/MariaDB/Oracle per-schema in shared container)
+     * override this to honour the key.
+     */
+    default ActiveDatabase activate(String isolationKey) {
+        return activate();
+    }
 
     @Override
     default void close() {
