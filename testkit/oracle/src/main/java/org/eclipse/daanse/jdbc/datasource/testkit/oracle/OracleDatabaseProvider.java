@@ -59,6 +59,12 @@ public class OracleDatabaseProvider implements DatabaseProvider {
 
     private ActiveDatabase newDatabaseForKey(String key) {
         OracleContainer c = sharedContainer();
+        // Oracle: schema == user. The default key reuses the container's own
+        // application user (and thus its schema); any other key gets an
+        // isolated user created via the privileged SYSTEM account.
+        if (DEFAULT_KEY.equals(key)) {
+            return buildDatabase(c, key, c.getUsername(), c.getPassword());
+        }
         String user = sanitize(key);
         String pwd = user + "_pwd";
         try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
@@ -68,6 +74,10 @@ public class OracleDatabaseProvider implements DatabaseProvider {
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to create Oracle user " + user, e);
         }
+        return buildDatabase(c, key, user, pwd);
+    }
+
+    private static ActiveDatabase buildDatabase(OracleContainer c, String key, String user, String pwd) {
         try {
             OracleDataSource ds = new OracleDataSource();
             ds.setURL(c.getJdbcUrl());
@@ -84,13 +94,14 @@ public class OracleDatabaseProvider implements DatabaseProvider {
     }
 
     private static Connection openAdmin(OracleContainer c) throws SQLException {
-        try {
-            OracleDataSource admin = new OracleDataSource();
-            admin.setURL(c.getJdbcUrl());
-            admin.setUser(c.getUsername());
-            admin.setPassword(c.getPassword());
-            return admin.getConnection();
-        } catch (SQLException e) { throw e; }
+        // CREATE USER requires the privileged SYSTEM account — the container's
+        // application user (getUsername()) cannot create users. The SYSTEM
+        // password equals the configured container password.
+        OracleDataSource admin = new OracleDataSource();
+        admin.setURL(c.getJdbcUrl());
+        admin.setUser("system");
+        admin.setPassword(c.getPassword());
+        return admin.getConnection();
     }
 
     private static String sanitize(String k) {
