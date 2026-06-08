@@ -52,6 +52,20 @@ public class Constants {
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
+     * Maps to the H2 {@code DB_CLOSE_DELAY} connection setting. {@code 0} closes the
+     * database when the last connection is closed (H2 default), {@code -1} keeps it
+     * open until the JVM exits, {@code n} keeps it open for {@code n} seconds. This
+     * matters for in-memory databases, whose content is otherwise discarded as soon
+     * as the last connection closes.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.h2.api.ocd.BaseConfig#dbCloseDelay()}
+     */
+    public static final String DATASOURCE_PROPERTY_DB_CLOSE_DELAY = "dbCloseDelay";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_DATASOURCE}.
+     *
      * {@link org.eclipse.daanse.jdbc.datasource.h2.api.ocd.BaseConfig#debug()}
      */
     public static final String DATASOURCE_PROPERTY_DEBUG = "debug";

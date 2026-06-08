@@ -33,7 +33,23 @@ class UrlBuilder {
         appendIdentifier(urlStringBuilder, map);
         // from here is post identifier. so separated with ";".
         appendDatabaseToUpper(urlStringBuilder, map);
+        appendDbCloseDelay(urlStringBuilder, map);
         return urlStringBuilder.toString();
+    }
+
+    /**
+     * Appends the H2 {@code DB_CLOSE_DELAY} setting, but only when it has been
+     * explicitly configured. For in-memory databases {@code DB_CLOSE_DELAY=-1} keeps
+     * the database alive for the lifetime of the JVM; without it the content is
+     * discarded as soon as the last connection is closed.
+     */
+    private static void appendDbCloseDelay(StringBuilder urlStringBuilder, Map<String, Object> map) {
+        if (map.containsKey(Constants.DATASOURCE_PROPERTY_DB_CLOSE_DELAY)) {
+            Object dbCloseDelay = map.get(Constants.DATASOURCE_PROPERTY_DB_CLOSE_DELAY);
+            if (dbCloseDelay != null) {
+                urlStringBuilder.append(";DB_CLOSE_DELAY=").append(dbCloseDelay);
+            }
+        }
     }
 
     private static void appendDatabaseToUpper(StringBuilder urlStringBuilder, Map<String, Object> map) {
