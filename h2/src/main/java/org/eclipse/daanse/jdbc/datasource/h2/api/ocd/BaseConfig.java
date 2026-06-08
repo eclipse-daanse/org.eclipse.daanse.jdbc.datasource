@@ -48,6 +48,9 @@ public interface BaseConfig {
     String L10N_DATABASE_TO_UPPER_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER + L10N_POSTFIX_NAME;
     String L10N_DATABASE_TO_UPPER_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DATABASE_TO_UPPER + L10N_POSTFIX_DESCRIPTION;
 
+    String L10N_DB_CLOSE_DELAY_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DB_CLOSE_DELAY + L10N_POSTFIX_NAME;
+    String L10N_DB_CLOSE_DELAY_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DB_CLOSE_DELAY + L10N_POSTFIX_DESCRIPTION;
+
     // Option label constants following .option.optionname.label pattern
     String L10N_PLUGABLE_FILESYSTEM_OPTION_ASYNC_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM + L10N_POSTFIX_OPTION + ".async" + L10N_POSTFIX_LABEL;
     String L10N_PLUGABLE_FILESYSTEM_OPTION_FILE_LABEL = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_PLUGABLE_FILESYSTEM + L10N_POSTFIX_OPTION + ".file" + L10N_POSTFIX_LABEL;
@@ -66,6 +69,7 @@ public interface BaseConfig {
     String DEFAULT_PASSWORD = "";
     String DEFAULT_USERNAME = "";
     boolean DEFAULT_DATABASE_TO_UPPER = true;
+    int DEFAULT_DB_CLOSE_DELAY = 0;
 
     @AttributeDefinition(name = L10N_DEBUG_NAME, description = L10N_DEBUG_DESCRIPTION, defaultValue = DEFAULT_DEBUG + "")
     default boolean debug() {
@@ -108,5 +112,10 @@ public interface BaseConfig {
     @AttributeDefinition(name = L10N_DATABASE_TO_UPPER_NAME, description = L10N_DATABASE_TO_UPPER_DESCRIPTION, defaultValue = DEFAULT_DATABASE_TO_UPPER + "")
     default boolean databaseToUpper() {
         return DEFAULT_DATABASE_TO_UPPER;
+    }
+
+    @AttributeDefinition(name = L10N_DB_CLOSE_DELAY_NAME, description = L10N_DB_CLOSE_DELAY_DESCRIPTION, required = false, defaultValue = DEFAULT_DB_CLOSE_DELAY + "")
+    default int dbCloseDelay() {
+        return DEFAULT_DB_CLOSE_DELAY;
     }
 }
