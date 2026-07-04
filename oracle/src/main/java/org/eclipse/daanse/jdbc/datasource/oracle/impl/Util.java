@@ -50,6 +50,31 @@ public class Util {
         setValueFromMap(ds::setServerName, configMap, Constants.DATASOURCE_PROPERTY_SERVERNAME);
         setValueFromMap(ds::setDatabaseName, configMap, Constants.DATASOURCE_PROPERTY_DATABASENAME);
 
+        // oracle.jdbc.defaultRowPrefetch: rows per fetch round trip (driver
+        // default 10). Only set when configured > 0 so the driver default is
+        // untouched otherwise.
+        int defaultRowPrefetch = intValue(configMap.get(Constants.DATASOURCE_PROPERTY_DEFAULTROWPREFETCH));
+        if (defaultRowPrefetch > 0) {
+            try {
+                ds.setConnectionProperty("oracle.jdbc.defaultRowPrefetch", Integer.toString(defaultRowPrefetch));
+            } catch (java.sql.SQLException e) {
+                throw new IllegalStateException("could not set oracle.jdbc.defaultRowPrefetch", e);
+            }
+        }
+    }
+
+    private static int intValue(Object value) {
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        if (value instanceof String string) {
+            try {
+                return Integer.parseInt(string.trim());
+            } catch (NumberFormatException e) {
+                // ignore, do not set the property
+            }
+        }
+        return 0;
     }
 
     @SuppressWarnings("unchecked")
