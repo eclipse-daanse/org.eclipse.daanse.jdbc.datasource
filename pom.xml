@@ -78,6 +78,7 @@
     <module>mssqlserver</module>
     <module>sqlite</module>
     <module>oracle</module>
+    <module>clickhouse</module>
     <module>testkit</module>
   </modules>
 
