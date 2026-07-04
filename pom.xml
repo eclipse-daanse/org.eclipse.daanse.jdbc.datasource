@@ -79,6 +79,7 @@
     <module>sqlite</module>
     <module>oracle</module>
     <module>clickhouse</module>
+    <module>duckdb</module>
     <module>testkit</module>
   </modules>
 
