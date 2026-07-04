@@ -100,4 +100,17 @@ public class Constants {
      */
     public static final String DATASOURCE_PROPERTY_PORTNUMBER = "portNumber";
 
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_DATASOURCE}.
+     *
+     * Rows fetched per round trip ({@code oracle.jdbc.defaultRowPrefetch}
+     * connection property). The Oracle driver default of 10 makes larger
+     * result-set scans latency-bound; values of a few hundred are typical.
+     * {@code 0} (the default) leaves the driver default untouched.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.oracle.api.ocd.BaseConfig#defaultRowPrefetch()}
+     */
+    public static final String DATASOURCE_PROPERTY_DEFAULTROWPREFETCH = "defaultRowPrefetch";
+
 }

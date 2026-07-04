@@ -46,6 +46,11 @@ public interface BaseConfig {
     String L10N_USER_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER + L10N_POSTFIX_NAME;
     String L10N_USER_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_USER + L10N_POSTFIX_DESCRIPTION;
 
+    String L10N_DEFAULTROWPREFETCH_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFAULTROWPREFETCH
+            + L10N_POSTFIX_NAME;
+    String L10N_DEFAULTROWPREFETCH_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_DEFAULTROWPREFETCH
+            + L10N_POSTFIX_DESCRIPTION;
+
     // Default value constants
     String DEFAULT_PASSWORD = "";
     String DEFAULT_USER = "";
@@ -53,6 +58,8 @@ public interface BaseConfig {
     int DEFAULT_PORT_NUMBER = 1521;
     String DEFAULT_DATABASE_NAME = "";
     String DEFAULT_SERVER_NAME = "localhost";
+    /** 0 = do not set the property; keep the Oracle driver default (10). */
+    int DEFAULT_DEFAULT_ROW_PREFETCH = 0;
 
     @AttributeDefinition(name = L10N_PASSWORD_NAME, description = L10N_PASSWORD_DESCRIPTION, type = AttributeType.PASSWORD, defaultValue = DEFAULT_PASSWORD)
     default String _password() {
@@ -83,5 +90,11 @@ public interface BaseConfig {
     @AttributeDefinition(name = L10N_SERVERNAME_NAME, description = L10N_SERVERNAME_DESCRIPTION, defaultValue = DEFAULT_SERVER_NAME)
     default String serverName() {
         return DEFAULT_SERVER_NAME;
+    }
+
+    @AttributeDefinition(name = L10N_DEFAULTROWPREFETCH_NAME, description = L10N_DEFAULTROWPREFETCH_DESCRIPTION, defaultValue = DEFAULT_DEFAULT_ROW_PREFETCH
+            + "")
+    default int defaultRowPrefetch() {
+        return DEFAULT_DEFAULT_ROW_PREFETCH;
     }
 }
