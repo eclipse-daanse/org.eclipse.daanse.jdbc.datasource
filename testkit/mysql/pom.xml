@@ -36,7 +36,7 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.jdbc.db.dialect.db.mysql</artifactId>
+      <artifactId>org.eclipse.daanse.sql.dialect.db.mysql</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>

@@ -20,9 +20,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
-import org.eclipse.daanse.jdbc.db.dialect.api.Dialect;
-import org.eclipse.daanse.jdbc.db.dialect.api.DialectInitData;
-import org.eclipse.daanse.jdbc.db.dialect.db.mysql.MySqlDialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DialectInitData;
+import org.eclipse.daanse.sql.dialect.db.mysql.MySqlDialect;
 import org.testcontainers.containers.MySQLContainer;
 
 import com.mysql.cj.jdbc.MysqlDataSource;

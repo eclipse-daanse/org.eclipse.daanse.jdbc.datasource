@@ -14,7 +14,7 @@ package org.eclipse.daanse.jdbc.datasource.testkit.api;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.jdbc.db.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * Pair of a live {@link DataSource} and the matching {@link Dialect}.
