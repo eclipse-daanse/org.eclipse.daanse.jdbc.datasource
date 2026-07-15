@@ -21,9 +21,9 @@ import java.util.concurrent.ConcurrentMap;
 import oracle.jdbc.pool.OracleDataSource;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
-import org.eclipse.daanse.jdbc.db.dialect.api.Dialect;
-import org.eclipse.daanse.jdbc.db.dialect.api.DialectInitData;
-import org.eclipse.daanse.jdbc.db.dialect.db.oracle.OracleDialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DialectInitData;
+import org.eclipse.daanse.sql.dialect.db.oracle.OracleDialect;
 import org.testcontainers.oracle.OracleContainer;
 
 /**
