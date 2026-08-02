@@ -53,7 +53,13 @@ public class H2DatabaseProvider implements DatabaseProvider {
 
     private ActiveDatabase newDatabase() {
         try {
-            String url = "jdbc:h2:memFS:" + UUID.randomUUID() + ";DATABASE_TO_UPPER=false";
+            // "mem" is h2's in-memory engine. The alternative, "memFS", puts a
+            // file-backed database on an in-memory file system, so every page still
+            // goes through the file layer for no gain here: both isolate by database
+            // name, and the name carries a UUID. Switchable with
+            // -Ddaanse.test.h2.scheme=memFS.
+            String scheme = System.getProperty("daanse.test.h2.scheme", "mem");
+            String url = "jdbc:h2:" + scheme + ":" + UUID.randomUUID() + ";DATABASE_TO_UPPER=false";
             JdbcDataSource ds = new JdbcDataSource();
             ds.setUrl(url);
             ds.setUser("sa");

@@ -20,28 +20,13 @@
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.eclipse.daanse.jdbc.datasource.testkit</artifactId>
+  <artifactId>org.eclipse.daanse.jdbc.datasource.pools</artifactId>
   <packaging>pom</packaging>
-  <name>Daanse JDBC DataSource Test Kit (aggregator)</name>
-  <description>Aggregator for the cross-repo testkit SPI + DB provider
-    implementations. Consumers depend on
-    org.eclipse.daanse.jdbc.datasource.testkit.api for the SPI types,
-    and on one or more of testkit.h2 / testkit.postgresql / testkit.mysql
-    / testkit.mssqlserver for the ServiceLoader-registered providers
-    that boot the actual database.</description>
+  <name>Daanse JDBC DataSource Connection Pools</name>
+  <description>Connection pool contract and implementations that wrap a plain DataSource.</description>
 
   <modules>
     <module>api</module>
-    <module>h2</module>
-    <module>postgresql</module>
-    <module>mysql</module>
-    <module>mssqlserver</module>
-    <module>mariadb</module>
-    <module>oracle</module>
-    <module>sqlite</module>
-    <module>duckdb</module>
-    <module>derby</module>
-    <module>clickhouse</module>
-    <module>empty</module>
+    <module>hikari</module>
   </modules>
 </project>
