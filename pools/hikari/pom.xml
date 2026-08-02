@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /*********************************************************************
-* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
 *
 * This program and the accompanying materials are made
 * available under the terms of the Eclipse Public License 2.0
@@ -16,32 +16,25 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.jdbc.datasource.testkit</artifactId>
+    <artifactId>org.eclipse.daanse.jdbc.datasource.pools</artifactId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.eclipse.daanse.jdbc.datasource.testkit.api</artifactId>
-  <name>Daanse JDBC DataSource Test Kit API</name>
-
-  <packaging>jar</packaging>
+  <artifactId>org.eclipse.daanse.jdbc.datasource.pools.hikari</artifactId>
+  <name>Daanse JDBC DataSource Connection Pool HikariCP</name>
+  <description>ConnectionPool implementation backed by HikariCP. Wraps a plain DataSource, so it does not depend on the driver firing PooledConnection close events.</description>
 
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.jdbc.datasource.pools.api</artifactId>
-      <version>${revision}</version>
+      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.jdbc.datasource.pools.hikari</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>7.1.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
