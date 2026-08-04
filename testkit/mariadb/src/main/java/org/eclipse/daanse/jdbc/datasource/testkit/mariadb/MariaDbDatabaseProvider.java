@@ -81,8 +81,10 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
         try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
             st.execute("CREATE DATABASE IF NOT EXISTS `" + dbName + "`");
             // The container's own user has rights on the container's own database
-            // only, so it has to be granted them on each one created here.
+            // only. Granted here per database, and globally besides, so that a
+            // consumer can CREATE SCHEMA - a database on this server - of its own.
             st.execute("GRANT ALL PRIVILEGES ON `" + dbName + "`.* TO '" + c.getUsername() + "'@'%'");
+            st.execute("GRANT ALL PRIVILEGES ON *.* TO '" + c.getUsername() + "'@'%' WITH GRANT OPTION");
             st.execute("FLUSH PRIVILEGES");
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to create MariaDB database " + dbName, e);
