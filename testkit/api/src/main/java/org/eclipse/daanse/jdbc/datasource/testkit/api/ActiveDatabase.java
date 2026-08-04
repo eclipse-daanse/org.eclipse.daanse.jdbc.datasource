@@ -12,12 +12,12 @@
  */
 package org.eclipse.daanse.jdbc.datasource.testkit.api;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.pools.api.ConnectionPool;
+import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.pools.hikari.api.HikariConnectionPools;
 import org.eclipse.daanse.sql.dialect.api.Dialect;
 
@@ -36,20 +36,33 @@ import org.eclipse.daanse.sql.dialect.api.Dialect;
  */
 public record ActiveDatabase(DataSource dataSource, Dialect dialect, ConnectionPool connectionPool) {
 
-    /** Wraps {@code dataSource} in a pool. */
-    public ActiveDatabase(DataSource dataSource, Dialect dialect) {
-        this(dataSource, dialect, HikariConnectionPools.create(dataSource, poolConfig()));
-    }
+    /**
+     * For the one database a provider serves when nothing asks for isolation.
+     * The size matches {@code segmentCacheManagerNumberSqlThreads}, the fan-out
+     * of a single MDX query, and stays under the server ceilings (200 on
+     * PostgreSQL, 300 on MySQL and MariaDB).
+     */
+    public static final PoolSettings SINGLE = PoolSettings.defaults().withMaximumPoolSize(100).withMinimumIdle(1)
+            .withConnectionTimeout(Duration.ofMinutes(1));
 
     /**
-     * Pool settings for test runs, overridable per run:
-     * {@code -Ddaanse.test.pool.maxSize=30 -Ddaanse.test.pool.minIdle=1}.
+     * For a database reached under an isolation key: one live database per key,
+     * each with a pool, so they share the same server ceiling.
      */
-    private static Map<String, Object> poolConfig() {
-        Map<String, Object> config = new HashMap<>();
-        config.put("maximumPoolSize", Integer.getInteger("daanse.test.pool.maxSize", 30));
-        config.put("minimumIdle", Integer.getInteger("daanse.test.pool.minIdle", 1));
-        config.put("connectionTimeout", Long.getLong("daanse.test.pool.timeoutMs", 60_000L));
-        return config;
+    public static final PoolSettings ISOLATED = SINGLE.withMaximumPoolSize(8);
+
+    /** Wraps {@code dataSource} in a pool for the single unkeyed database. */
+    public ActiveDatabase(DataSource dataSource, Dialect dialect) {
+        this(dataSource, dialect, SINGLE);
+    }
+
+    /** Wraps {@code dataSource} in a pool with the given settings. */
+    public ActiveDatabase(DataSource dataSource, Dialect dialect, PoolSettings settings) {
+        this(dataSource, dialect, HikariConnectionPools.create(dataSource, settings));
+    }
+
+    /** {@link #SINGLE} for the unkeyed database, {@link #ISOLATED} for any other. */
+    public static PoolSettings settingsFor(String isolationKey) {
+        return isolationKey == null || DatabaseProvider.DEFAULT_KEY.equals(isolationKey) ? SINGLE : ISOLATED;
     }
 }

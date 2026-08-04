@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import oracle.jdbc.pool.OracleDataSource;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
+import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
 import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectInitData;
@@ -84,13 +85,37 @@ public class OracleDatabaseProvider implements DatabaseProvider {
             ds.setUser(user);
             ds.setPassword(pwd);
             Dialect dialect;
+            PoolSettings poolSettings;
             try (Connection conn = ds.getConnection()) {
                 dialect = new OracleDialect(DialectInitData.fromConnection(conn));
+                poolSettings = poolSettingsFor(conn, key);
             }
-            return new ActiveDatabase(ds, dialect);
+            return new ActiveDatabase(ds, dialect, poolSettings);
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to build Oracle dialect for key " + key, e);
         }
+    }
+
+    /**
+     * How many connections this instance will serve. Oracle's session count is a
+     * hard instance parameter: past {@code processes} a connection does not wait,
+     * it fails with {@code ORA-12516}. {@code getMaxConnections()} answers 0 for
+     * "unknown or unlimited", so the fallback carries the number.
+     */
+    private static PoolSettings poolSettingsFor(Connection conn, String key) {
+        int oracleMax = 40;
+        try {
+            int reported = conn.getMetaData().getMaxConnections();
+            if (reported > 0) {
+                oracleMax = Math.max(8, Math.min(100, reported * 3 / 4));
+            }
+        } catch (SQLException | RuntimeException e) {
+            // An unanswered question is the same as an answer of 0.
+        }
+        // A keyed database shares the instance with its siblings, so it takes
+        // whichever share is smaller.
+        PoolSettings settings = ActiveDatabase.settingsFor(key);
+        return settings.withMaximumPoolSize(Math.min(settings.maximumPoolSize(), oracleMax));
     }
 
     private static Connection openAdmin(OracleContainer c) throws SQLException {

@@ -81,7 +81,7 @@ public class ClickHouseDatabaseProvider implements DatabaseProvider {
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to build ClickHouse dialect for key " + key, e);
         }
-        return new ActiveDatabase(ds, dialect);
+        return new ActiveDatabase(ds, dialect, ActiveDatabase.settingsFor(key));
     }
 
     private static DataSource dataSource(ClickHouseContainer c, String dbName) {

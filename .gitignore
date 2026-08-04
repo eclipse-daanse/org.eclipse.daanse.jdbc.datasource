@@ -38,3 +38,8 @@ pnpm-debug.log*
 *.sln
 *.sw?
 .flattened-pom.xml
+
+# H2 file databases written by the integration tests
+*.mv.db
+*.trace.db
+/h2/h2/

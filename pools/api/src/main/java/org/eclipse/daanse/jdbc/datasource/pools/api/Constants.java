@@ -61,7 +61,15 @@ public class Constants {
      */
     public static final String POOL_PROPERTY_LEAK_THRESHOLD = "leakThreshold";
 
-    public static final int DEFAULT_MAX_SIZE = 50;
+    /**
+     * Tied to the OLAP engine's fan-out: {@code segmentCacheManagerNumberSqlThreads}
+     * defaults to 100, so a single query may ask for that many connections at
+     * once, and a smaller pool queues the engine's own threads before they reach
+     * the database. Oracle needs it lowered again — {@code processes} is a hard
+     * instance limit that refuses rather than queues.
+     */
+    public static final int DEFAULT_MAX_SIZE = 100;
+
     public static final int DEFAULT_MIN_IDLE = 5;
     public static final long DEFAULT_ACQUIRE_TIMEOUT = 30_000L;
     public static final long DEFAULT_IDLE_TIMEOUT = 600_000L;

@@ -18,6 +18,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -34,13 +36,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Embedded DuckDB, in memory. Every {@code driver.connect("jdbc:duckdb:")} opens
- * its own private, empty database, so this provider connects ONCE and hands out
- * {@link DuckDBConnection#duplicate()} siblings of that connection — they all
- * share the one in-memory database, and it lives as long as the keeper does.
+ * its own private, empty database, so this provider connects ONCE per database
+ * and hands out {@link DuckDBConnection#duplicate()} siblings of that connection
+ * — they all share the one in-memory database, and it lives as long as the
+ * keeper does.
  *
  * <p>
- * The engine runs on its own defaults; system properties named
- * {@code daanse.duckdb.<setting>} are passed through to it.
+ * {@link #activate()} returns the provider's single default database;
+ * {@link #activate(String)} returns one database per distinct key. Each is its
+ * own {@code jdbc:duckdb:} instance, which is what isolates them — and what
+ * gives each its own engine thread pool, so the {@code threads} setting
+ * multiplies by the number of keys in use.
  * </p>
  */
 public class DuckDbDatabaseProvider implements DatabaseProvider {
@@ -51,30 +57,47 @@ public class DuckDbDatabaseProvider implements DatabaseProvider {
 
 	private static final String URL = "jdbc:duckdb:";
 
-	/** Prefix of the system properties passed through to the engine. */
-	private static final String SETTING_PREFIX = "daanse.duckdb.";
+	private static final String DEFAULT_KEY = "__default__";
+
+
+	private final ConcurrentMap<String, ActiveDatabase> dbsByKey = new ConcurrentHashMap<>();
 
 	@Override
 	public String id() {
 		return "duckdb";
 	}
 
-	private volatile DuckDbDataSource dataSource;
-
 	@Override
 	public void close() {
-		DuckDbDataSource ds = dataSource;
-		if (ds != null) {
-			// closing the keeper drops the in-memory database; there is no file to unlink
-			ds.close();
+		for (ActiveDatabase database : dbsByKey.values()) {
+			// The pool first: it holds duplicate() connections, and the keeper is what
+			// keeps their database alive. Closing the keeper drops the in-memory
+			// database; there is no file to unlink.
+			try {
+				database.connectionPool().close();
+			} catch (RuntimeException e) {
+				LOGGER.warn("closing a duckdb connection pool failed", e);
+			}
+			if (database.dataSource() instanceof DuckDbDataSource duckDbDataSource) {
+				duckDbDataSource.close();
+			}
 		}
+		dbsByKey.clear();
 	}
 
 	@Override
 	public ActiveDatabase activate() {
+		return activate(DEFAULT_KEY);
+	}
+
+	@Override
+	public ActiveDatabase activate(String isolationKey) {
+		return dbsByKey.computeIfAbsent(isolationKey, this::newDatabase);
+	}
+
+	private ActiveDatabase newDatabase(String key) {
 		long tActivate = System.nanoTime();
 		DuckDbDataSource dataSource = new DuckDbDataSource(URL);
-		this.dataSource = dataSource;
 		try (Connection connection = dataSource.getConnection()) {
 			Dialect dialect = new DuckDbDialect(DialectInitData.fromConnection(connection));
 			// embedded: db-ready = the (tiny) connect duration, for comparability with docker DBs
@@ -82,7 +105,7 @@ public class DuckDbDatabaseProvider implements DatabaseProvider {
 			LOGGER.warn("DBTIMING db={} phase=db-ready ms={}", id(), ms);
 			LOGGER.warn("DBTIMING db={} phase=context-first ms={} detail=fresh,epoch={}", id(), ms,
 					System.currentTimeMillis() / 1000);
-			return new ActiveDatabase(dataSource, dialect);
+			return new ActiveDatabase(dataSource, dialect, ActiveDatabase.settingsFor(key));
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -131,13 +154,10 @@ public class DuckDbDatabaseProvider implements DatabaseProvider {
 
 		@Override
 		public Connection getConnection() throws SQLException {
-			Properties props = duckDbSettings();
 			if (keeper == null) {
 				synchronized (this) {
 					if (keeper == null) {
-						// The settings above only take effect on the connect that starts the
-						// database, so the keeper must carry them.
-						keeper = (DuckDBConnection) driver.connect(url, props);
+						keeper = (DuckDBConnection) driver.connect(url, duckDbSettings());
 					}
 				}
 			}
@@ -147,35 +167,24 @@ public class DuckDbDatabaseProvider implements DatabaseProvider {
 		}
 
 		/**
-		 * Every {@code daanse.duckdb.<setting>} system property, passed on as
-		 * {@code <setting>}.
+		 * The engine settings this provider connects with, chosen for the kind of
+		 * run a testkit sees: many small queries on a machine that is busy with the
+		 * rest of the suite. They are connection properties rather than a
+		 * {@code SET} per checkout, which would cost a round trip each time.
 		 *
 		 * <p>
-		 * Nothing is set otherwise, so an unconfigured provider starts DuckDB with
-		 * DuckDB's own defaults. Any setting the engine accepts can be given this
-		 * way - {@code -Ddaanse.duckdb.threads=2},
-		 * {@code -Ddaanse.duckdb.memory_limit=4GB}. They go in as connection
-		 * properties rather than a {@code SET} per connection, which would cost a
-		 * round trip on every checkout.
-		 * </p>
-		 *
-		 * <p>
-		 * One worth knowing about: {@code preserve_insertion_order=false} is faster,
-		 * but lets DuckDB return the rows of an unordered query in whatever order its
-		 * threads produce - which a caller comparing whole result strings cannot rely
-		 * on.
-		 * </p>
+		 * <b>{@code preserve_insertion_order=false} is the one to know about:</b> it
+		 * lets DuckDB return the rows of a query without ORDER BY in whatever order
+		 * its threads produce, so a caller comparing whole result strings can see two
+		 * rows swapped between runs. It costs roughly a third of the runtime to turn
+		 * back on.
 		 */
 		private static Properties duckDbSettings() {
 			Properties props = new Properties();
-			for (String name : System.getProperties().stringPropertyNames()) {
-				if (name.startsWith(SETTING_PREFIX) && name.length() > SETTING_PREFIX.length()) {
-					String value = System.getProperty(name);
-					if (value != null && !value.isBlank()) {
-						props.setProperty(name.substring(SETTING_PREFIX.length()), value);
-					}
-				}
-			}
+			// One thread per core, DuckDB's default, spends more on coordination than
+			// it wins on queries this small.
+			props.setProperty("threads", "2");
+			props.setProperty("preserve_insertion_order", "false");
 			return props;
 		}
 
