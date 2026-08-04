@@ -27,6 +27,7 @@ import java.util.concurrent.TimeoutException;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.pools.api.ConnectionPool;
+import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.pools.api.Constants;
 import org.eclipse.daanse.jdbc.datasource.pools.hikari.api.ocd.DsConfig;
 import org.osgi.service.component.annotations.Activate;
@@ -68,21 +69,28 @@ public class HikariConnectionPool implements ConnectionPool {
     /** Only used by the deadline-bounded acquire path; virtual threads keep it cheap. */
     private final ExecutorService acquireExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
+    /**
+     * The Declarative Services entry point. Configuration Admin hands its
+     * properties as a map, and this is the only place that has to know their
+     * names.
+     */
     @Activate
     public HikariConnectionPool(@Reference DataSource dataSource, Map<String, Object> config) {
+        this(dataSource, PoolSettings.from(config, LOGGER::warn));
+    }
+
+    public HikariConnectionPool(DataSource dataSource, PoolSettings settings) {
         HikariConfig cfg = new HikariConfig();
         cfg.setDataSource(dataSource);
-        cfg.setPoolName(string(config, Constants.POOL_PROPERTY_POOL_NAME, "daanse-hikari"));
-        cfg.setMaximumPoolSize(integer(config, Constants.POOL_PROPERTY_MAX_SIZE, Constants.DEFAULT_MAX_SIZE));
-        cfg.setMinimumIdle(integer(config, Constants.POOL_PROPERTY_MIN_IDLE, Constants.DEFAULT_MIN_IDLE));
-        cfg.setConnectionTimeout(
-                number(config, Constants.POOL_PROPERTY_ACQUIRE_TIMEOUT, Constants.DEFAULT_ACQUIRE_TIMEOUT));
-        cfg.setIdleTimeout(number(config, Constants.POOL_PROPERTY_IDLE_TIMEOUT, Constants.DEFAULT_IDLE_TIMEOUT));
-        cfg.setMaxLifetime(number(config, Constants.POOL_PROPERTY_MAX_LIFETIME, Constants.DEFAULT_MAX_LIFETIME));
+        cfg.setPoolName(settings.poolName().isBlank() ? "daanse-hikari" : settings.poolName());
+        cfg.setMaximumPoolSize(settings.maximumPoolSize());
+        cfg.setMinimumIdle(settings.minimumIdle());
+        cfg.setConnectionTimeout(settings.connectionTimeout().toMillis());
+        cfg.setIdleTimeout(settings.idleTimeout().toMillis());
+        cfg.setMaxLifetime(settings.maxLifetime().toMillis());
         // Reports a connection held longer than this; unlike dbcp2 hikari never takes
         // it back, so this is a warning about a caller that forgot to close, nothing more.
-        cfg.setLeakDetectionThreshold(
-                number(config, Constants.POOL_PROPERTY_LEAK_THRESHOLD, Constants.DEFAULT_LEAK_THRESHOLD));
+        cfg.setLeakDetectionThreshold(settings.leakThreshold().toMillis());
 
         this.acquireTimeout = Duration.ofMillis(cfg.getConnectionTimeout());
         this.pool = new HikariDataSource(cfg);
@@ -167,29 +175,6 @@ public class HikariConnectionPool implements ConnectionPool {
         return pool.getHikariPoolMXBean() == null ? 0 : pool.getHikariPoolMXBean().getActiveConnections();
     }
 
-    private static String string(Map<String, Object> config, String key, String dflt) {
-        Object v = config.get(key);
-        return v == null || v.toString().isBlank() ? dflt : v.toString();
-    }
 
-    private static int integer(Map<String, Object> config, String key, int dflt) {
-        return (int) number(config, key, dflt);
-    }
 
-    private static long number(Map<String, Object> config, String key, long dflt) {
-        Object v = config.get(key);
-        if (v instanceof Number n) {
-            return n.longValue();
-        }
-        if (v != null) {
-            try {
-                return Long.parseLong(v.toString().trim());
-            } catch (NumberFormatException e) {
-                // A mistyped value must not silently become the default - that is exactly
-                // the trap ConfigConstants falls into elsewhere in this codebase.
-                LOGGER.warn("pool property {}={} is not a number, using {}", key, v, dflt);
-            }
-        }
-        return dflt;
-    }
 }

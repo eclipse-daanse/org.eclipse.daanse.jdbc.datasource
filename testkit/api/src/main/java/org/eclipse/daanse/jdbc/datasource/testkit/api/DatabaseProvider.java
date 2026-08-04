@@ -25,6 +25,9 @@ import org.eclipse.daanse.sql.dialect.api.Dialect;
  */
 public interface DatabaseProvider extends AutoCloseable {
 
+    /** The key of the one database a provider serves when nothing asks for isolation. */
+    String DEFAULT_KEY = "__default__";
+
     String id();
 
     /**
@@ -39,7 +42,7 @@ public interface DatabaseProvider extends AutoCloseable {
      * {@link ActiveDatabase} on every call.
      *
      * <p>Default implementation ignores the key and delegates to
-     * {@link #activate()} — providers that can isolate (H2 memFS UUID;
+     * {@link #activate()} — providers that can isolate (H2 in-memory UUID;
      * Postgres/MySQL/MSSQL/MariaDB/Oracle per-schema in shared container)
      * override this to honour the key.
      */

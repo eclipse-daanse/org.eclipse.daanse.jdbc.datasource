@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
@@ -25,6 +26,7 @@ import org.eclipse.daanse.sql.dialect.api.DialectInitData;
 import org.eclipse.daanse.sql.dialect.db.mysql.MySqlDialect;
 import org.testcontainers.containers.MySQLContainer;
 
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 /**
@@ -35,7 +37,23 @@ import com.mysql.cj.jdbc.MysqlDataSource;
  */
 public class MySqlDatabaseProvider implements DatabaseProvider {
 
-    private static final String IMAGE = "mysql:8.0";
+    /** Follows the current long-term release rather than pinning a version. */
+    private static final String IMAGE = "mysql:lts";
+
+    /**
+     * Replaces the {@code my.cnf} Testcontainers mounts, which must go rather
+     * than be overridden: it sets {@code innodb_log_file_size}, removed in MySQL
+     * 9, and the server aborts on it before reading any command-line argument.
+     */
+    private static final String CONFIG_OVERRIDE = "daanse-mysql-conf";
+
+    /**
+     * The container's memory ceiling, and the figure the server sizes itself
+     * from — {@code innodb_dedicated_server} takes 75 % of what it can see, and
+     * without a limit that is the whole host.
+     */
+    private static final long MEMORY_LIMIT = 4L << 30;
+
     private static final String DEFAULT_KEY = "__default__";
 
     private static volatile MySQLContainer<?> container;
@@ -61,8 +79,12 @@ public class MySqlDatabaseProvider implements DatabaseProvider {
     private ActiveDatabase newDatabaseForKey(String key) {
         MySQLContainer<?> c = sharedContainer();
         String dbName = sanitize(key);
-        try (Connection admin = openAdmin(c, c.getDatabaseName()); Statement st = admin.createStatement()) {
+        try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
             st.execute("CREATE DATABASE IF NOT EXISTS `" + dbName + "`");
+            // The container's own user has rights on the container's own database
+            // only, so it has to be granted them on each one created here.
+            st.execute("GRANT ALL PRIVILEGES ON `" + dbName + "`.* TO '" + c.getUsername() + "'@'%'");
+            st.execute("FLUSH PRIVILEGES");
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to create MySQL database " + dbName, e);
         }
@@ -76,13 +98,18 @@ public class MySqlDatabaseProvider implements DatabaseProvider {
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to build MySQL dialect for key " + key, e);
         }
-        return new ActiveDatabase(ds, dialect);
+        return new ActiveDatabase(ds, dialect, ActiveDatabase.settingsFor(key));
     }
 
-    private static Connection openAdmin(MySQLContainer<?> c, String defaultDb) throws SQLException {
+    /**
+     * Connects as root: creating a database and granting rights on it is beyond
+     * what the container's own user may do. Testcontainers gives root the same
+     * password as that user.
+     */
+    private static Connection openAdmin(MySQLContainer<?> c) throws SQLException {
         MysqlDataSource admin = new MysqlDataSource();
         admin.setURL(c.getJdbcUrl());
-        admin.setUser(c.getUsername());
+        admin.setUser("root");
         admin.setPassword(c.getPassword());
         return admin.getConnection();
     }
@@ -109,6 +136,11 @@ public class MySqlDatabaseProvider implements DatabaseProvider {
         return s.length() > 64 ? s.substring(0, 64) : s;
     }
 
+    /** Typed here because a lambda on the raw {@link MySQLContainer} would be erased. */
+    private static Consumer<CreateContainerCmd> memoryLimit() {
+        return cmd -> cmd.getHostConfig().withMemory(MEMORY_LIMIT).withMemorySwap(MEMORY_LIMIT);
+    }
+
     @SuppressWarnings("resource")
     private static MySQLContainer<?> sharedContainer() {
         MySQLContainer<?> c = container;
@@ -119,6 +151,8 @@ public class MySqlDatabaseProvider implements DatabaseProvider {
             if (container == null) {
                 @SuppressWarnings("rawtypes")
                 MySQLContainer my = new MySQLContainer(IMAGE);
+                my.withConfigurationOverride(CONFIG_OVERRIDE);
+                my.withCreateContainerCmdModifier(memoryLimit());
                 my.start();
                 container = my;
                 Runtime.getRuntime().addShutdownHook(new Thread(my::close, "daanse-mysql-stop"));

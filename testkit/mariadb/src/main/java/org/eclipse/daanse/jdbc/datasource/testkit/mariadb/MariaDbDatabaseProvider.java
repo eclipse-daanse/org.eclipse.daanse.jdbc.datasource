@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.jdbc.datasource.testkit.api.ActiveDatabase;
 import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
@@ -24,6 +25,9 @@ import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectInitData;
 import org.eclipse.daanse.sql.dialect.db.mariadb.MariaDBDialect;
 import org.mariadb.jdbc.MariaDbDataSource;
+
+import com.github.dockerjava.api.command.CreateContainerCmd;
+
 import org.testcontainers.containers.MariaDBContainer;
 
 /**
@@ -33,7 +37,22 @@ import org.testcontainers.containers.MariaDBContainer;
  */
 public class MariaDbDatabaseProvider implements DatabaseProvider {
 
-    private static final String IMAGE = "mariadb:11";
+    /** Follows the current long-term release rather than pinning a version. */
+    private static final String IMAGE = "mariadb:lts";
+
+    /**
+     * Replaces the {@code my.cnf} Testcontainers mounts; see that file for what
+     * it sets.
+     */
+    private static final String CONFIG_OVERRIDE = "daanse-mariadb-conf";
+
+    /**
+     * The container's memory ceiling. MariaDB has no
+     * {@code innodb_dedicated_server}, so the buffer pool is stated in the
+     * configuration file as 62.5 % of this — keep the two in step.
+     */
+    private static final long MEMORY_LIMIT = 4L << 30;
+
     private static final String DEFAULT_KEY = "__default__";
 
     private static volatile MariaDBContainer<?> container;
@@ -61,6 +80,10 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
         String dbName = sanitize(key);
         try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
             st.execute("CREATE DATABASE IF NOT EXISTS `" + dbName + "`");
+            // The container's own user has rights on the container's own database
+            // only, so it has to be granted them on each one created here.
+            st.execute("GRANT ALL PRIVILEGES ON `" + dbName + "`.* TO '" + c.getUsername() + "'@'%'");
+            st.execute("FLUSH PRIVILEGES");
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to create MariaDB database " + dbName, e);
         }
@@ -73,20 +96,23 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
             try (Connection conn = ds.getConnection()) {
                 dialect = new MariaDBDialect(DialectInitData.fromConnection(conn));
             }
-            return new ActiveDatabase(ds, dialect);
+            return new ActiveDatabase(ds, dialect, ActiveDatabase.settingsFor(key));
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to build MariaDB dialect for key " + key, e);
         }
     }
 
+    /**
+     * Connects as root: creating a database and granting rights on it is beyond
+     * what the container's own user may do. Testcontainers gives root the same
+     * password as that user.
+     */
     private static Connection openAdmin(MariaDBContainer<?> c) throws SQLException {
-        try {
-            MariaDbDataSource admin = new MariaDbDataSource();
-            admin.setUrl(c.getJdbcUrl());
-            admin.setUser(c.getUsername());
-            admin.setPassword(c.getPassword());
-            return admin.getConnection();
-        } catch (SQLException e) { throw e; }
+        MariaDbDataSource admin = new MariaDbDataSource();
+        admin.setUrl(c.getJdbcUrl());
+        admin.setUser("root");
+        admin.setPassword(c.getPassword());
+        return admin.getConnection();
     }
 
     private static String jdbcUrlWithDb(MariaDBContainer<?> c, String dbName) {
@@ -108,6 +134,11 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
         return s.length() > 64 ? s.substring(0, 64) : s;
     }
 
+    /** Typed here because a lambda on the raw {@link MariaDBContainer} would be erased. */
+    private static Consumer<CreateContainerCmd> memoryLimit() {
+        return cmd -> cmd.getHostConfig().withMemory(MEMORY_LIMIT).withMemorySwap(MEMORY_LIMIT);
+    }
+
     @SuppressWarnings("resource")
     private static MariaDBContainer<?> sharedContainer() {
         MariaDBContainer<?> c = container;
@@ -119,6 +150,8 @@ public class MariaDbDatabaseProvider implements DatabaseProvider {
                 @SuppressWarnings("rawtypes")
                 MariaDBContainer m = new MariaDBContainer(IMAGE).withDatabaseName("rt").withUsername("rt")
                         .withPassword("rt");
+                m.withConfigurationOverride(CONFIG_OVERRIDE);
+                m.withCreateContainerCmdModifier(memoryLimit());
                 m.start();
                 container = m;
                 Runtime.getRuntime().addShutdownHook(new Thread(m::close, "daanse-mariadb-stop"));

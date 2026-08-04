@@ -72,7 +72,8 @@ public class MsSqlDatabaseProvider implements DatabaseProvider {
         ds.setPassword(c.getPassword());
         ds.setDatabaseName(dbName);
         try (Connection conn = ds.getConnection()) {
-            return new ActiveDatabase(ds, new MicrosoftSqlServerDialect(DialectInitData.fromConnection(conn)));
+            return new ActiveDatabase(ds, new MicrosoftSqlServerDialect(DialectInitData.fromConnection(conn)),
+                        ActiveDatabase.settingsFor(key));
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to build MSSQL dialect for key " + key, e);
         }

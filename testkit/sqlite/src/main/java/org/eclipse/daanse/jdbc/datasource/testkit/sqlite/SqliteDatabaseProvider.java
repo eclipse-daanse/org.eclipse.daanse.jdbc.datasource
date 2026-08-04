@@ -47,10 +47,10 @@ public class SqliteDatabaseProvider implements DatabaseProvider {
 
     @Override
     public ActiveDatabase activate(String isolationKey) {
-        return dbsByKey.computeIfAbsent(isolationKey, k -> newDatabase());
+        return dbsByKey.computeIfAbsent(isolationKey, this::newDatabase);
     }
 
-    private ActiveDatabase newDatabase() {
+    private ActiveDatabase newDatabase(String key) {
         try {
             String url = "jdbc:sqlite:file:daanse-test-" + UUID.randomUUID() + "?mode=memory&cache=shared";
             SQLiteDataSource ds = new SQLiteDataSource();
@@ -59,7 +59,7 @@ public class SqliteDatabaseProvider implements DatabaseProvider {
             try (Connection c = ds.getConnection()) {
                 dialect = new SqliteDialect(DialectInitData.fromConnection(c));
             }
-            return new ActiveDatabase(ds, dialect);
+            return new ActiveDatabase(ds, dialect, ActiveDatabase.settingsFor(key));
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to start SQLite datasource", e);
         }

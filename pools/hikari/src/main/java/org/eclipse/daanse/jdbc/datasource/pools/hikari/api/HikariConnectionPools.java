@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.pools.api.ConnectionPool;
+import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.pools.hikari.impl.HikariConnectionPool;
 
 /**
@@ -37,15 +38,27 @@ public final class HikariConnectionPools {
 
     /**
      * @param dataSource the data source to pool
-     * @param config     pool properties as in {@link org.eclipse.daanse.jdbc.datasource.pools.api.Constants};
-     *                   an empty map takes every default
+     * @param settings   pool settings; {@link PoolSettings#defaults()} for every
+     *                   default
      */
-    public static ConnectionPool create(DataSource dataSource, Map<String, Object> config) {
-        return new HikariConnectionPool(dataSource, config == null ? Map.of() : config);
+    public static ConnectionPool create(DataSource dataSource, PoolSettings settings) {
+        return new HikariConnectionPool(dataSource, settings == null ? PoolSettings.defaults() : settings);
     }
 
-    /** As {@link #create(DataSource, Map)} with every default. */
+    /**
+     * For a caller that already holds Configuration Admin properties rather than
+     * settings.
+     *
+     * @param config pool properties as named in
+     *               {@link org.eclipse.daanse.jdbc.datasource.pools.api.Constants};
+     *               an empty map takes every default
+     */
+    public static ConnectionPool create(DataSource dataSource, Map<String, Object> config) {
+        return create(dataSource, PoolSettings.from(config));
+    }
+
+    /** As {@link #create(DataSource, PoolSettings)} with every default. */
     public static ConnectionPool create(DataSource dataSource) {
-        return create(dataSource, Map.of());
+        return create(dataSource, PoolSettings.defaults());
     }
 }

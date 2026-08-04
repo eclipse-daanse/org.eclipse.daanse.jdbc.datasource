@@ -28,7 +28,7 @@ import org.h2.jdbcx.JdbcDataSource;
 /**
  * H2 in-memory provider. {@link #activate()} returns the provider's single
  * default database. {@link #activate(String)} returns one isolated database
- * per distinct key — backed by independent memFS UUID URLs.
+ * per distinct key — backed by independent in-memory UUID URLs.
  */
 public class H2DatabaseProvider implements DatabaseProvider {
 
@@ -48,18 +48,13 @@ public class H2DatabaseProvider implements DatabaseProvider {
 
     @Override
     public ActiveDatabase activate(String isolationKey) {
-        return dbsByKey.computeIfAbsent(isolationKey, k -> newDatabase());
+        return dbsByKey.computeIfAbsent(isolationKey, this::newDatabase);
     }
 
-    private ActiveDatabase newDatabase() {
+    private ActiveDatabase newDatabase(String key) {
         try {
-            // "mem" is h2's in-memory engine. The alternative, "memFS", puts a
-            // file-backed database on an in-memory file system, so every page still
-            // goes through the file layer for no gain here: both isolate by database
-            // name, and the name carries a UUID. Switchable with
-            // -Ddaanse.test.h2.scheme=memFS.
-            String scheme = System.getProperty("daanse.test.h2.scheme", "mem");
-            String url = "jdbc:h2:" + scheme + ":" + UUID.randomUUID() + ";DATABASE_TO_UPPER=false";
+            // The in-memory engine, isolated by a database name carrying a UUID.
+            String url = "jdbc:h2:mem:" + UUID.randomUUID() + ";DATABASE_TO_UPPER=false";
             JdbcDataSource ds = new JdbcDataSource();
             ds.setUrl(url);
             ds.setUser("sa");
@@ -68,7 +63,7 @@ public class H2DatabaseProvider implements DatabaseProvider {
             try (Connection c = ds.getConnection()) {
                 dialect = new H2Dialect(DialectInitData.fromConnection(c));
             }
-            return new ActiveDatabase(ds, dialect);
+            return new ActiveDatabase(ds, dialect, ActiveDatabase.settingsFor(key));
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to start H2 datasource", e);
         }
