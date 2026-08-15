@@ -62,6 +62,12 @@ public class Constants {
     public static final String POOL_PROPERTY_LEAK_THRESHOLD = "leakThreshold";
 
     /**
+     * Read-only state the pool puts a connection in. Has to match the DataSource:
+     * a driver that opened the database read-only refuses to leave that state.
+     */
+    public static final String POOL_PROPERTY_READ_ONLY = "readOnly";
+
+    /**
      * Tied to the OLAP engine's fan-out: {@code segmentCacheManagerNumberSqlThreads}
      * defaults to 100, so a single query may ask for that many connections at
      * once, and a smaller pool queues the engine's own threads before they reach
@@ -75,4 +81,5 @@ public class Constants {
     public static final long DEFAULT_IDLE_TIMEOUT = 600_000L;
     public static final long DEFAULT_MAX_LIFETIME = 1_800_000L;
     public static final long DEFAULT_LEAK_THRESHOLD = 300_000L;
+    public static final boolean DEFAULT_READ_ONLY = false;
 }

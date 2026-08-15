@@ -53,6 +53,12 @@ public class DataSourceService extends AbstractDataSource {
 
     @Deactivate
     public void deactivate() {
+        // Releases the database held by the DataSource's kept connection.
+        try {
+            ds.close();
+        } catch (SQLException e) {
+            LOGGER.warn("closing the duckdb database failed", e);
+        }
         LOGGER.debug("deactivated");
     }
 

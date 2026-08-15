@@ -31,6 +31,10 @@ public interface BaseConfig {
     String L10N_READ_ONLY_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_READ_ONLY
             + L10N_POSTFIX_DESCRIPTION;
 
+    String L10N_SETTINGS_NAME = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SETTINGS + L10N_POSTFIX_NAME;
+    String L10N_SETTINGS_DESCRIPTION = L10N_PREFIX + Constants.DATASOURCE_PROPERTY_SETTINGS
+            + L10N_POSTFIX_DESCRIPTION;
+
     // Default value constants
     String DEFAULT_DATABASE_NAME = "";
     boolean DEFAULT_READ_ONLY = false;
@@ -49,5 +53,14 @@ public interface BaseConfig {
             + "")
     default boolean readOnly() {
         return DEFAULT_READ_ONLY;
+    }
+
+    /**
+     * Engine settings as {@code name=value}, handed to DuckDB as connection
+     * properties ({@code threads}, {@code memory_limit}, ...).
+     */
+    @AttributeDefinition(name = L10N_SETTINGS_NAME, description = L10N_SETTINGS_DESCRIPTION, required = false)
+    default String[] settings() {
+        return new String[0];
     }
 }

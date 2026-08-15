@@ -59,4 +59,16 @@ public class Constants {
      */
     public static final String DATASOURCE_PROPERTY_READ_ONLY = "readOnly";
 
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_DATASOURCE}.
+     *
+     * Engine settings as {@code name=value}, passed to DuckDB as connection
+     * properties: {@code threads=2}, {@code memory_limit=4GB}, or anything else
+     * the engine accepts — deliberately not enumerated here.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#settings()}
+     */
+    public static final String DATASOURCE_PROPERTY_SETTINGS = "settings";
+
 }

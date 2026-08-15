@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.duckdb.DuckDBConnection;
 import org.duckdb.DuckDBDriver;
 
 /**
@@ -28,12 +29,20 @@ import org.duckdb.DuckDBDriver;
  * DataSource implementation of its own, so connections are created through
  * {@link DuckDBDriver#connect(String, Properties)} (no {@code DriverManager} —
  * that would not work across OSGi class loaders).
+ * <p>
+ * One connection is opened and kept; every connection handed out is a
+ * {@link DuckDBConnection#duplicate()} of it. An in-memory DuckDB database
+ * belongs to the connection that opened it — a second {@code connect} would
+ * open a second, empty database.
  */
 public class DuckDbDataSource implements DataSource {
 
     private final DuckDBDriver driver = new DuckDBDriver();
     private final String url;
     private final Properties properties;
+
+    /** The connection that owns the database; held until {@link #close()}. */
+    private volatile DuckDBConnection keeper;
 
     private PrintWriter logWriter;
     private int loginTimeout = 0;
@@ -45,7 +54,31 @@ public class DuckDbDataSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return driver.connect(url, properties);
+        DuckDBConnection held = keeper;
+        if (held == null) {
+            synchronized (this) {
+                if (keeper == null) {
+                    keeper = (DuckDBConnection) driver.connect(url, properties);
+                }
+                held = keeper;
+            }
+        }
+        return held.duplicate();
+    }
+
+    /**
+     * Releases the database. The next {@link #getConnection()} opens a new — for
+     * in-memory, empty — database, so call this only at the end of the component's life.
+     */
+    public void close() throws SQLException {
+        DuckDBConnection held;
+        synchronized (this) {
+            held = keeper;
+            keeper = null;
+        }
+        if (held != null) {
+            held.close();
+        }
     }
 
     /**

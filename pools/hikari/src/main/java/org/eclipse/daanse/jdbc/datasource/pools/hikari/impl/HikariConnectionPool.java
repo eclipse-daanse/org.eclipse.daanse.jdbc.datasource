@@ -27,8 +27,8 @@ import java.util.concurrent.TimeoutException;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.jdbc.datasource.pools.api.ConnectionPool;
-import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.pools.api.Constants;
+import org.eclipse.daanse.jdbc.datasource.pools.api.PoolSettings;
 import org.eclipse.daanse.jdbc.datasource.pools.hikari.api.ocd.DsConfig;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -75,7 +75,11 @@ public class HikariConnectionPool implements ConnectionPool {
      * names.
      */
     @Activate
-    public HikariConnectionPool(@Reference DataSource dataSource, Map<String, Object> config) {
+    // The compiled class keeps no parameter names; unnamed, the reference becomes
+    // "$000" and the dataSource.target property silently filters nothing.
+    public HikariConnectionPool(
+            @Reference(name = "dataSource") DataSource dataSource,
+            Map<String, Object> config) {
         this(dataSource, PoolSettings.from(config, LOGGER::warn));
     }
 
@@ -88,6 +92,9 @@ public class HikariConnectionPool implements ConnectionPool {
         cfg.setConnectionTimeout(settings.connectionTimeout().toMillis());
         cfg.setIdleTimeout(settings.idleTimeout().toMillis());
         cfg.setMaxLifetime(settings.maxLifetime().toMillis());
+        // Has to match how the DataSource opened the database; a read-only driver
+        // refuses to leave that state.
+        cfg.setReadOnly(settings.readOnly());
         // Reports a connection held longer than this; unlike dbcp2 hikari never takes
         // it back, so this is a warning about a caller that forgot to close, nothing more.
         cfg.setLeakDetectionThreshold(settings.leakThreshold().toMillis());
