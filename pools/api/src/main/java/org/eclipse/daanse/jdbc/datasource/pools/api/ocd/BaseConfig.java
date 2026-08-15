@@ -47,6 +47,8 @@ public interface BaseConfig {
     String L10N_LEAK_THRESHOLD_NAME = L10N_PREFIX + Constants.POOL_PROPERTY_LEAK_THRESHOLD + L10N_POSTFIX_NAME;
     String L10N_LEAK_THRESHOLD_DESCRIPTION = L10N_PREFIX + Constants.POOL_PROPERTY_LEAK_THRESHOLD
             + L10N_POSTFIX_DESCRIPTION;
+    String L10N_READ_ONLY_NAME = L10N_PREFIX + Constants.POOL_PROPERTY_READ_ONLY + L10N_POSTFIX_NAME;
+    String L10N_READ_ONLY_DESCRIPTION = L10N_PREFIX + Constants.POOL_PROPERTY_READ_ONLY + L10N_POSTFIX_DESCRIPTION;
 
     @AttributeDefinition(name = L10N_POOL_NAME_NAME, description = L10N_POOL_NAME_DESCRIPTION, required = false)
     default String poolName() {
@@ -81,5 +83,10 @@ public interface BaseConfig {
     @AttributeDefinition(name = L10N_LEAK_THRESHOLD_NAME, description = L10N_LEAK_THRESHOLD_DESCRIPTION, required = false)
     default long leakThreshold() {
         return Constants.DEFAULT_LEAK_THRESHOLD;
+    }
+
+    @AttributeDefinition(name = L10N_READ_ONLY_NAME, description = L10N_READ_ONLY_DESCRIPTION, required = false)
+    default boolean readOnly() {
+        return Constants.DEFAULT_READ_ONLY;
     }
 }
