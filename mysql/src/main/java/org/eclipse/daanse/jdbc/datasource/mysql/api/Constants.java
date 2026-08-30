@@ -764,9 +764,9 @@ public class Constants {
     public static final String DATASOURCE_PROPERTY_PEDANTIC = "pedantic";
 
     /**
-     * MySQL ping interval
+     * MySQL pin global XA transaction to its physical connection
      */
-    public static final String DATASOURCE_PROPERTY_PING_INTERVAL = "pinGlobalTxToPhysicalConnection";
+    public static final String DATASOURCE_PROPERTY_PIN_GLOBAL_TX_TO_PHYSICAL_CONNECTION = "pinGlobalTxToPhysicalConnection";
 
     /**
      * MySQL process escape codes for prepared statements
@@ -797,11 +797,6 @@ public class Constants {
      * MySQL replication connection group
      */
     public static final String DATASOURCE_PROPERTY_REPLICATION_CONNECTION_GROUP = "replicationConnectionGroup";
-
-    /**
-     * MySQL report metrics interval
-     */
-    public static final String DATASOURCE_PROPERTY_REPORT_METRICS_INTERVAL = "reportMetricsIntervalMillis";
 
     /**
      * MySQL retrieval policy for generated keys
@@ -847,11 +842,6 @@ public class Constants {
      * MySQL socket factory
      */
     public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY = "socketFactory";
-
-    /**
-     * MySQL socket factory class name
-     */
-    public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY_CLASS_NAME = "socketFactory";
 
     /**
      * MySQL SSL mode
@@ -952,10 +942,5 @@ public class Constants {
      * MySQL using JVMNano Time For Elapsed Time
      */
     public static final String DATASOURCE_PROPERTY_USE_NANO_FOR_ELAPSED_TIME = "useNanosForElapsedTime";
-
-    /**
-     * MySQL xa rollback on timeout
-     */
-    public static final String DATASOURCE_PROPERTY_XA_ROLLBACK_ON_TIMEOUT = "pinGlobalTxToPhysicalConnection";
 
 }

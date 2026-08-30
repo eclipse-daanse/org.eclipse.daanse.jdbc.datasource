@@ -97,37 +97,37 @@ public class Constants {
     /**
      * {@link PGProperty#ADAPTIVE_FETCH}
      */
-    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH = "adaptive.fetch";
+    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH = "adaptiveFetch";
 
     /**
      * {@link PGProperty#ADAPTIVE_FETCH_MAXIMUM}
      */
-    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH_MAXIMUM = "adaptive.fetch.maximum";
+    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH_MAXIMUM = "adaptiveFetchMaximum";
 
     /**
      * {@link PGProperty#ADAPTIVE_FETCH_MINIMUM}
      */
-    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH_MINIMUM = "adaptive.fetch.minimum";
+    public static final String DATASOURCE_PROPERTY_ADAPTIVE_FETCH_MINIMUM = "adaptiveFetchMinimum";
 
     /**
      * {@link PGProperty#ALLOW_ENCODING_CHANGES}
      */
-    public static final String DATASOURCE_PROPERTY_ALLOW_ENCODING_CHANGES = "allow.encoding.changes";
+    public static final String DATASOURCE_PROPERTY_ALLOW_ENCODING_CHANGES = "allowEncodingChanges";
 
     /**
      * {@link PGProperty#APPLICATION_NAME}
      */
-    public static final String DATASOURCE_PROPERTY_APPLICATION_NAME = "application.name";
+    public static final String DATASOURCE_PROPERTY_APPLICATION_NAME = "applicationName";
 
     /**
      * {@link PGProperty#ASSUME_MIN_SERVER_VERSION}
      */
-    public static final String DATASOURCE_PROPERTY_ASSUME_MIN_SERVER_VERSION = "assume.min.server.version";
+    public static final String DATASOURCE_PROPERTY_ASSUME_MIN_SERVER_VERSION = "assumeMinServerVersion";
 
     /**
      * {@link PGProperty#AUTHENTICATION_PLUGIN_CLASS_NAME}
      */
-    public static final String DATASOURCE_PROPERTY_AUTHENTICATION_PLUGIN_CLASS_NAME = "authentication.plugin.class.name";
+    public static final String DATASOURCE_PROPERTY_AUTHENTICATION_PLUGIN_CLASS_NAME = "authenticationPluginClassName";
 
     /**
      * {@link PGProperty#AUTOSAVE}
@@ -137,147 +137,147 @@ public class Constants {
     /**
      * {@link PGProperty#BINARY_TRANSFER}
      */
-    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER = "binary.transfer";
+    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER = "binaryTransfer";
 
     /**
      * {@link PGProperty#BINARY_TRANSFER_DISABLE}
      */
-    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER_DISABLE = "binary.transfer.disable";
+    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER_DISABLE = "binaryTransferDisable";
 
     /**
      * {@link PGProperty#BINARY_TRANSFER_ENABLE}
      */
-    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER_ENABLE = "binary.transfer.enable";
+    public static final String DATASOURCE_PROPERTY_BINARY_TRANSFER_ENABLE = "binaryTransferEnable";
 
     /**
      * {@link PGProperty#CANCEL_SIGNAL_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_CANCEL_SIGNAL_TIMEOUT = "cancel.signal.timeout";
+    public static final String DATASOURCE_PROPERTY_CANCEL_SIGNAL_TIMEOUT = "cancelSignalTimeout";
 
     /**
      * {@link PGProperty#CLEANUP_SAVEPOINTS}
      */
-    public static final String DATASOURCE_PROPERTY_CLEANUP_SAVEPOINTS = "cleanup.savepoints";
+    public static final String DATASOURCE_PROPERTY_CLEANUP_SAVEPOINTS = "cleanupSavepoints";
 
     /**
      * {@link PGProperty#CONNECT_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_CONNECT_TIMEOUT = "connect.timeout";
+    public static final String DATASOURCE_PROPERTY_CONNECT_TIMEOUT = "connectTimeout";
 
     /**
      * {@link PGProperty#CURRENT_SCHEMA}
      */
-    public static final String DATASOURCE_PROPERTY_CURRENT_SCHEMA = "current.schema";
+    public static final String DATASOURCE_PROPERTY_CURRENT_SCHEMA = "currentSchema";
 
     /**
      * {@link PGProperty#DATABASE_METADATA_CACHE_FIELDS}
      */
-    public static final String DATASOURCE_PROPERTY_DATABASE_METADATA_CACHE_FIELDS = "database.metadata.cache.fields";
+    public static final String DATASOURCE_PROPERTY_DATABASE_METADATA_CACHE_FIELDS = "databaseMetadataCacheFields";
 
     /**
      * {@link PGProperty#DATABASE_METADATA_CACHE_FIELDS_MIB}
      */
-    public static final String DATASOURCE_PROPERTY_DATABASE_METADATA_CACHE_FIELDS_MIB = "database.metadata.cache.fields.mib";
+    public static final String DATASOURCE_PROPERTY_DATABASE_METADATA_CACHE_FIELDS_MIB = "databaseMetadataCacheFieldsMib";
 
     /**
      * {@link PGProperty#DEFAULT_ROW_FETCH_SIZE}
      */
-    public static final String DATASOURCE_PROPERTY_DEFAULT_ROW_FETCH_SIZE = "default.row.fetch.size";
+    public static final String DATASOURCE_PROPERTY_DEFAULT_ROW_FETCH_SIZE = "defaultRowFetchSize";
 
     /**
      * {@link PGProperty#DISABLE_COLUMN_SANITISER}
      */
-    public static final String DATASOURCE_PROPERTY_DISABLE_COLUMN_SANITISER = "disable.column.sanitiser";
+    public static final String DATASOURCE_PROPERTY_DISABLE_COLUMN_SANITISER = "disableColumnSanitiser";
 
     /**
      * {@link PGProperty#ESCAPE_SYNTAX_CALL_MODE}
      */
-    public static final String DATASOURCE_PROPERTY_ESCAPE_SYNTAX_CALL_MODE = "escape.syntax.call.mode";
+    public static final String DATASOURCE_PROPERTY_ESCAPE_SYNTAX_CALL_MODE = "escapeSyntaxCallMode";
 
     /**
      * {@link PGProperty#GROUP_STARTUP_PARAMETERS}
      */
-    public static final String DATASOURCE_PROPERTY_GROUP_STARTUP_PARAMETERS = "group.startup.parameters";
+    public static final String DATASOURCE_PROPERTY_GROUP_STARTUP_PARAMETERS = "groupStartupParameters";
 
     /**
      * {@link PGProperty#GSS_ENC_MODE}
      */
-    public static final String DATASOURCE_PROPERTY_GSS_ENC_MODE = "gss.enc.mode";
+    public static final String DATASOURCE_PROPERTY_GSS_ENC_MODE = "gssEncMode";
 
     /**
      * {@link PGProperty#GSS_LIB}
      */
-    public static final String DATASOURCE_PROPERTY_GSS_LIB = "gss.lib";
+    public static final String DATASOURCE_PROPERTY_GSS_LIB = "gssLib";
 
     /**
      * {@link PGProperty#GSS_RESPONSE_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_GSS_RESPONSE_TIMEOUT = "gss.response.timeout";
+    public static final String DATASOURCE_PROPERTY_GSS_RESPONSE_TIMEOUT = "gssResponseTimeout";
 
     /**
      * {@link PGProperty#HIDE_UNPRIVILEGED_OBJECTS}
      */
-    public static final String DATASOURCE_PROPERTY_HIDE_UNPRIVILEGED_OBJECTS = "hide.unprivileged.objects";
+    public static final String DATASOURCE_PROPERTY_HIDE_UNPRIVILEGED_OBJECTS = "hideUnprivilegedObjects";
 
     /**
      * {@link PGProperty#HOST_RECHECK_SECONDS}
      */
-    public static final String DATASOURCE_PROPERTY_HOST_RECHECK_SECONDS = "host.recheck.seconds";
+    public static final String DATASOURCE_PROPERTY_HOST_RECHECK_SECONDS = "hostRecheckSeconds";
 
     /**
      * {@link PGProperty#JAAS_APPLICATION_NAME}
      */
-    public static final String DATASOURCE_PROPERTY_JAAS_APPLICATION_NAME = "jaas.application.name";
+    public static final String DATASOURCE_PROPERTY_JAAS_APPLICATION_NAME = "jaasApplicationName";
 
     /**
      * {@link PGProperty#JAAS_LOGIN}
      */
-    public static final String DATASOURCE_PROPERTY_JAAS_LOGIN = "jaas.login";
+    public static final String DATASOURCE_PROPERTY_JAAS_LOGIN = "jaasLogin";
 
     /**
      * {@link PGProperty#KERBEROS_SERVER_NAME}
      */
-    public static final String DATASOURCE_PROPERTY_KERBEROS_SERVER_NAME = "kerberos.server.name";
+    public static final String DATASOURCE_PROPERTY_KERBEROS_SERVER_NAME = "kerberosServerName";
 
     /**
      * {@link PGProperty#LOAD_BALANCE_HOSTS}
      */
-    public static final String DATASOURCE_PROPERTY_LOAD_BALANCE_HOSTS = "load.balance.hosts";
+    public static final String DATASOURCE_PROPERTY_LOAD_BALANCE_HOSTS = "loadBalanceHosts";
 
     /**
      * {@link PGProperty#LOCAL_SOCKET_ADDRESS}
      */
-    public static final String DATASOURCE_PROPERTY_LOCAL_SOCKET_ADDRESS = "local.socket.address";
+    public static final String DATASOURCE_PROPERTY_LOCAL_SOCKET_ADDRESS = "localSocketAddress";
 
     /**
      * {@link PGProperty#LOGGER_FILE}
      */
-    public static final String DATASOURCE_PROPERTY_LOGGER_FILE = "logger.file";
+    public static final String DATASOURCE_PROPERTY_LOGGER_FILE = "loggerFile";
 
     /**
      * {@link PGProperty#LOGGER_LEVEL}
      */
-    public static final String DATASOURCE_PROPERTY_LOGGER_LEVEL = "logger.level";
+    public static final String DATASOURCE_PROPERTY_LOGGER_LEVEL = "loggerLevel";
 
     /**
      * {@link PGProperty#LOGIN_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_LOGIN_TIMEOUT = "login.timeout";
+    public static final String DATASOURCE_PROPERTY_LOGIN_TIMEOUT = "loginTimeout";
 
     /**
      * {@link PGProperty#LOG_SERVER_ERROR_DETAIL}
      */
-    public static final String DATASOURCE_PROPERTY_LOG_SERVER_ERROR_DETAIL = "log.server.error.detail";
+    public static final String DATASOURCE_PROPERTY_LOG_SERVER_ERROR_DETAIL = "logServerErrorDetail";
 
     /**
      * {@link PGProperty#LOG_UNCLOSED_CONNECTIONS}
      */
-    public static final String DATASOURCE_PROPERTY_LOG_UNCLOSED_CONNECTIONS = "log.unclosed.connections";
+    public static final String DATASOURCE_PROPERTY_LOG_UNCLOSED_CONNECTIONS = "logUnclosedConnections";
 
     /**
      * {@link PGProperty#MAX_RESULT_BUFFER}
      */
-    public static final String DATASOURCE_PROPERTY_MAX_RESULT_BUFFER = "max.result.buffer";
+    public static final String DATASOURCE_PROPERTY_MAX_RESULT_BUFFER = "maxResultBuffer";
 
     /**
      * {@link PGProperty#OPTIONS}
@@ -287,47 +287,47 @@ public class Constants {
     /**
      * {@link PGProperty#PREFER_QUERY_MODE}
      */
-    public static final String DATASOURCE_PROPERTY_PREFER_QUERY_MODE = "prefer.query.mode";
+    public static final String DATASOURCE_PROPERTY_PREFER_QUERY_MODE = "preferQueryMode";
 
     /**
      * {@link PGProperty#PREPARED_STATEMENT_CACHE_QUERIES}
      */
-    public static final String DATASOURCE_PROPERTY_PREPARED_STATEMENT_CACHE_QUERIES = "prepared.statement.cache.queries";
+    public static final String DATASOURCE_PROPERTY_PREPARED_STATEMENT_CACHE_QUERIES = "preparedStatementCacheQueries";
 
     /**
      * {@link PGProperty#PREPARED_STATEMENT_CACHE_SIZE_MIB}
      */
-    public static final String DATASOURCE_PROPERTY_PREPARED_STATEMENT_CACHE_SIZE_MIB = "prepared.statement.cache.size.mib";
+    public static final String DATASOURCE_PROPERTY_PREPARED_STATEMENT_CACHE_SIZE_MIB = "preparedStatementCacheSizeMib";
 
     /**
      * {@link PGProperty#PREPARE_THRESHOLD}
      */
-    public static final String DATASOURCE_PROPERTY_PREPARE_THRESHOLD = "prepare.threshold";
+    public static final String DATASOURCE_PROPERTY_PREPARE_THRESHOLD = "prepareThreshold";
 
     /**
      * {@link PGProperty#PROTOCOL_VERSION}
      */
-    public static final String DATASOURCE_PROPERTY_PROTOCOL_VERSION = "protocol.version";
+    public static final String DATASOURCE_PROPERTY_PROTOCOL_VERSION = "protocolVersion";
 
     /**
      * {@link PGProperty#QUOTE_RETURNING_IDENTIFIERS}
      */
-    public static final String DATASOURCE_PROPERTY_QUOTE_RETURNING_IDENTIFIERS = "quote.returning.identifiers";
+    public static final String DATASOURCE_PROPERTY_QUOTE_RETURNING_IDENTIFIERS = "quoteReturningIdentifiers";
 
     /**
      * {@link PGProperty#READ_ONLY}
      */
-    public static final String DATASOURCE_PROPERTY_READ_ONLY = "read.only";
+    public static final String DATASOURCE_PROPERTY_READ_ONLY = "readOnly";
 
     /**
      * {@link PGProperty#READ_ONLY_MODE}
      */
-    public static final String DATASOURCE_PROPERTY_READ_ONLY_MODE = "read.only.mode";
+    public static final String DATASOURCE_PROPERTY_READ_ONLY_MODE = "readOnlyMode";
 
     /**
      * {@link PGProperty#RECEIVE_BUFFER_SIZE}
      */
-    public static final String DATASOURCE_PROPERTY_RECEIVE_BUFFER_SIZE = "receive.buffer.size";
+    public static final String DATASOURCE_PROPERTY_RECEIVE_BUFFER_SIZE = "receiveBufferSize";
 
     /**
      * {@link PGProperty#REPLICATION}
@@ -337,12 +337,12 @@ public class Constants {
     /**
      * {@link PGProperty#REWRITE_BATCHED_INSERTS}
      */
-    public static final String DATASOURCE_PROPERTY_REWRITE_BATCHED_INSERTS = "rewrite.batched.inserts";
+    public static final String DATASOURCE_PROPERTY_REWRITE_BATCHED_INSERTS = "rewriteBatchedInserts";
 
     /**
      * {@link PGProperty#SEND_BUFFER_SIZE}
      */
-    public static final String DATASOURCE_PROPERTY_SEND_BUFFER_SIZE = "send.buffer.size";
+    public static final String DATASOURCE_PROPERTY_SEND_BUFFER_SIZE = "sendBufferSize";
 
     /**
      * {@link PGProperty#SERVICE}
@@ -352,17 +352,17 @@ public class Constants {
     /**
      * {@link PGProperty#SOCKET_FACTORY}
      */
-    public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY = "socket.factory";
+    public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY = "socketFactory";
 
     /**
      * {@link PGProperty#SOCKET_FACTORY_ARG}
      */
-    public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY_ARG = "socket.factory.arg";
+    public static final String DATASOURCE_PROPERTY_SOCKET_FACTORY_ARG = "socketFactoryArg";
 
     /**
      * {@link PGProperty#SOCKET_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_SOCKET_TIMEOUT = "socket.timeout";
+    public static final String DATASOURCE_PROPERTY_SOCKET_TIMEOUT = "socketTimeout";
 
     /**
      * {@link PGProperty#SSL}
@@ -372,91 +372,91 @@ public class Constants {
     /**
      * {@link PGProperty#SSL_CERT}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_CERT = "ssl.cert";
+    public static final String DATASOURCE_PROPERTY_SSL_CERT = "sslCert";
 
     /**
      * {@link PGProperty#SSL_FACTORY}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_FACTORY = "ssl.factory";
+    public static final String DATASOURCE_PROPERTY_SSL_FACTORY = "sslFactory";
 
     /**
      * {@link PGProperty#SSL_FACTORY_ARG}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_FACTORY_ARG = "ssl.factory.arg";
+    public static final String DATASOURCE_PROPERTY_SSL_FACTORY_ARG = "sslFactoryArg";
 
     /**
      * {@link PGProperty#SSL_HOSTNAME_VERIFIER}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_HOSTNAME_VERIFIER = "ssl.hostname.verifier";
+    public static final String DATASOURCE_PROPERTY_SSL_HOSTNAME_VERIFIER = "sslHostnameVerifier";
 
     /**
      * {@link PGProperty#SSL_KEY}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_KEY = "ssl.key";
+    public static final String DATASOURCE_PROPERTY_SSL_KEY = "sslKey";
 
     /**
      * {@link PGProperty#SSL_MODE}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_MODE = "ssl.mode";
+    public static final String DATASOURCE_PROPERTY_SSL_MODE = "sslMode";
 
     /**
      * {@link PGProperty#SSL_PASSWORD}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_PASSWORD = ".ssl.password";
+    public static final String DATASOURCE_PROPERTY_SSL_PASSWORD = ".sslPassword";
 
     /**
      * {@link PGProperty#SSL_PASSWORD_CALLBACK}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_PASSWORD_CALLBACK = "ssl.password.callback";
+    public static final String DATASOURCE_PROPERTY_SSL_PASSWORD_CALLBACK = "sslPasswordCallback";
 
     /**
      * {@link PGProperty#SSL_RESPONSE_TIMEOUT}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_RESPONSE_TIMEOUT = "ssl.response.timeout";
+    public static final String DATASOURCE_PROPERTY_SSL_RESPONSE_TIMEOUT = "sslResponseTimeout";
 
     /**
      * {@link PGProperty#SSL_ROOT_CERT}
      */
-    public static final String DATASOURCE_PROPERTY_SSL_ROOT_CERT = "ssl.root.cert";
+    public static final String DATASOURCE_PROPERTY_SSL_ROOT_CERT = "sslRootCert";
 
     /**
      * {@link PGProperty#SSPI_SERVICE_CLASS}
      */
-    public static final String DATASOURCE_PROPERTY_SSPI_SERVICE_CLASS = "sspi.service.class";
+    public static final String DATASOURCE_PROPERTY_SSPI_SERVICE_CLASS = "sspiServiceClass";
 
     /**
      * {@link PGProperty#STRING_TYPE}
      */
-    public static final String DATASOURCE_PROPERTY_STRING_TYPE = "string.type";
+    public static final String DATASOURCE_PROPERTY_STRING_TYPE = "stringType";
 
     /**
      * {@link PGProperty#TARGET_SERVER_TYPE}
      */
-    public static final String DATASOURCE_PROPERTY_TARGET_SERVER_TYPE = "target.server.type";
+    public static final String DATASOURCE_PROPERTY_TARGET_SERVER_TYPE = "targetServerType";
 
     /**
      * {@link PGProperty#TCP_KEEP_ALIVE}
      */
-    public static final String DATASOURCE_PROPERTY_TCP_KEEP_ALIVE = "tcp.keep.alive";
+    public static final String DATASOURCE_PROPERTY_TCP_KEEP_ALIVE = "tcpKeepAlive";
 
     /**
      * {@link PGProperty#TCP_NO_DELAY}
      */
-    public static final String DATASOURCE_PROPERTY_TCP_NO_DELAY = "tcp.no.delay";
+    public static final String DATASOURCE_PROPERTY_TCP_NO_DELAY = "tcpNoDelay";
 
     /**
      * {@link PGProperty#UNKNOWN_LENGTH}
      */
-    public static final String DATASOURCE_PROPERTY_UNKNOWN_LENGTH = "unknown.length";
+    public static final String DATASOURCE_PROPERTY_UNKNOWN_LENGTH = "unknownLength";
 
     /**
      * {@link PGProperty#USE_SPNEGO}
      */
-    public static final String DATASOURCE_PROPERTY_USE_SPNEGO = "use.spnego";
+    public static final String DATASOURCE_PROPERTY_USE_SPNEGO = "useSpnego";
 
     /**
      * {@link PGProperty#XML_FACTORY_FACTORY}
      */
-    public static final String DATASOURCE_PROPERTY_XML_FACTORY_FACTORY = "xml.factory.factory";
+    public static final String DATASOURCE_PROPERTY_XML_FACTORY_FACTORY = "xmlFactoryFactory";
 
 }
