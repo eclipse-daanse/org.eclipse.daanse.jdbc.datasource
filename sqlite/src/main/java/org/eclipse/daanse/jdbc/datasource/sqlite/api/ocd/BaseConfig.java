@@ -344,7 +344,7 @@ public interface BaseConfig {
 
     @AttributeDefinition(name = L10N_JOURNAL_SIZE_LIMIT_NAME, description = L10N_JOURNAL_SIZE_LIMIT_DESCRIPTION, defaultValue = DEFAULT_JOURNAL_SIZE_LIMIT
             + "")
-    default int jounalSizeLimit() {
+    default int journalSizeLimit() {
         return DEFAULT_JOURNAL_SIZE_LIMIT;
     }
 

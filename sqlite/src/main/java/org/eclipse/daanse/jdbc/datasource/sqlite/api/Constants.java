@@ -130,7 +130,7 @@ public class Constants {
     /**
      * SQLite journal size limit
      */
-    public static final String DATASOURCE_PROPERTY_JOURNAL_SIZE_LIMIT = "jounalSizeLimit";
+    public static final String DATASOURCE_PROPERTY_JOURNAL_SIZE_LIMIT = "journalSizeLimit";
 
     /**
      * SQLite legacy file format
