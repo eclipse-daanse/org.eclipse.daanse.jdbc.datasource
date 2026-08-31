@@ -48,5 +48,6 @@ header:
     - '**/*.svg'
     - 'oracle/src/main/resources/META-INF/FDHUT_LICENSE.txt'
     - '**/org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider'
+    - '**/my.cnf'
 
   comment: always
