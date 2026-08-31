@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.jdbc.datasource</artifactId>
+    <version>${revision}</version>
+  </parent>
+  <artifactId>org.eclipse.daanse.jdbc.datasource.hive</artifactId>
+  <name>Eclipse Daanse JDBC DataSource Hive</name>
+
+  <licenses>
+    <license>
+      <name>EPL-2.0</name>
+      <url>https://opensource.org/licenses/EPL-2.0</url>
+      <distribution>repo</distribution>
+      <comments>Eclipse Public License, Version 2.0</comments>
+    </license>
+  </licenses>
+
+  <properties>
+    <hive-jdbc.version>4.2.0</hive-jdbc.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.jdbc.datasource.common</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hive</groupId>
+      <artifactId>hive-jdbc</artifactId>
+      <version>${hive-jdbc.version}</version>
+      <classifier>standalone</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Container-backed connectivity test, gated by -Dintegration.docker=true.
+    JUnit + assertj come from the parent. -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>1.19.7</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <environmentVariables>
+            <!-- Passed through so Testcontainers reaches a non-default engine
+            socket, e.g. rootless Podman (DOCKER_HOST=unix:///run/user/<uid>/podman/podman.sock). -->
+            <DOCKER_HOST>${env.DOCKER_HOST}</DOCKER_HOST>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
