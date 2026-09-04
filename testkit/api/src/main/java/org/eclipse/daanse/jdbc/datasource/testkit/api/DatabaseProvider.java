@@ -50,6 +50,23 @@ public interface DatabaseProvider extends AutoCloseable {
         return activate();
     }
 
+    /**
+     * Releases just {@code isolationKey}'s database ahead of {@link #close()},
+     * for a caller that knows a key is done for good (e.g. a per-test or
+     * per-class database whose owning test is finishing) and wants its memory
+     * back now rather than at provider close. A no-op if the key was never
+     * activated, or was already released.
+     *
+     * <p>Default no-op: most providers reach an isolated database as a
+     * schema/session in a shared container that is cheap to leave open until
+     * {@link #close()}, so there's nothing worth releasing early. Providers
+     * with an expensive per-key resource (currently {@code duckdb}, whose
+     * in-memory database otherwise sits in the JVM heap for the whole run)
+     * override this.
+     */
+    default void close(String isolationKey) {
+    }
+
     @Override
     default void close() {
     }
