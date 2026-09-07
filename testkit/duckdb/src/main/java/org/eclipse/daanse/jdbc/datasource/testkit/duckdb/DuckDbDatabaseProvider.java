@@ -252,6 +252,10 @@ public class DuckDbDatabaseProvider implements DatabaseProvider {
             // it wins on queries this small.
             props.setProperty("threads", "2");
             props.setProperty("preserve_insertion_order", "false");
+            // DuckDB's default memory_limit is 80% of RAM PER INSTANCE; a suite
+            // running test-scoped databases concurrently would oversubscribe the
+            // host many times over.
+            props.setProperty("memory_limit", "1GB");
             return props;
         }
 
