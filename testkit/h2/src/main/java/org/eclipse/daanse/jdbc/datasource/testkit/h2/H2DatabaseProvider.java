@@ -24,6 +24,8 @@ import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectInitData;
 import org.eclipse.daanse.sql.dialect.db.h2.H2Dialect;
 import org.h2.jdbcx.JdbcDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * H2 in-memory provider. {@link #activate()} returns the provider's single
@@ -32,6 +34,8 @@ import org.h2.jdbcx.JdbcDataSource;
  */
 public class H2DatabaseProvider implements DatabaseProvider {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(H2DatabaseProvider.class);
+
     private static final String DEFAULT_KEY = "__default__";
 
     private final ConcurrentMap<String, ActiveDatabase> dbsByKey = new ConcurrentHashMap<>();
@@ -39,6 +43,36 @@ public class H2DatabaseProvider implements DatabaseProvider {
     @Override
     public String id() {
         return "h2";
+    }
+
+    @Override
+    public void close() {
+        for (String key : dbsByKey.keySet()) {
+            close(key);
+        }
+    }
+
+    /**
+     * Closes and forgets just {@code key}'s database, leaving any others under
+     * this provider untouched. A no-op if {@code key} was never
+     * {@link #activate(String) activate}d, or was already closed.
+     *
+     * <p>H2 drops an in-memory database's data as soon as its last open
+     * connection closes (no {@code DB_CLOSE_DELAY} is set), so closing the
+     * pool — which otherwise keeps at least one idle connection open for the
+     * life of the provider — is all that is needed to free it.
+     */
+    @Override
+    public void close(String key) {
+        ActiveDatabase database = dbsByKey.remove(key);
+        if (database == null) {
+            return;
+        }
+        try {
+            database.connectionPool().close();
+        } catch (RuntimeException e) {
+            LOGGER.warn("closing an h2 connection pool failed", e);
+        }
     }
 
     @Override
