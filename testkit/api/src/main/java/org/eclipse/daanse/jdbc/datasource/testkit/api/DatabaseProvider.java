@@ -81,8 +81,8 @@ public interface DatabaseProvider extends AutoCloseable {
 
     /**
      * Env-var dispatch: {@code DAANSE_TEST_DB} → {@code daanse.test.db} sys-prop →
-     * default {@code "h2"}. Makes it possible to run tests in maven in different db
-     * by setting the env
+     * default {@code "duckdb"} (embedded, in-memory). Makes it possible to run
+     * tests in maven in different db by setting the env
      */
     static DatabaseProvider selected() {
         String id = System.getenv("DAANSE_TEST_DB");
@@ -90,7 +90,7 @@ public interface DatabaseProvider extends AutoCloseable {
             id = System.getProperty("daanse.test.db");
         }
         if (id == null || id.isBlank()) {
-            id = "h2";
+            id = "duckdb";
         }
         return byId(id);
     }
