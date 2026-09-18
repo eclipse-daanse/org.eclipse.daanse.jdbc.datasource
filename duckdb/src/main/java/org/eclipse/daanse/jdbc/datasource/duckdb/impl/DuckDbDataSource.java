@@ -16,8 +16,10 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -41,8 +43,15 @@ public class DuckDbDataSource implements DataSource {
     private final String url;
     private final Properties properties;
 
+    /** Same marker as the driver's; it runs the part below for an opened connection only. */
+    private static final Pattern CONNECTION_INIT_MARKER = Pattern
+            .compile("/\\*\\s*DUCKDB_CONNECTION_INIT_BELOW_MARKER\\s*\\*/");
+
     /** The connection that owns the database; held until {@link #close()}. */
     private volatile DuckDBConnection keeper;
+
+    /** Part of the session init SQL file that is due for every connection. */
+    private volatile String connectionInitSql = "";
 
     private PrintWriter logWriter;
     private int loginTimeout = 0;
@@ -58,16 +67,38 @@ public class DuckDbDataSource implements DataSource {
         if (held == null) {
             synchronized (this) {
                 if (keeper == null) {
-                    keeper = (DuckDBConnection) driver.connect(url, properties);
+                    DuckDBConnection opened = (DuckDBConnection) driver.connect(url, properties);
+                    connectionInitSql = connectionInitSql(opened.getSessionInitSQL());
+                    keeper = opened;
                 }
                 held = keeper;
             }
         }
-        return held.duplicate();
+        DuckDBConnection connection = held.duplicate();
+        // The driver ran it for the held connection; a duplicate comes without.
+        String initSql = connectionInitSql;
+        if (!initSql.isEmpty()) {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute(initSql);
+            } catch (SQLException e) {
+                connection.close();
+                throw e;
+            }
+        }
+        return connection;
+    }
+
+    private static String connectionInitSql(String sessionInitSql) {
+        if (sessionInitSql == null) {
+            return "";
+        }
+        String[] parts = CONNECTION_INIT_MARKER.split(sessionInitSql);
+        return parts.length == 2 ? parts[1].trim() : "";
     }
 
     /**
-     * Releases the database. The next {@link #getConnection()} opens a new — for
+     * Releases the database, along with a pin ({@code jdbc_pin_db}, the default for
+     * {@code ducklake:}) that would hold it until the JVM ends. The next {@link #getConnection()} opens a new — for
      * in-memory, empty — database, so call this only at the end of the component's life.
      */
     public void close() throws SQLException {
@@ -76,8 +107,12 @@ public class DuckDbDataSource implements DataSource {
             held = keeper;
             keeper = null;
         }
-        if (held != null) {
-            held.close();
+        try {
+            if (held != null) {
+                held.close();
+            }
+        } finally {
+            DuckDBDriver.releaseDB(url);
         }
     }
 
