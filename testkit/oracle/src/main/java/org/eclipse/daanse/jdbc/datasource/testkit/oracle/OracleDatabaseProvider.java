@@ -25,6 +25,7 @@ import org.eclipse.daanse.jdbc.datasource.testkit.api.DatabaseProvider;
 import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectInitData;
 import org.eclipse.daanse.sql.dialect.db.oracle.OracleDialect;
+import org.testcontainers.containers.Container;
 import org.testcontainers.oracle.OracleContainer;
 
 /**
@@ -37,6 +38,26 @@ public class OracleDatabaseProvider implements DatabaseProvider {
 
     private static final String IMAGE = "gvenzl/oracle-free:23-slim-faststart";
     private static final String DEFAULT_KEY = "__default__";
+
+    /**
+     * How many processes the test instance allows; {@code 0} keeps the image's own setting (200). The image's 200 leave
+     * about 118 for connections once the background processes run, and a test suite that opens and closes a pool per
+     * class makes the listener refuse with {@code ORA-12516} although the instance is far from full: it counts the
+     * connections it handed out and learns late that they closed (measured 17.10.2026: 101 of 320 connections refused
+     * at 200, none at 1000). This is our own test database, so we may set it; the product has to cope with whatever a
+     * customer's database is set to. Not more than needed: every process takes memory of the image's 1.5 GB SGA, and
+     * at 1000 a full run left 16 MB of it free (18.10.2026) -- 400 is the idle 82 plus room for the burst.
+     */
+    public static final String PROCESSES_PROPERTY = "daanse.testkit.oracle.processes";
+    static final int DEFAULT_PROCESSES = 400;
+
+    /**
+     * How long a test connection waits for the server's answer before it gives up, in milliseconds; {@code 0} waits
+     * forever. A connection the server no longer serves kept a full run waiting for two hours in a socket read (18.10.,
+     * a CSV import in {@code aggtable}); with a bound the test fails and the run goes on. Long enough for a slow load.
+     */
+    public static final String READ_TIMEOUT_PROPERTY = "daanse.testkit.oracle.readTimeoutMillis";
+    static final long DEFAULT_READ_TIMEOUT_MILLIS = 15 * 60 * 1000L;
 
     private static volatile OracleContainer container;
     private static final Object LOCK = new Object();
@@ -84,6 +105,7 @@ public class OracleDatabaseProvider implements DatabaseProvider {
             ds.setURL(c.getJdbcUrl());
             ds.setUser(user);
             ds.setPassword(pwd);
+            ds.setConnectionProperties(readTimeout());
             Dialect dialect;
             PoolSettings poolSettings;
             try (Connection conn = ds.getConnection()) {
@@ -126,7 +148,76 @@ public class OracleDatabaseProvider implements DatabaseProvider {
         admin.setURL(c.getJdbcUrl());
         admin.setUser("system");
         admin.setPassword(c.getPassword());
+        admin.setConnectionProperties(readTimeout());
         return admin.getConnection();
+    }
+
+    /** The driver's read timeout for a test connection, as {@link #READ_TIMEOUT_PROPERTY} sets it. */
+    static java.util.Properties readTimeout() {
+        java.util.Properties properties = new java.util.Properties();
+        long millis = Long.getLong(READ_TIMEOUT_PROPERTY, DEFAULT_READ_TIMEOUT_MILLIS);
+        if (millis > 0) {
+            properties.setProperty("oracle.jdbc.ReadTimeout", Long.toString(millis));
+        }
+        return properties;
+    }
+
+    /**
+     * Sets {@code processes} and restarts the instance, which reads the parameter only when it starts; then waits until
+     * the application user connects through the listener again.
+     *
+     * @param processes the number, or {@code 0} or less to leave the image's setting alone
+     */
+    static void configureProcesses(OracleContainer c, int processes) {
+        if (processes <= 0) {
+            return;
+        }
+        String script = "sqlplus -s / as sysdba <<'SQL'\n"
+                + "WHENEVER SQLERROR EXIT FAILURE\n"
+                + "ALTER SYSTEM SET processes=" + processes + " SCOPE=SPFILE;\n"
+                + "SHUTDOWN IMMEDIATE;\n"
+                + "STARTUP;\n"
+                + "ALTER PLUGGABLE DATABASE ALL OPEN;\n"
+                + "SQL\n";
+        try {
+            Container.ExecResult result = c.execInContainer("bash", "-c", script);
+            if (result.getExitCode() != 0) {
+                throw new IllegalStateException("setting processes=" + processes + " failed: " + result.getStdout()
+                        + result.getStderr());
+            }
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException("setting processes=" + processes + " failed", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("interrupted while setting processes=" + processes, e);
+        }
+        awaitConnectable(c);
+    }
+
+    /** Until the restarted instance has registered its service with the listener again, a connection is refused. */
+    private static void awaitConnectable(OracleContainer c) {
+        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(120);
+        SQLException last = null;
+        while (System.nanoTime() < deadline) {
+            try {
+                OracleDataSource ds = new OracleDataSource();
+                ds.setURL(c.getJdbcUrl());
+                ds.setUser(c.getUsername());
+                ds.setPassword(c.getPassword());
+                try (Connection conn = ds.getConnection()) {
+                    return;
+                }
+            } catch (SQLException e) {
+                last = e;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("interrupted while waiting for the restarted instance", e);
+            }
+        }
+        throw new IllegalStateException("the restarted Oracle instance did not accept a connection within 120 s", last);
     }
 
     private static String sanitize(String k) {
@@ -150,6 +241,7 @@ public class OracleDatabaseProvider implements DatabaseProvider {
             if (container == null) {
                 OracleContainer o = new OracleContainer(IMAGE).withUsername("rt").withPassword("rt");
                 o.start();
+                configureProcesses(o, Integer.getInteger(PROCESSES_PROPERTY, DEFAULT_PROCESSES));
                 container = o;
                 Runtime.getRuntime().addShutdownHook(new Thread(o::close, "daanse-oracle-stop"));
             }
