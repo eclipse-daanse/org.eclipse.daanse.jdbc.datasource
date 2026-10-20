@@ -37,6 +37,8 @@ public class MsSqlDatabaseProvider implements DatabaseProvider {
 
     private static final String IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String DEFAULT_KEY = "__default__";
+    /** The collation of every test database: VARCHAR holds UTF-8 (SQL Server 2019 and later). */
+    static final String COLLATION = "Latin1_General_100_CI_AS_SC_UTF8";
 
     private static volatile MSSQLServerContainer<?> container;
     private static final Object LOCK = new Object();
@@ -62,7 +64,10 @@ public class MsSqlDatabaseProvider implements DatabaseProvider {
         MSSQLServerContainer<?> c = sharedContainer();
         String dbName = sanitize(key);
         try (Connection admin = openAdmin(c); Statement st = admin.createStatement()) {
-            st.execute("IF DB_ID('" + dbName + "') IS NULL CREATE DATABASE [" + dbName + "]");
+            // a UTF-8 collation: under the server's default (SQL_Latin1_General_CP1_CI_AS) a VARCHAR keeps code page
+            // 1252 only, and test data in other scripts arrived as '?' (Cyrillic in the Member Identifier tutorial,
+            // database run 19./20.10.). Still case- and accent-insensitive like the default.
+            st.execute("IF DB_ID('" + dbName + "') IS NULL CREATE DATABASE [" + dbName + "] COLLATE " + COLLATION);
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to create MSSQL database " + dbName, e);
         }
