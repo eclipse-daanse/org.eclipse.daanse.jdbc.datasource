@@ -33,6 +33,10 @@ Remote: `remoteUri` (required), `.remoteToken`, `remoteAlias` (default `remote`)
 }
 ```
 
+Every database DuckDB 2.0 opens starts `threads - 1` workers and `async_threads` (default 64) threads of its own. A
+process that holds many databases at once, one per catalog for example, can reach the system's task limit;
+`async_threads=0` keeps a database at its workers.
+
 ## Remote (Quack)
 
 The server is started with `CALL quack_serve('quack:0.0.0.0:9494', token = '...', allow_other_hostname = true)`.
