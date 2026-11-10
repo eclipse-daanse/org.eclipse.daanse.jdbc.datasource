@@ -52,6 +52,43 @@ public class DerbyDatabaseProvider implements DatabaseProvider {
 
     @Override
     public void close() {
+        for (String key : dbsByKey.keySet()) {
+            close(key);
+        }
+    }
+
+    /**
+     * Closes and drops just {@code key}'s in-memory database, leaving any others under this provider untouched. A
+     * no-op if {@code key} was never {@link #activate(String) activate}d, or was already closed.
+     *
+     * <p>Derby keeps an in-memory database for the whole JVM until it is dropped, its connections closed or not: a
+     * caller that opens one database per key fills the heap with every key it ever used unless it gives them back
+     * here.
+     */
+    @Override
+    public void close(String key) {
+        ActiveDatabase database = dbsByKey.remove(key);
+        if (database == null) {
+            return;
+        }
+        try {
+            database.connectionPool().close();
+        } catch (RuntimeException e) {
+            LOGGER.warn("closing a derby connection pool failed", e);
+        }
+        if (database.dataSource() instanceof EmbeddedDataSource embedded) {
+            EmbeddedDataSource drop = new EmbeddedDataSource();
+            drop.setDatabaseName(embedded.getDatabaseName());
+            drop.setConnectionAttributes("drop=true");
+            try (Connection never = drop.getConnection()) {
+                // a drop answers with an exception, not with a connection
+            } catch (SQLException e) {
+                // 08006: the database is dropped
+                if (!"08006".equals(e.getSQLState())) {
+                    LOGGER.warn("dropping the derby database {} failed", embedded.getDatabaseName(), e);
+                }
+            }
+        }
     }
 
     /**
