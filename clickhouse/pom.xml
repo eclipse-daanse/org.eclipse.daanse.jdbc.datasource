@@ -33,8 +33,8 @@
 
   <properties>
     <!-- ClickHouse 26.9 answers with ZSTD by default (network_compression_method); up to 0.10.0 the driver reads
-    only LZ4 ("Invalid LZ4 magic byte"). Move to 0.11.0 once it is released. -->
-    <clickhouse-jdbc.version>0.11.0-rc1</clickhouse-jdbc.version>
+    only LZ4 ("Invalid LZ4 magic byte"), so it takes 0.11 or later. -->
+    <clickhouse-jdbc.version>0.11.1</clickhouse-jdbc.version>
   </properties>
 
   <dependencies>
