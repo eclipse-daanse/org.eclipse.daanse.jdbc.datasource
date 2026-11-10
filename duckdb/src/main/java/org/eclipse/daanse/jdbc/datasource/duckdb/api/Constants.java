@@ -37,6 +37,13 @@ public class Constants {
     public static final String PID_DATASOURCE = "daanse.jdbc.datasource.duckdb.DataSource";
 
     /**
+     * Constant for the {@link org.osgi.framework.Constants#SERVICE_PID} of a
+     * {@link DataSource} - Service that is a client of a remote DuckDB server
+     * (Quack protocol).
+     */
+    public static final String PID_REMOTE_DATASOURCE = "daanse.jdbc.datasource.duckdb.RemoteDataSource";
+
+    /**
      * Constant for Properties of the Service that could be configured using the
      * {@link Constants#PID_DATASOURCE}.
      *
@@ -47,7 +54,7 @@ public class Constants {
      * share only a file or a named in-memory database. Must not contain {@code ;}:
      * connection options have their own attributes.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#databaseName()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#databaseName()}
      */
     public static final String DATASOURCE_PROPERTY_DATABASENAME = "databaseName";
 
@@ -59,7 +66,7 @@ public class Constants {
      * setting {@code access_mode=READ_ONLY}; the two must not contradict each
      * other.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#readOnly()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#readOnly()}
      */
     public static final String DATASOURCE_PROPERTY_READ_ONLY = "readOnly";
 
@@ -73,7 +80,7 @@ public class Constants {
      * {@code readOnly=true} combined with a different access mode, and a read-only
      * in-memory database.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#accessMode()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#accessMode()}
      */
     public static final String DATASOURCE_PROPERTY_ACCESS_MODE = "accessMode";
 
@@ -86,7 +93,8 @@ public class Constants {
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Custom string appended to the user agent reported to DuckDB. Driver option {@code custom_user_agent}.
      *
@@ -96,7 +104,8 @@ public class Constants {
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Stream result sets instead of materializing them. Off by default; on by
      * default for {@code ducklake:} databases. Driver option {@code jdbc_stream_results}.
@@ -107,7 +116,8 @@ public class Constants {
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Default auto-commit mode of the connections handed out. On by default. Driver option {@code jdbc_auto_commit}.
      *
@@ -124,7 +134,7 @@ public class Constants {
      * pin when it is closed. Off by default; on by default for {@code ducklake:}
      * databases. Driver option {@code jdbc_pin_db}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#pinDb()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#pinDb()}
      */
     public static final String DATASOURCE_PROPERTY_PIN_DB = "pinDb";
 
@@ -136,13 +146,14 @@ public class Constants {
      * default; off creates an isolated instance, which may run into file lock
      * conflicts. Driver option {@code jdbc_instance_cache}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#instanceCache()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#instanceCache()}
      */
     public static final String DATASOURCE_PROPERTY_INSTANCE_CACHE = "instanceCache";
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Silently drop settings DuckDB does not know instead of refusing to connect. Driver option {@code jdbc_ignore_unsupported_options}.
      *
@@ -152,7 +163,8 @@ public class Constants {
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Name under which the database instance is tracked in the
      * {@code duckdb.MemoryUsage} JFR event; empty disables the monitoring. Driver option {@code jdbc_jfr_memory_monitor}.
@@ -171,7 +183,7 @@ public class Constants {
      * part below it for every connection. Runs with the full privileges of the
      * connection. Must not contain {@code ;} or {@code =}. Driver option {@code session_init_sql_file}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#sessionInitSqlFile()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#sessionInitSqlFile()}
      */
     public static final String DATASOURCE_PROPERTY_SESSION_INIT_SQL_FILE = "sessionInitSqlFile";
 
@@ -182,22 +194,24 @@ public class Constants {
      * Expected SHA-256 digest (hex) of the session init SQL file; the connection is
      * refused on a mismatch. Needs the session init SQL file. Driver option {@code session_init_sql_file_sha256}.
      *
-     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#sessionInitSqlFileSha256()}
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.DsConfig#sessionInitSqlFileSha256()}
      */
     public static final String DATASOURCE_PROPERTY_SESSION_INIT_SQL_FILE_SHA256 = "sessionInitSqlFileSha256";
 
     /**
      * Constant for Properties of the Service that could be configured using the
-     * {@link Constants#PID_DATASOURCE}.
+     * {@link Constants#PID_DATASOURCE} and the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
      *
      * Engine settings as {@code name=value}, passed to DuckDB as connection
      * properties: {@code threads=2}, {@code memory_limit=4GB},
      * {@code access_mode=READ_ONLY}, or anything else the engine accepts —
      * deliberately not enumerated here. They configure the database instance, not
-     * a connection: a second DataSource on the same database has to use the same
-     * settings. The dedicated attributes win over an entry of the same option.
+     * a connection: a second embedded DataSource on the same database has to use
+     * the same settings. The dedicated attributes win over an entry of the same
+     * option.
      * <p>
-     * {@code access_mode} is {@code AUTOMATIC} (default), {@code READ_ONLY} or
+     * Embedded only: {@code access_mode} is {@code AUTOMATIC} (default), {@code READ_ONLY} or
      * {@code READ_WRITE}. {@code access_mode=READ_ONLY} opens a file database
      * read-only, the same as {@code readOnly=true}; DuckDB refuses a
      * {@code readOnly=true} that is combined with a different {@code access_mode},
@@ -206,5 +220,68 @@ public class Constants {
      * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.BaseConfig#settings()}
      */
     public static final String DATASOURCE_PROPERTY_SETTINGS = "settings";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
+     *
+     * URI of the remote DuckDB server speaking the Quack client/server protocol,
+     * {@code quack:<host>[:<port>]} (port 9494 by default). Required. The remote is
+     * attached to a private in-memory database under
+     * {@link #DATASOURCE_PROPERTY_REMOTE_ALIAS} and is the default catalog of every
+     * connection handed out: unqualified names, {@code Connection#getCatalog()} and
+     * the metadata refer to it. The {@code quack} extension is installed and loaded
+     * on first use.
+     * <p>
+     * Parameterized statements ({@code ?}) are not supported on remote tables:
+     * DuckDB prepares them on the server without the values. Literal SQL works,
+     * and so does loading with an appender into a local temporary table followed
+     * by one {@code INSERT INTO <table> SELECT ...} from it. Client settings such
+     * as {@code quack_enable_reconnects} go into {@link #DATASOURCE_PROPERTY_SETTINGS}.
+     * <p>
+     * The client caches the catalog of the remote: a table created on the server
+     * after the attach, not through this DataSource, stays invisible until
+     * {@code CALL quack_clear_cache()} is run.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.RemoteDsConfig#remoteUri()}
+     */
+    public static final String DATASOURCE_PROPERTY_REMOTE_URI = "remoteUri";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
+     *
+     * Authentication token of the remote server. Handed to DuckDB as a temporary
+     * secret scoped to {@link #DATASOURCE_PROPERTY_REMOTE_URI}, which keeps it out
+     * of {@code duckdb_databases()}. Empty relies on a quack secret that exists
+     * already, for example a persistent one. The leading full stop keeps it out of
+     * the service properties.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.RemoteDsConfig#_remoteToken()}
+     */
+    public static final String DATASOURCE_PROPERTY_REMOTE_TOKEN = ".remoteToken";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
+     *
+     * Catalog name the remote server is attached under; {@code remote} by
+     * default.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.RemoteDsConfig#remoteAlias()}
+     */
+    public static final String DATASOURCE_PROPERTY_REMOTE_ALIAS = "remoteAlias";
+
+    /**
+     * Constant for Properties of the Service that could be configured using the
+     * {@link Constants#PID_REMOTE_DATASOURCE}.
+     *
+     * Talk plain HTTP to the remote server. The client assumes HTTPS for a host
+     * that is not local; set this for a non-local server without TLS, for example
+     * one behind a private network.
+     *
+     * {@link org.eclipse.daanse.jdbc.datasource.duckdb.api.ocd.RemoteDsConfig#remoteDisableSsl()}
+     */
+    public static final String DATASOURCE_PROPERTY_REMOTE_DISABLE_SSL = "remoteDisableSsl";
 
 }

@@ -36,12 +36,27 @@ import org.duckdb.DuckDBDriver;
  * {@link DuckDBConnection#duplicate()} of it. An in-memory DuckDB database
  * belongs to the connection that opened it — a second {@code connect} would
  * open a second, empty database.
+ * <p>
+ * Two optional {@link ConnectionStep steps} adapt the database: one runs once,
+ * on the held connection, the other on every connection handed out.
  */
 public class DuckDbDataSource implements DataSource {
+
+    /** Something done to a connection before it is used. */
+    @FunctionalInterface
+    public interface ConnectionStep {
+
+        ConnectionStep NONE = connection -> {
+        };
+
+        void apply(DuckDBConnection connection) throws SQLException;
+    }
 
     private final DuckDBDriver driver = new DuckDBDriver();
     private final String url;
     private final Properties properties;
+    private final ConnectionStep onOpen;
+    private final ConnectionStep onHandout;
 
     /** Same marker as the driver's; it runs the part below for an opened connection only. */
     private static final Pattern CONNECTION_INIT_MARKER = Pattern
@@ -57,8 +72,20 @@ public class DuckDbDataSource implements DataSource {
     private int loginTimeout = 0;
 
     public DuckDbDataSource(String url, Properties properties) {
+        this(url, properties, ConnectionStep.NONE, ConnectionStep.NONE);
+    }
+
+    /**
+     * @param onOpen    run once, on the connection that opens the database; the
+     *                  database is closed again when it fails
+     * @param onHandout run on every connection handed out, before the
+     *                  per-connection part of the session init SQL
+     */
+    public DuckDbDataSource(String url, Properties properties, ConnectionStep onOpen, ConnectionStep onHandout) {
         this.url = url;
         this.properties = properties;
+        this.onOpen = onOpen;
+        this.onHandout = onHandout;
     }
 
     @Override
@@ -68,6 +95,12 @@ public class DuckDbDataSource implements DataSource {
             synchronized (this) {
                 if (keeper == null) {
                     DuckDBConnection opened = (DuckDBConnection) driver.connect(url, properties);
+                    try {
+                        onOpen.apply(opened);
+                    } catch (SQLException e) {
+                        opened.close();
+                        throw e;
+                    }
                     connectionInitSql = connectionInitSql(opened.getSessionInitSQL());
                     keeper = opened;
                 }
@@ -75,15 +108,18 @@ public class DuckDbDataSource implements DataSource {
             }
         }
         DuckDBConnection connection = held.duplicate();
-        // The driver ran it for the held connection; a duplicate comes without.
-        String initSql = connectionInitSql;
-        if (!initSql.isEmpty()) {
-            try (Statement statement = connection.createStatement()) {
-                statement.execute(initSql);
-            } catch (SQLException e) {
-                connection.close();
-                throw e;
+        try {
+            onHandout.apply(connection);
+            // The driver ran it for the held connection; a duplicate comes without.
+            String initSql = connectionInitSql;
+            if (!initSql.isEmpty()) {
+                try (Statement statement = connection.createStatement()) {
+                    statement.execute(initSql);
+                }
             }
+        } catch (SQLException e) {
+            connection.close();
+            throw e;
         }
         return connection;
     }
@@ -117,8 +153,8 @@ public class DuckDbDataSource implements DataSource {
     }
 
     /**
-     * DuckDB is embedded and has no user/password authentication — the credentials
-     * are ignored.
+     * DuckDB has no user/password authentication — the credentials are ignored; a
+     * remote server authenticates with its configured token.
      */
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
