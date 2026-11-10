@@ -35,6 +35,13 @@
 
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <!-- Newer than the parent pom manages. -->
+    <bnd.version>7.4.0</bnd.version>
+    <!-- AssertJ is built against this Byte Buddy and imports it from 1.18 on: change the two together. -->
+    <assertj.version>3.27.7</assertj.version>
+    <bytebuddy.version>1.18.3</bytebuddy.version>
+    <slf4j.version>2.0.20</slf4j.version>
   </properties>
 
   <repositories>
@@ -85,5 +92,76 @@
     <module>testkit</module>
   </modules>
 
+  <!-- The parent pom names these with a fixed version; they are newer here. -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.16.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.5.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.12.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.ec4j.maven</groupId>
+          <artifactId>editorconfig-maven-plugin</artifactId>
+          <version>0.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <!-- The parent pom runs these with a fixed version of its own, which only a plugin entry here overrides. -->
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.6.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.9.0</version>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
