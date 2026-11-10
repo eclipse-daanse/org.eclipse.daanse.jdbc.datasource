@@ -23,6 +23,15 @@
   <artifactId>org.eclipse.daanse.jdbc.datasource.testkit.derby</artifactId>
   <name>Daanse JDBC DataSource Test Kit — Derby Provider</name>
   <packaging>jar</packaging>
+
+  <!-- Derby 10.17 is built for Java 19 and later; it is the first release on Maven Central with the fix for the
+  LDAP injection in its authenticator (CVE-2022-46337). -->
+  <properties>
+    <java.version>21</java.version>
+    <java.release>21</java.release>
+    <derby.version>10.17.1.0</derby.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
@@ -38,7 +47,13 @@
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.14.2.0</version>
+      <version>${derby.version}</version>
+    </dependency>
+    <!-- Since Derby 10.15 the data sources, among them EmbeddedDataSource, are in derbytools. -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbytools</artifactId>
+      <version>${derby.version}</version>
     </dependency>
   </dependencies>
 </project>
