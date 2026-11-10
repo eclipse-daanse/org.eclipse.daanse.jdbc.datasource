@@ -4,7 +4,7 @@ OSGi `javax.sql.DataSource` services for [DuckDB](https://duckdb.org) (`org.duck
 Two factory configurations:
 
 | PID | OCD | What |
-|---|---|---|
+| --- | --- | --- |
 | `daanse.jdbc.datasource.duckdb.DataSource` | `DsConfig` | Embedded database, file or in-memory |
 | `daanse.jdbc.datasource.duckdb.RemoteDataSource` | `RemoteDsConfig` | Client of a remote DuckDB server (Quack protocol) |
 
@@ -52,7 +52,7 @@ The client attaches it to a private in-memory database and makes it the default 
 Fastest first, 200k rows (int, varchar, double), embedded:
 
 | Way | Time | Remote |
-|---|---|---|
+| --- | --- | --- |
 | `INSERT ... SELECT * FROM read_csv(...)` (file) | ~35 ms | yes, the client reads the file |
 | Java table function, `DuckDBWritableVector.setStrings` | ~30 ms | yes, streams to the server |
 | `DuckDBAppender` | ~110 ms | via a local temp table |
