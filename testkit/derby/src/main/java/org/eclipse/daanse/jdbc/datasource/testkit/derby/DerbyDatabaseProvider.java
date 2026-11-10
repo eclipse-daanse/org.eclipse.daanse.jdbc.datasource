@@ -96,12 +96,16 @@ public class DerbyDatabaseProvider implements DatabaseProvider {
      * in place before {@link EmbeddedDataSource#getConnection()} is called. The page cache
      * defaults to 1000 pages (~4 MB) — FoodMart does not fit, so every aggregate scan walks back
      * through the pager. {@code durability=test} skips the log syncs, which buy nothing for a
-     * database that lives and dies with the JVM.
+     * database that lives and dies with the JVM. A hash join may hold 64 MB of a table instead of
+     * 1 MB: below that Derby joins a derived table of some ten thousand rows by nested loops, once
+     * per row of the other side -- one join of 60 000 facts to such a table ran past an hour, with
+     * the room it took two seconds.
      */
     private static void bootProperties() {
         setIfAbsent("derby.storage.pageCacheSize", "20000");
         setIfAbsent("derby.system.durability", "test");
         setIfAbsent("derby.language.statementCacheSize", "500");
+        setIfAbsent("derby.language.maxMemoryPerTable", "65536");
     }
 
     private static void setIfAbsent(String key, String value) {
