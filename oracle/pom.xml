@@ -43,7 +43,7 @@
   </licenses>
 
   <properties>
-    <ojdbc11.version>23.8.0.25.04</ojdbc11.version>
+    <ojdbc11.version>23.26.4.0.0</ojdbc11.version>
   </properties>
 
   <dependencies>
